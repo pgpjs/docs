@@ -10,7 +10,13 @@ test.describe('Index file hosting', () => {
   };
 
   test('should serve from index file', async ({ page }) => {
-    await docsifyInit(sharedOptions);
+    await docsifyInit({
+      ...sharedOptions,
+      waitForSelector: '.hero h1',
+    });
+    await expect(page.locator('.hero h1')).toContainText(
+      'OpenPGP Without the Complexity',
+    );
     await expect(page.locator('#main')).toContainText(
       'Pretty Good Privacy | JavaScript documentation site generator',
     );
@@ -20,8 +26,11 @@ test.describe('Index file hosting', () => {
   test('should use index file links in sidebar from index file hosting', async ({
     page,
   }) => {
-    await docsifyInit(sharedOptions);
-    await page.click('a[href="#/quickstart"]');
+    await docsifyInit({
+      ...sharedOptions,
+      waitForSelector: '.hero h1',
+    });
+    await page.click('a.btn[href="#/quickstart"]');
     await expect(page.locator('#main')).toContainText('Quick start');
     expect(page.url()).toMatch(/index\.html#\/quickstart$/);
   });

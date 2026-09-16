@@ -47,11 +47,6 @@ function packageUrls(pkg, repoPath, corePath) {
   }
 
   urls.push(`${CORE_RAW}/${corePath}`, `${CORE_JSDELIVR}/${corePath}`);
-
-  if (!STANDALONE[pkg]) {
-    urls.push(`${raw}/${repoPath}`, `${raw}/docs/${repoPath}`);
-  }
-
   return urls;
 }
 
@@ -197,10 +192,34 @@ function wrapCode(filename, source, url) {
   ].join('\n');
 }
 
+function rewriteRelativeUrls(text, sourceUrl) {
+  if (!text || !sourceUrl) {
+    return text;
+  }
+
+  let base;
+  try {
+    base = new URL('.', sourceUrl).href;
+  } catch {
+    return text;
+  }
+
+  return text.replace(
+    /(!?\[[^\]]*]\()(?!https?:|\/\/|#|mailto:)([^)\s]+)(\))/g,
+    (match, prefix, path, suffix) => {
+      try {
+        return `${prefix}${new URL(path, base).href}${suffix}`;
+      } catch {
+        return match;
+      }
+    },
+  );
+}
+
 function wrapMarkdown(text, url) {
   const badge = `<span class="live-badge">Live from GitHub</span>\n\n`;
   const source = url ? `> Synced from \`${url}\`\n\n` : '';
-  return badge + source + text;
+  return badge + source + rewriteRelativeUrls(text, url);
 }
 
 function relocateSearch() {
@@ -256,17 +275,16 @@ function liveDocsPlugin(hook, vm) {
 
     const path = (vm.route.path || '/').replace(/\.md$/, '');
     const isHome = path === '/' || path === '/README' || path === '';
+    const current = path.replace(/\/$/, '');
     document.body.classList.toggle('pgpjs-home', isHome);
     document.body.classList.toggle('pgpjs-docs', !isHome);
 
-    document.querySelectorAll('.main-nav a[href^="#/"]').forEach(link => {
-      const href = link.getAttribute('href') || '';
-      const route = href.slice(1).replace(/\/$/, '');
-      const current = path.replace(/\/$/, '');
+    document.querySelectorAll('.main-nav a[data-nav]').forEach(link => {
+      const pkg = link.getAttribute('data-nav');
       const active =
         !isHome &&
-        route &&
-        (current === route || current.startsWith(`${route}/`));
+        Boolean(pkg) &&
+        (current === `/${pkg}` || current.startsWith(`/${pkg}/`));
       link.classList.toggle('active', active);
     });
   });
