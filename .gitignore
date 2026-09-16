@@ -16,9 +16,9 @@ node_modules
 # Output folder for the global build only
 dist/
 
-# Output folders for the legacy v4 build
-lib/
-themes/
+# Output folders for the legacy v4 build (root only; do not ignore src/themes)
+/lib/
+/themes/
 
 # TypeScript declaration files for standard ESM consumption
 src/**/*.d.ts
