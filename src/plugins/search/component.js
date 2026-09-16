@@ -125,7 +125,7 @@ function resultSourceHtml(post) {
 }
 
 function tpl(vm, defaultValue = '') {
-  const { insertAfter, insertBefore } = vm.config?.search || {};
+  const { insertAfter, insertBefore, insertInto } = vm.config?.search || {};
   const html = /* html */ `
     <div class="input-wrap">
       <input type="search" value="${defaultValue}" required aria-keyshortcuts="/ control+k meta+k" />
@@ -140,16 +140,28 @@ function tpl(vm, defaultValue = '') {
     <p class="results-status" aria-live="polite"></p>
     <div class="results-panel"></div>
   `;
-  const sidebarElm = Docsify.dom.find('.sidebar');
   const searchElm = Docsify.dom.create('section', html);
+
+  searchElm.classList.add('search');
+  searchElm.setAttribute('role', 'search');
+
+  if (insertInto) {
+    const host = document.querySelector(insertInto);
+
+    if (host) {
+      host.querySelector('.search-input')?.remove();
+      host.appendChild(searchElm);
+      return;
+    }
+  }
+
+  const sidebarElm = Docsify.dom.find('.sidebar');
   const insertElm = /** @type {HTMLElement} */ (
     sidebarElm.querySelector(
       `:scope ${insertAfter || insertBefore || '> :first-child'}`,
     )
   );
 
-  searchElm.classList.add('search');
-  searchElm.setAttribute('role', 'search');
   sidebarElm.insertBefore(
     searchElm,
     insertAfter ? insertElm.nextSibling : insertElm,
@@ -254,9 +266,12 @@ function updateNoData(text, path) {
 }
 
 export function init(opts, vm) {
-  const sidebarElm = Docsify.dom.find('.sidebar');
+  const insertInto = vm.config?.search?.insertInto || opts.insertInto;
+  const host =
+    (insertInto && document.querySelector(insertInto)) ||
+    Docsify.dom.find('.sidebar');
 
-  if (!sidebarElm) {
+  if (!host) {
     return;
   }
 

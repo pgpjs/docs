@@ -16,6 +16,7 @@ import { init as initSearch } from './search.js';
  *   keyBindings: string[];
  *   insertAfter?: string;
  *   insertBefore?: string;
+ *   insertInto?: string;
  *   resultSource?: 'none' | 'page' | 'breadcrumb';
  * }} */
 const CONFIG = {
@@ -29,6 +30,7 @@ const CONFIG = {
   keyBindings: ['/', 'meta+k', 'ctrl+k'],
   insertAfter: undefined, // CSS selector
   insertBefore: undefined, // CSS selector
+  insertInto: undefined, // CSS selector (e.g. header search host)
   resultSource: 'none', // 'none' | 'page' | 'breadcrumb'
 };
 
@@ -48,6 +50,9 @@ const install = function (hook, vm) {
     CONFIG.pathNamespaces = opts.pathNamespaces || CONFIG.pathNamespaces;
     CONFIG.keyBindings = opts.keyBindings || CONFIG.keyBindings;
     CONFIG.resultSource = opts.resultSource || CONFIG.resultSource;
+    CONFIG.insertAfter = opts.insertAfter || CONFIG.insertAfter;
+    CONFIG.insertBefore = opts.insertBefore || CONFIG.insertBefore;
+    CONFIG.insertInto = opts.insertInto || CONFIG.insertInto;
   }
 
   const isAuto = CONFIG.paths === 'auto';
@@ -65,10 +70,12 @@ const install = function (hook, vm) {
             document.querySelector('.sidebar-toggle')
           );
           const searchElm = /** @type {HTMLInputElement | null} */ (
-            sidebarElm?.querySelector('input[type="search"]')
+            document.querySelector('.search input[type="search"]')
           );
+          const searchVisible =
+            (searchElm?.getBoundingClientRect().height ?? 0) > 0;
           const isSidebarHidden =
-            (sidebarElm?.getBoundingClientRect().x ?? 0) < 0;
+            !searchVisible && (sidebarElm?.getBoundingClientRect().x ?? 0) < 0;
 
           isSidebarHidden && sidebarToggleElm?.click();
 
@@ -87,5 +94,8 @@ const install = function (hook, vm) {
   });
 };
 
-window.$docsify = window.$docsify || {};
+window.$docsify = window.$docsify || window.$pgpjs || {};
 window.$docsify.plugins = [install, ...(window.$docsify.plugins || [])];
+if (window.$pgpjs && window.$pgpjs !== window.$docsify) {
+  window.$pgpjs.plugins = [install, ...(window.$pgpjs.plugins || [])];
+}

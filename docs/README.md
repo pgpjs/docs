@@ -2,29 +2,22 @@
 
 > Pretty Good Privacy | JavaScript documentation site generator.
 
-## What it is
+OpenPGP without the complexity — a modern TypeScript toolkit for React, Next.js, and the web.
 
-PGPJS turns your Markdown files into a documentation website instantly. Unlike most other documentation site generator tools, it doesn't need to build HTML files. Instead, it dynamically loads and parses your Markdown files and displays them as a website.
+This site uses the P7 frontend with PGPJS (Docsify) for documentation. Core, Next, and React pages load **live from GitHub**, so repository changes show up here without a rebuild.
 
-PGPJS is a rebrand of [Docsify](https://github.com/docsifyjs/docsify). Configuration is available as `window.$pgpjs`, and the original `window.$docsify` API remains supported.
+## Packages
 
-To get started, create an `index.html` file and [deploy it on GitHub Pages](deploy.md) (for more details see the [Quick start](quickstart.md) guide).
+- [@pgpjs/core](core/) — RFC 9580 engine and high-level `seal` / `open` API
+- [@pgpjs/next](next/) — Next.js route handlers, server actions, and `secureRequest`
+- [@pgpjs/react](react/) — `PGPProvider` and hooks (`useKey`, `useEncryption`, …)
 
-## Features
+## Live docs
 
-- No statically built HTML files
-- Simple and lightweight
-- Smart full-text search plugin
-- Multiple themes
-- Useful plugin API
-- Emoji support
+Markdown and source files are fetched from:
 
-## Name
+- https://github.com/pgpjs/core
+- https://github.com/pgpjs/next (falls back to `core/packages/next` until that repo exists)
+- https://github.com/pgpjs/react (falls back to `core/packages/react` until that repo exists)
 
-The product name is **PGPJS** (Pretty Good Privacy | JavaScript). Use it in page titles, cover pages, and `name` configuration:
-
-```js
-window.$pgpjs = {
-  name: 'PGPJS',
-};
-```
+Use the header search bar to find pages across those docs.

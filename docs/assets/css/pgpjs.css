@@ -1,0 +1,1175 @@
+/* ==========================================================================
+   PGPJS — Modern OpenPGP Stylesheet & Viewport Typography
+   ========================================================================== */
+
+:root {
+  --navy: #0b1f5c;
+  --navy-dark: #081549;
+  --navy-light: #162e7a;
+  --navy-subtle: #f4f7fc;
+  --blue-accent: #2563eb;
+  --blue-light: #60a5fa;
+  --gray-bg: #f3f4f6;
+  --gray-card: #d9d9d9;
+  --card-bg: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #475569;
+  --text-subtle: #64748b;
+  --border-gray: #e2e8f0;
+  --border-card: #e2e8f0;
+  --max-content-width: 1152px; /* Prysel max-w-6xl */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-dark);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   Centered Desktop Containers
+   ========================================================================== */
+
+.topbar-inner,
+.header-inner,
+.hero-inner,
+.logo-strip-inner,
+.section-inner,
+.footer-inner {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Top Utility Bar
+   ========================================================================== */
+
+.topbar {
+  background: var(--navy);
+  color: #ffffff;
+  padding: clamp(10px, 1.2vw, 14px) clamp(20px, 3.5vw, 48px);
+  font-size: clamp(12.5px, 0.9vw + 1px, 14px);
+  width: 100%;
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.topbar .bio-text {
+  opacity: 0.9;
+  letter-spacing: 0.2px;
+}
+
+.topbar .top-links {
+  display: flex;
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.topbar .top-links a {
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.topbar .top-links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Main Header / Navigation
+   ========================================================================== */
+
+.main-header {
+  padding: clamp(14px, 1.5vw, 18px) clamp(20px, 3.5vw, 48px);
+  border-bottom: 1px solid var(--border-gray);
+  background: #ffffff;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  background: var(--gray-bg);
+  border-radius: 6px;
+  padding: 2px 4px 2px 2px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.search-wrap:focus-within {
+  border-color: var(--blue-accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.search-wrap img {
+  border-radius: 4px;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  padding: 0 12px;
+  font-size: clamp(13px, 0.9vw + 1px, 14.5px);
+  color: var(--text-dark);
+  width: clamp(160px, 16vw, 240px);
+  outline: none;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.2vw, 36px);
+  font-size: clamp(14px, 0.95vw + 1px, 15px);
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.main-nav a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 4px 0;
+}
+
+.main-nav a:hover {
+  color: var(--navy);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 1.8vw, 24px);
+}
+
+.git-btn {
+  background: var(--gray-bg);
+  padding: 10px clamp(14px, 1.3vw, 20px);
+  font-size: clamp(12.5px, 0.85vw + 1px, 13.5px);
+  color: #333;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  border: 1px solid var(--border-gray);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.git-btn:hover {
+  background: #e6eaf3;
+  color: var(--navy);
+  border-color: #cbd5e1;
+}
+
+.git-btn:active {
+  transform: scale(0.97);
+}
+
+.git-btn.copied {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.git-btn .copy-icon {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.git-btn:hover .copy-icon {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Hero Section with Fluid Viewport Typography
+   ========================================================================== */
+
+.hero {
+  padding: clamp(48px, 5.5vw, 84px) clamp(20px, 3.5vw, 48px);
+  width: 100%;
+}
+
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(36px, 4vw, 64px);
+  flex-wrap: wrap;
+}
+
+.hero-text {
+  flex: 1 1 440px;
+  min-width: 320px;
+  max-width: 680px;
+}
+
+.hero-text h1 {
+  /* Fluid viewport typography for all desktop screens */
+  font-size: clamp(2.3rem, 4.3vw + 0.3rem, 4.25rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--text-dark);
+  margin-bottom: clamp(18px, 2vw, 28px);
+}
+
+.hero-text p {
+  /* Fluid viewport body text */
+  font-size: clamp(1.05rem, 1.2vw + 0.15rem, 1.35rem);
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: clamp(28px, 3vw, 40px);
+  max-width: 580px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: var(--navy);
+  color: #fff;
+  border: 2px solid var(--navy);
+  padding: clamp(12px, 1.2vw, 16px) clamp(24px, 2.2vw, 36px);
+  font-size: clamp(14px, 0.95vw + 1px, 15px);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--navy-dark);
+  border-color: var(--navy-dark);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--navy);
+  border: 2px solid var(--navy);
+}
+
+.btn-secondary:hover {
+  background: var(--navy);
+  color: #fff;
+}
+
+.hero-visual {
+  flex: 1 1 480px;
+  min-width: 340px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.campus-img {
+  width: 100%;
+  max-width: 620px;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 12px 36px rgba(11, 31, 92, 0.08);
+}
+
+.code-card {
+  position: absolute;
+  left: -40px;
+  bottom: -6%;
+  width: 52%;
+  min-width: 280px;
+  background: #0f1526;
+  border-radius: 8px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.32);
+  overflow: hidden;
+  font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-tab {
+  background: #171d33;
+  color: #cfd6ea;
+  font-size: 13px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #232a44;
+}
+
+.code-tab .x {
+  opacity: 0.5;
+  margin-left: 4px;
+}
+
+.code-body {
+  padding: 14px 16px 20px 16px;
+  font-size: clamp(11.5px, 0.8vw + 1px, 13px);
+  line-height: 1.75;
+}
+
+.code-line {
+  display: flex;
+  gap: 14px;
+  white-space: pre;
+}
+
+.line-no {
+  color: #4a5372;
+  width: 18px;
+  text-align: right;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.code-comment { color: #6b7a99; }
+.code-keyword { color: #d197ff; }
+.code-func { color: #7fc6ff; }
+.code-string { color: #ffcf8b; }
+.code-var { color: #8fd6c1; }
+.code-plain { color: #cfd6ea; }
+
+/* ==========================================================================
+   Logo Strip
+   ========================================================================== */
+
+.logo-strip {
+  background: var(--gray-bg);
+  padding: clamp(32px, 3.5vw, 44px) clamp(20px, 3.5vw, 48px);
+  width: 100%;
+}
+
+.logo-strip-inner {
+  display: flex;
+  gap: clamp(14px, 1.8vw, 24px);
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.logo-slot {
+  background: #ffffff;
+  border: 1px solid var(--border-gray);
+  border-radius: 6px;
+  flex: 1 1 180px;
+  min-width: 150px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--navy);
+  font-size: clamp(14px, 0.95vw + 1px, 16px);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 0 16px;
+  transition: all 0.25s ease;
+}
+
+.logo-slot svg {
+  flex-shrink: 0;
+}
+
+.logo-slot:hover {
+  border-color: #94a3b8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 31, 92, 0.08);
+}
+
+/* ==========================================================================
+   Blog Section: "tool what pgpjs use" (3 Cards with Img & Text)
+   ========================================================================== */
+
+.blog-tools-section {
+  padding: clamp(56px, 6vw, 96px) clamp(20px, 3.5vw, 48px);
+  background: #f8fafc;
+  border-top: 1px solid var(--border-gray);
+  border-bottom: 1px solid var(--border-gray);
+  width: 100%;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto clamp(36px, 4vw, 60px) auto;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+  color: var(--blue-accent);
+  font-size: clamp(11.5px, 0.8vw + 1px, 13px);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.section-badge svg {
+  flex-shrink: 0;
+}
+
+.section-title {
+  /* Fluid viewport typography for h1 */
+  font-size: clamp(2rem, 3.4vw + 0.2rem, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--navy-dark);
+  margin-bottom: clamp(14px, 1.5vw, 20px);
+  text-transform: capitalize;
+}
+
+.section-subtitle {
+  /* Fluid viewport text for section subtitle */
+  font-size: clamp(1rem, 1.1vw + 0.1rem, 1.22rem);
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin: 0 auto;
+  max-width: 680px;
+}
+
+/* 3-Card Grid for Desktop */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.4vw, 32px);
+  width: 100%;
+}
+
+.tool-card {
+  background: #ffffff;
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
+  box-shadow: 0 4px 12px rgba(11, 31, 92, 0.04);
+}
+
+.tool-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(11, 31, 92, 0.1);
+  border-color: #cbd5e1;
+}
+
+.tool-card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0b1f5c;
+  overflow: hidden;
+}
+
+.tool-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.tool-card:hover .tool-card-img {
+  transform: scale(1.05);
+}
+
+.tool-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(11, 31, 92, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tool-card-body {
+  padding: clamp(20px, 2.2vw, 28px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tool-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: clamp(11.5px, 0.8vw + 1px, 12.5px);
+  color: var(--text-subtle);
+  margin-bottom: 12px;
+}
+
+.tool-card-title {
+  font-size: clamp(1.15rem, 1.25vw + 0.1rem, 1.38rem);
+  font-weight: 700;
+  line-height: 1.32;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.tool-card-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.tool-card-title a:hover {
+  color: var(--blue-accent);
+}
+
+.tool-card-desc {
+  font-size: clamp(0.9rem, 0.85vw + 0.15rem, 0.98rem);
+  line-height: 1.62;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.tool-card-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tool-tech-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tool-tech-pills span {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.tool-learn-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(13px, 0.85vw + 1px, 14px);
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.tool-learn-more svg {
+  transition: transform 0.2s ease;
+}
+
+.tool-learn-more:hover {
+  color: var(--blue-accent);
+  gap: 9px;
+}
+
+.tool-learn-more:hover svg {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  background: var(--navy-dark);
+  color: #ffffff;
+  padding: clamp(48px, 5vw, 68px) clamp(20px, 3.5vw, 48px) clamp(24px, 3vw, 36px) clamp(20px, 3.5vw, 48px);
+  width: 100%;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: clamp(32px, 3.5vw, 48px);
+  padding-bottom: clamp(36px, 4vw, 48px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-brand {
+  flex: 1 1 320px;
+  max-width: 420px;
+}
+
+.footer-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.footer-logo-title {
+  font-size: clamp(18px, 1.4vw, 21px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.footer-desc {
+  color: #a0aec0;
+  font-size: clamp(13px, 0.85vw + 1px, 14px);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.footer-badge-rfc {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #7ea6ff;
+  background: rgba(126, 166, 255, 0.1);
+  border: 1px solid rgba(126, 166, 255, 0.25);
+  padding: 5px 12px;
+  border-radius: 4px;
+}
+
+.footer-nav-group {
+  display: flex;
+  flex: 2 1 500px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.footer-col {
+  min-width: 140px;
+}
+
+.footer-heading {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffffff;
+  margin-bottom: 18px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links a {
+  color: #a0aec0;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: clamp(20px, 2.5vw, 28px);
+  font-size: 13px;
+  color: #718096;
+}
+
+.footer-bottom a {
+  color: #a0aec0;
+  text-decoration: none;
+}
+
+.footer-bottom a:hover {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints: Desktop, Tablet & Mobile
+   ========================================================================== */
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .hero-inner {
+    gap: 80px;
+  }
+}
+
+/* Medium Desktop & Tablet (<= 1024px) */
+@media (max-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .code-card {
+    left: -20px;
+    width: 60%;
+  }
+}
+
+/* Tablet & Mobile (<= 900px) */
+@media (max-width: 900px) {
+  .main-nav {
+    display: none;
+  }
+  .site-footer {
+    padding: 40px 24px 24px 24px;
+  }
+  .footer-nav-group {
+    flex-direction: column;
+    gap: 28px;
+  }
+}
+
+/* Mobile (<= 680px) */
+@media (max-width: 680px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .code-card {
+    position: static;
+    width: 100%;
+    margin-top: 16px;
+  }
+  .hero-visual {
+    flex-direction: column;
+  }
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ==========================================================================
+   Under Design: Exact 1:1 Copy with Prysel Container & Fixed Footer
+   ========================================================================== */
+
+/* Prysel-compatible container (max-w-6xl = 1152px) */
+.under-container,
+.site-container,
+.topbar-inner,
+.header-inner,
+.hero-inner,
+.logo-strip-inner {
+  width: 100%;
+  max-width: 1152px; /* same as max-w-6xl in Prysel */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  position: relative;
+}
+
+.under-design-section {
+  width: 100%;
+  padding: clamp(36px, 4vw, 56px) 0 0 0;
+  background: #ffffff;
+}
+
+.under-heading {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(30px, 3.2vw, 42px);
+  font-weight: 400;
+  color: #000000;
+  line-height: 1.15;
+  margin: 0 0 clamp(18px, 2vw, 24px) 0;
+  letter-spacing: -0.3px;
+}
+
+.under-heading-cli {
+  margin-top: clamp(44px, 4.8vw, 68px);
+}
+
+/* 3-Card Row */
+.under-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 1.4vw, 20px);
+  width: 100%;
+}
+
+.under-card {
+  position: relative;
+  aspect-ratio: 843 / 524;
+  border-radius: 10px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: block;
+  text-decoration: none;
+}
+
+.under-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Row 1: Tool banner card overlay */
+.under-card-overlay-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(12px, 1.6vw, 18px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.88) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.under-card-title {
+  color: #ffffff;
+  font-size: clamp(15px, 1.3vw, 19px);
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 0 0 3px 0;
+}
+
+.under-card-sub {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(10px, 0.8vw, 12px);
+  font-weight: 400;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.btn-readme {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-readme:hover {
+  background: #f1f5f9;
+  transform: scale(1.03);
+}
+
+/* Row 2: CLI Card Specifics */
+.btn-readme-topright {
+  position: absolute;
+  top: clamp(10px, 1.2vw, 16px);
+  right: clamp(10px, 1.2vw, 16px);
+  z-index: 2;
+}
+
+.under-card-cli-label {
+  position: absolute;
+  bottom: clamp(12px, 1.6vw, 18px);
+  left: clamp(12px, 1.6vw, 18px);
+  color: #ffffff;
+  font-size: clamp(15px, 1.3vw, 19px);
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   Under Footer: Fixed Visible Tab, Real PGPJS Info, and Prysel Subfooter
+   ========================================================================== */
+
+.under-footer-wrapper {
+  position: relative;
+  width: 100%;
+  background: #001353;
+  margin-top: clamp(72px, 9vw, 130px);
+}
+
+/* Fixed Overlapping Tab — fully visible and never hidden under the footer */
+.under-footer-tab {
+  position: absolute;
+  top: -30px;
+  left: 1.5rem;
+  width: 72px;
+  height: 31px;
+  background: #001353;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px 4px 0 0;
+  z-index: 50;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.footer-tab-logo-text {
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  line-height: 1;
+  user-select: none;
+}
+
+.under-footer-content {
+  padding: clamp(52px, 5.5vw, 76px) 0 clamp(44px, 4.5vw, 64px) 0;
+}
+
+.under-footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(36px, 4.5vw, 64px);
+  align-items: start;
+}
+
+.under-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 520px;
+}
+
+.under-footer-brand-title {
+  color: #ffffff;
+  font-size: clamp(20px, 1.8vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+}
+
+.under-footer-brand-desc {
+  color: #cbd5e1;
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.under-footer-brand-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #93c5fd;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.under-footer-brand-link a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.under-footer-cols {
+  display: flex;
+  gap: clamp(32px, 4vw, 64px);
+  justify-content: flex-end;
+}
+
+.under-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.under-footer-col-header {
+  color: #93c5fd;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.under-footer-col a {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 400;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.15s ease;
+  line-height: 1.4;
+}
+
+.under-footer-col a:hover {
+  color: #60a5fa;
+  transform: translateX(2px);
+}
+
+/* ==========================================================================
+   Sub-footer: Prysel.svg Logo, Copyright, and MIT text
+   ========================================================================== */
+
+.under-subfooter {
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 22px 0;
+}
+
+.under-subfooter-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.under-subfooter-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.prysel-logo-link {
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.prysel-logo-link:hover {
+  opacity: 0.85;
+}
+
+.prysel-logo-img {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+.under-subfooter-copy {
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.under-subfooter-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.under-subfooter-mit {
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.under-subfooter-mit a {
+  color: #111827;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.under-subfooter-mit a:hover {
+  color: #ff7b00;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .under-cards-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .under-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .under-footer-cols {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .under-cards-row {
+    grid-template-columns: 1fr;
+  }
+  .under-footer-cols {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .under-subfooter-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

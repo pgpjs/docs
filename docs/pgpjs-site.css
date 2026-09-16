@@ -1,0 +1,208 @@
+/* Overlay: keep the p7 chrome intact when PGPJS/Docsify mounts. */
+
+:root {
+  --theme-color: #0b1f5c;
+  --link-color: #2563eb;
+  --pgpjs-topbar-height: 42px;
+  --pgpjs-chrome-height: 114px;
+  --scroll-padding-top: var(--pgpjs-chrome-height);
+}
+
+body.pgpjs-site {
+  overflow-x: hidden;
+}
+
+body.pgpjs-site .github-corner {
+  display: none;
+}
+
+body.pgpjs-site .skip-link {
+  z-index: 200;
+}
+
+/* Landing vs docs views */
+body.pgpjs-home .pgpjs-docs-shell,
+body.pgpjs-home .sidebar,
+body.pgpjs-home .sidebar-toggle,
+body.pgpjs-home > main {
+  display: none !important;
+}
+
+body.pgpjs-docs .pgpjs-landing {
+  display: none !important;
+}
+
+body.pgpjs-docs .under-footer-wrapper,
+body.pgpjs-docs .under-subfooter {
+  display: none !important;
+}
+
+body.pgpjs-docs {
+  background: #f8fafc;
+}
+
+body.pgpjs-docs .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 102;
+}
+
+body.pgpjs-docs .main-header {
+  position: sticky;
+  top: var(--pgpjs-topbar-height);
+  z-index: 101;
+}
+
+body.pgpjs-docs > main {
+  display: flex;
+  min-height: calc(100vh - var(--pgpjs-chrome-height));
+}
+
+body.pgpjs-docs .sidebar {
+  background: #ffffff;
+  border-right: 1px solid var(--border-gray, #e2e8f0);
+  top: var(--pgpjs-chrome-height) !important;
+  height: calc(100vh - var(--pgpjs-chrome-height));
+  z-index: 90;
+}
+
+body.pgpjs-docs .sidebar-toggle {
+  top: calc(var(--pgpjs-chrome-height) + 8px) !important;
+}
+
+body.pgpjs-docs .app-name {
+  display: none;
+}
+
+body.pgpjs-docs .content {
+  padding-top: 8px;
+}
+
+body.pgpjs-docs .markdown-section {
+  max-width: 860px;
+}
+
+body.pgpjs-docs .app-name-link {
+  color: var(--navy, #0b1f5c);
+  font-weight: 700;
+}
+
+/* Header search hosts the Docsify search plugin */
+.search-wrap {
+  position: relative;
+  min-width: min(420px, 46vw);
+  width: min(420px, 46vw);
+  padding-right: 8px;
+}
+
+.search-wrap .search {
+  margin: 0;
+  width: 100%;
+  flex: 1;
+}
+
+.search-wrap .search .input-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.search-wrap .search input[type='search'] {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.search-wrap .search .kbd-group {
+  display: none;
+}
+
+.search-wrap .search .results-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 250;
+  max-height: min(420px, 70vh);
+  overflow: auto;
+  background: #ffffff;
+  border: 1px solid var(--border-gray, #e2e8f0);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  padding: 8px 12px;
+}
+
+.search-wrap .search .results-status {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 12px;
+  z-index: 251;
+  background: #ffffff;
+  padding: 6px 0 0;
+}
+
+.search-wrap .search:has(.results-panel:not(:empty)) ~ *,
+.search-wrap
+  .search:where(:has(input:valid:focus), :has(.results-panel::empty))
+  ~ * {
+  display: initial;
+  opacity: 1;
+}
+
+.main-header .search:has(.results-panel:not(:empty)) ~ * {
+  display: flex;
+  opacity: 1;
+}
+
+.main-nav a.active,
+.main-nav a[aria-current='page'] {
+  color: var(--navy, #0b1f5c);
+}
+
+.main-nav a.active::after,
+.main-nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--blue-accent, #2563eb);
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.live-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+@media (max-width: 900px) {
+  .search-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.pgpjs-docs > main {
+    display: block;
+  }
+}
