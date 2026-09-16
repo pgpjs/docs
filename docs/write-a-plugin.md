@@ -230,8 +230,7 @@ window.$pgpjs = {
 
       hook.beforeEach(html => {
         const url =
-          'https://github.com/pgpjs/docs/blob/main/docs/' +
-          vm.route.file;
+          'https://github.com/pgpjs/docs/blob/main/docs/' + vm.route.file;
         const editHtml = '[📝 EDIT DOCUMENT](' + url + ')\n';
 
         return (

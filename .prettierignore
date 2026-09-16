@@ -2,6 +2,8 @@
 _playwright-*
 dist
 lib
+docs/assets
+docs/vendor
 
 # Files
 _vars.css

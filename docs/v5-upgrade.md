@@ -34,10 +34,7 @@ If your site uses URLs without `@4` or a specific version number, follow the sam
 
 ```html
 <!-- Core Theme -->
-<link
-  rel="stylesheet"
-  href="/dist/themes/core.min.css"
-/>
+<link rel="stylesheet" href="/dist/themes/core.min.css" />
 <!-- Optional: Dark Mode Support -->
 <link
   rel="stylesheet"
