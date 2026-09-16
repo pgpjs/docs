@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PGPJS</title>
+    <link rel="icon" href="_media/favicon.ico" />
+    <meta
+      name="keywords"
+      content="pgpjs,pgp,doc,docs,documentation,generator,markdown,javascript"
+    />
+    <meta
+      name="description"
+      content="PGPJS — Pretty Good Privacy | JavaScript documentation site generator."
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <!-- Core Theme -->
+    <link rel="stylesheet" href="/dist/themes/core.min.css" />
+
+    <!-- Theme Add-on(s) -->
+    <link
+      rel="stylesheet"
+      href="/dist/themes/addons/core-dark.min.css"
+      media="(prefers-color-scheme: dark)"
+      data-group="addon"
+      data-sheet="core-dark-auto"
+    />
+    <link
+      rel="stylesheet"
+      href="/dist/themes/addons/core-dark.min.css"
+      data-group="addon"
+      data-sheet="core-dark"
+      disabled
+    />
+    <link
+      rel="stylesheet"
+      href="/dist/themes/addons/vue.min.css"
+      data-group="addon"
+      data-sheet="vue"
+      disabled
+    />
+
+    <!-- Site styles -->
+    <style>
+      /* UI Kit */
+      .ui-kit-color {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: var(--font-size-s);
+      }
+
+      .ui-kit-color figure {
+        flex-grow: 1;
+        margin: 0;
+        padding: 0;
+      }
+
+      .ui-kit-color figure div {
+        height: 4rem;
+        border-radius: var(--border-radius);
+      }
+
+      .ui-kit-color figcaption {
+        text-align: center;
+        padding: 0.5em 0;
+      }
+    </style>
+  </head>
+
+  <body class="loading sidebar-chevron-right sidebar-group-box">
+    <div id="app"></div>
+    <script>
+      window.$pgpjs = {
+        alias: {
+          '.*?/changelog': '/changelog.md',
+          '/.*/_navbar.md': '/_navbar.md',
+        },
+        auto2top: true,
+        collapsibleSidebarGroups: true,
+        coverpage: true,
+        executeScript: true,
+        loadSidebar: true,
+        loadNavbar: true,
+        maxLevel: 4,
+        repo: 'pgpjs/docs',
+        subMaxLevel: 2,
+        name: 'PGPJS',
+        nameLink: {
+          '/': '#/',
+        },
+        search: {
+          noData: {
+            '/': 'No results!',
+          },
+          paths: 'auto',
+          placeholder: {
+            '/': 'Search',
+          },
+          depth: 6,
+        },
+        vueComponents: {
+          'button-counter': {
+            template: /* html */ `<button @click="count += 1">You clicked me {{ count }} times</button>`,
+            data() {
+              return {
+                count: 0,
+              };
+            },
+          },
+        },
+        vueGlobalOptions: {
+          data() {
+            return {
+              count: 0,
+              message: 'Hello, World!',
+              images: [
+                { title: 'Image 1', url: 'https://picsum.photos/150?random=1' },
+                { title: 'Image 2', url: 'https://picsum.photos/150?random=2' },
+                { title: 'Image 3', url: 'https://picsum.photos/150?random=3' },
+              ],
+            };
+          },
+          computed: {
+            timeOfDay() {
+              const date = new Date();
+              const hours = date.getHours();
+
+              if (hours < 12) {
+                return 'morning';
+              } else if (hours < 18) {
+                return 'afternoon';
+              } else {
+                return 'evening';
+              }
+            },
+          },
+          methods: {
+            hello() {
+              alert(this.message);
+            },
+          },
+        },
+        vueMounts: {
+          '#counter': {
+            data() {
+              return {
+                count: 0,
+              };
+            },
+          },
+        },
+        plugins: [
+          function (hook, vm) {
+            hook.beforeEach(html => {
+              let url =
+                'https://github.com/pgpjs/docs/blob/main/docs/' + vm.route.file;
+
+              if (/githubusercontent\.com/.test(vm.route.file)) {
+                url = vm.route.file
+                  .replace('raw.githubusercontent.com', 'github.com')
+                  .replace(/\/master/, '/blob/master')
+                  .replace(/\/main/, '/blob/main');
+              }
+
+              const footerHTML = [
+                '<hr>',
+                '<div style="display: flex; align-items: center; justify-content: space-between;">',
+                '  <span>Powered by <a href="/">PGPJS</a></span>',
+                `  <a href="${url}" style="display: inline-flex; align-items: center; gap: 0.25em;">:memo: Edit Page</a>`,
+                '</div>',
+              ].join('\n');
+
+              return html + footerHTML;
+            });
+          },
+        ],
+      };
+    </script>
+    <script src="/dist/pgpjs.min.js"></script>
+    <script src="/dist/plugins/search.min.js"></script>
+    <script src="/dist/plugins/front-matter.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markdown.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-nginx.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+  </body>
+</html>

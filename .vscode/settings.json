@@ -1,0 +1,5 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "cSpell.words": ["coverpage", "pgpjs", "PGPJS"],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

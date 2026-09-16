@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: PGPJS repository
+    url: https://github.com/pgpjs/docs
+    about: Source, issues, and documentation for PGPJS
