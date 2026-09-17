@@ -41,6 +41,10 @@ npm run dev
 
 The documentation site lives in [`docs/`](./docs) and is configured with the name **PGPJS**.
 
+### Deploy on Netlify
+
+Connect this GitHub repository in [Netlify](https://app.netlify.com/) and leave Base directory, Build command, and Publish directory empty. [`netlify.toml`](./netlify.toml) publishes `docs/` as a static site (no `npm run build`). You can also drag-and-drop the `docs/` folder.
+
 ### Embed PGPJS in a page
 
 ```html

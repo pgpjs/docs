@@ -92,17 +92,25 @@ server {
 
 ## Netlify
 
-1.  Login to your [Netlify](https://www.netlify.com/) account.
-2.  In the [dashboard](https://app.netlify.com/) page, click **Add New Site**.
-3.  Select GitHub.
-4.  Choose the repository where you store your docs, in the **Base Directory** add the subfolder where the files are stored. For example, it should be `docs`.
-5.  In the **Build Command** area leave it blank.
-6.  In the **Publish directory** area, if you have added the `docs` in the **Base Directory** you will see the publish directory populated with `docs/`
-7.  Netlify is smart enough to look for the the `index.html` file inside the `docs/` folder.
+This repository already includes `netlify.toml`. It publishes the static `docs/` folder and does **not** run the library `npm run build` (that output is `dist/`, which is not the website). There is no `package.json` inside `docs/`, so Netlify will not run `npm ci` or Husky.
+
+### Connect the Git repo
+
+1. Log in to [Netlify](https://www.netlify.com/) and click **Add new site** → **Import an existing project**.
+2. Choose GitHub (or GitLab) and select this repository.
+3. Leave **Base directory**, **Build command**, and **Publish directory** empty so `netlify.toml` is used (`base = "docs"`, publish the folder contents).
+4. Deploy. The site root is `docs/index.html`.
+
+Do **not** set the Netlify UI Base directory to `docs` on top of `netlify.toml` — Netlify would look for `docs/docs` and the deploy would fail.
+
+### Drag and drop
+
+- Upload the **`docs`** folder, or
+- Upload the whole repository (a root `index.html` sends visitors to `/docs/`).
 
 ### HTML5 router
 
-When using the HTML5 router, you need to set up redirect rules that redirect all requests to your `index.html`. It's pretty simple when you're using Netlify. Just create a file named `_redirects` in the docs directory, add this snippet to the file, and you're all set:
+`docs/_redirects` already rewrites unknown paths to `index.html` without hiding real `.md` or asset files. You only need to add this yourself if you start a new PGPJS site:
 
 ```sh
 /*    /index.html   200

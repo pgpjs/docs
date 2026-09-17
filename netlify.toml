@@ -1,0 +1,39 @@
+# PGPJS docs site — Netlify
+# Live site files are already static in docs/. The library `npm run build`
+# writes dist/ (the engine), not this website — never use dist as publish.
+#
+# Leave Base directory / Build command / Publish directory empty in the
+# Netlify UI. Setting Base to "docs" in the UI as well would resolve to
+# docs/docs and fail the deploy.
+
+[build]
+  base = "docs"
+  publish = "."
+  command = "true"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_CONFIG_IGNORE_SCRIPTS = "true"
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
+
+[build.processing]
+  skip_processing = true
+
+# Existing files (index.html, *.md, assets, vendor) win over this rewrite.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/*.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
