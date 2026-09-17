@@ -305,14 +305,15 @@ body.pgpjs-docs .app-name-link {
 }
 
 .code-body {
-  max-height: min(420px, 56vh);
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 body.pgpjs-home .code-line {
   display: block;
   white-space: pre;
   color: #cfd6ea;
+  line-height: 1.55;
 }
 
 body.pgpjs-home .code-line .line-no {
@@ -322,8 +323,14 @@ body.pgpjs-home .code-line .line-no {
 }
 
 body.pgpjs-home .code-card {
-  width: min(92%, 36rem);
+  width: min(100%, 42rem);
   left: -12px;
+  overflow: visible;
+}
+
+body.pgpjs-home .code-body {
+  font-size: 12px;
+  padding-bottom: 16px;
 }
 
 @media (max-width: 900px) {
