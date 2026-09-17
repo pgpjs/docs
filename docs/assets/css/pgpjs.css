@@ -364,12 +364,13 @@ body {
 }
 
 .code-line {
-  display: flex;
-  gap: 0;
-  white-space: nowrap;
+  display: block;
+  white-space: pre;
+  color: #cfd6ea;
 }
 
 .line-no {
+  display: inline-block;
   color: #4a5372;
   width: 18px;
   text-align: right;

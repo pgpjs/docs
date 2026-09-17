@@ -305,28 +305,25 @@ body.pgpjs-docs .app-name-link {
 }
 
 .code-body {
-  max-height: min(380px, 52vh);
+  max-height: min(420px, 56vh);
   overflow: auto;
 }
 
 body.pgpjs-home .code-line {
-  display: flex;
-  gap: 0;
-  white-space: nowrap;
+  display: block;
+  white-space: pre;
+  color: #cfd6ea;
 }
 
 body.pgpjs-home .code-line .line-no {
-  flex: 0 0 18px;
+  display: inline-block;
   width: 18px;
   margin-right: 14px;
 }
 
-body.pgpjs-home .code-line > span:not(.line-no) {
-  flex: 0 0 auto;
-}
-
 body.pgpjs-home .code-card {
-  width: min(72%, 640px);
+  width: min(92%, 36rem);
+  left: -12px;
 }
 
 @media (max-width: 900px) {
