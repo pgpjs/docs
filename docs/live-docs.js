@@ -279,6 +279,9 @@ function liveDocsPlugin(hook, vm) {
     document.body.classList.toggle('pgpjs-home', isHome);
     document.body.classList.toggle('pgpjs-docs', !isHome);
     document.querySelector('main > .content')?.scrollTo(0, 0);
+    document
+      .querySelector('.markdown-section')
+      ?.classList.toggle('pgpjs-live-source', /\/code\//.test(current));
 
     document.querySelectorAll('.main-nav a[data-nav]').forEach(link => {
       const pkg = link.getAttribute('data-nav');
