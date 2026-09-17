@@ -304,33 +304,37 @@ body.pgpjs-docs .app-name-link {
   background: #10b981;
 }
 
-.code-body {
-  max-height: none;
-  overflow: visible;
+body.pgpjs-home .code-card {
+  width: 52%;
+  max-width: 340px;
+  left: -40px;
+  bottom: -6%;
+  overflow: hidden;
+}
+
+body.pgpjs-home .code-tab {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+body.pgpjs-home .code-body {
+  max-height: 250px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 10px 12px 14px;
 }
 
 body.pgpjs-home .code-line {
   display: block;
   white-space: pre;
   color: #cfd6ea;
-  line-height: 1.55;
 }
 
 body.pgpjs-home .code-line .line-no {
   display: inline-block;
-  width: 18px;
-  margin-right: 14px;
-}
-
-body.pgpjs-home .code-card {
-  width: min(100%, 42rem);
-  left: -12px;
-  overflow: visible;
-}
-
-body.pgpjs-home .code-body {
-  font-size: 12px;
-  padding-bottom: 16px;
+  width: 16px;
+  margin-right: 10px;
 }
 
 @media (max-width: 900px) {
