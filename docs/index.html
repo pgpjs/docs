@@ -132,30 +132,26 @@
               <div class="code-body">
                 <div class="code-line">
                   <span class="line-no">1</span
-                  ><span class="code-comment">// Pretty Good Privacy | JS</span>
-                </div>
-                <div class="code-line">
-                  <span class="line-no">2</span
                   ><span class="code-keyword">import</span
                   ><span class="code-plain"> </span
                   ><span class="code-var">PGPJS</span
                   ><span class="code-plain"> </span
                   ><span class="code-keyword">from</span
                   ><span class="code-plain"> </span
-                  ><span class="code-string">'@pgpjs/core'</span
+                  ><span class="code-string">"@/lib/pgpjs"</span
                   ><span class="code-plain">;</span>
                 </div>
                 <div class="code-line">
-                  <span class="line-no">3</span><span class="code-plain"></span>
+                  <span class="line-no">2</span><span class="code-plain"></span>
                 </div>
                 <div class="code-line">
-                  <span class="line-no">4</span
+                  <span class="line-no">3</span
                   ><span class="code-comment"
-                    >// 1. Generate RFC 9580 keypair</span
+                    >// 1. Generate an RFC 9580 keypair (Ed25519 / X25519)</span
                   >
                 </div>
                 <div class="code-line">
-                  <span class="line-no">5</span
+                  <span class="line-no">4</span
                   ><span class="code-keyword">const</span
                   ><span class="code-plain"> </span
                   ><span class="code-var">keys</span
@@ -166,14 +162,17 @@
                   ><span class="code-plain">({</span>
                 </div>
                 <div class="code-line">
-                  <span class="line-no">6</span><span class="code-plain"> </span
+                  <span class="line-no">5</span><span class="code-plain"> </span
                   ><span class="code-var">name</span
                   ><span class="code-plain">: </span
-                  ><span class="code-string">'Alice'</span
-                  ><span class="code-plain">, </span
+                  ><span class="code-string">"Alice"</span
+                  ><span class="code-plain">,</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">6</span><span class="code-plain"> </span
                   ><span class="code-var">email</span
                   ><span class="code-plain">: </span
-                  ><span class="code-string">'alice@pgpjs.org'</span>
+                  ><span class="code-string">"alice@example.com"</span>
                 </div>
                 <div class="code-line">
                   <span class="line-no">7</span
@@ -185,36 +184,86 @@
                 <div class="code-line">
                   <span class="line-no">9</span
                   ><span class="code-comment"
-                    >// 2. Seal data (type-safe serialization)</span
+                    >// 2. Seal data (accepts objects, strings, arrays)</span
                   >
                 </div>
                 <div class="code-line">
                   <span class="line-no">10</span
                   ><span class="code-keyword">const</span
                   ><span class="code-plain"> </span
-                  ><span class="code-var">sealed</span
+                  ><span class="code-var">ciphertext</span
                   ><span class="code-plain"> = </span
                   ><span class="code-keyword">await</span
                   ><span class="code-plain"> </span
                   ><span class="code-func">PGPJS.seal</span
-                  ><span class="code-plain">({</span>
+                  ><span class="code-plain">({ </span
+                  ><span class="code-var">user</span
+                  ><span class="code-plain">: </span
+                  ><span class="code-string">"Bob"</span
+                  ><span class="code-plain">, </span
+                  ><span class="code-var">balance</span
+                  ><span class="code-plain">: 500 }, {</span>
                 </div>
                 <div class="code-line">
                   <span class="line-no">11</span
                   ><span class="code-plain"> </span
-                  ><span class="code-var">message</span
-                  ><span class="code-plain">: </span
-                  ><span class="code-string">'Hello, PGPJS!'</span>
-                </div>
-                <div class="code-line">
-                  <span class="line-no">12</span
-                  ><span class="code-plain">}, { </span
                   ><span class="code-var">to</span
                   ><span class="code-plain">: </span
                   ><span class="code-var">keys</span
                   ><span class="code-plain">.</span
-                  ><span class="code-var">publicKey</span
-                  ><span class="code-plain"> });</span>
+                  ><span class="code-var">publicKey</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">12</span
+                  ><span class="code-plain">});</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">13</span
+                  ><span class="code-plain"></span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">14</span
+                  ><span class="code-comment">// 3. Open data</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">15</span
+                  ><span class="code-keyword">const</span
+                  ><span class="code-plain"> </span
+                  ><span class="code-var">data</span
+                  ><span class="code-plain"> = </span
+                  ><span class="code-keyword">await</span
+                  ><span class="code-plain"> </span
+                  ><span class="code-func">PGPJS.open</span
+                  ><span class="code-plain">(</span
+                  ><span class="code-var">ciphertext</span
+                  ><span class="code-plain">, {</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">16</span
+                  ><span class="code-plain"> </span
+                  ><span class="code-var">privateKey</span
+                  ><span class="code-plain">: </span
+                  ><span class="code-var">keys</span
+                  ><span class="code-plain">.</span
+                  ><span class="code-var">privateKey</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">17</span
+                  ><span class="code-plain">});</span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">18</span
+                  ><span class="code-plain"></span>
+                </div>
+                <div class="code-line">
+                  <span class="line-no">19</span
+                  ><span class="code-func">console.log</span
+                  ><span class="code-plain">(</span
+                  ><span class="code-var">data</span
+                  ><span class="code-plain">.</span
+                  ><span class="code-var">balance</span
+                  ><span class="code-plain">); </span
+                  ><span class="code-comment">// 500</span>
                 </div>
               </div>
             </div>
