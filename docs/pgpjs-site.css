@@ -211,6 +211,40 @@ body.pgpjs-docs .app-name-link {
   opacity: 1;
 }
 
+/* Docsify's global `a` styles turn chrome links blue + underlined */
+.topbar .top-links a,
+.topbar .top-links a:visited,
+.topbar .top-links a:hover,
+.topbar .top-links a:active,
+.topbar .top-links a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  text-decoration-line: none;
+  opacity: 1;
+}
+
+.topbar .top-links a:hover,
+.topbar .top-links a:focus {
+  opacity: 0.85;
+}
+
+.main-nav a,
+.main-nav a:visited,
+.main-nav a:hover,
+.main-nav a:active,
+.main-nav a:focus,
+.main-nav a.active,
+.main-nav a[aria-current='page'] {
+  color: var(--text-dark, #1e293b);
+  text-decoration: none;
+  text-decoration-line: none;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: var(--navy, #0b1f5c);
+}
+
 .main-nav a.active,
 .main-nav a[aria-current='page'] {
   color: var(--navy, #0b1f5c);
@@ -218,13 +252,7 @@ body.pgpjs-docs .app-name-link {
 
 .main-nav a.active::after,
 .main-nav a[aria-current='page']::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--blue-accent, #2563eb);
+  content: none;
 }
 
 .live-badge {
