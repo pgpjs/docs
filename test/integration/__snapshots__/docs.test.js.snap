@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Docs Site coverpage renders and is unchanged 1`] = `
+"<section class="cover show" role="complementary" aria-label="cover">
+      <div class="mask"></div>
+      <div class="cover-main"><!-- markdownlint-disable first-line-h1 --><p><img src="http://127.0.0.1:4000/_media/icon.svg" data-origin="_media/icon.svg" alt="logo"></p><h1 id="pgpjs" tabindex="-1"><a href="#/?id=pgpjs" data-id="pgpjs" class="anchor"><span>PGPJS <small>5.0.0</small></span></a></h1><blockquote><p>Pretty Good Privacy | JavaScript documentation site generator</p></blockquote><ul><li>Simple and lightweight</li><li>No statically built HTML files</li><li>Multiple themes</li></ul><p><a href="#/?id=pgpjs" class="button primary">Get Started</a>
+<a href="https://github.com/pgpjs/docs/" target="_blank" rel="noopener" class="button secondary">GitHub</a></p></div>
+    </section>"
+`;
+
+exports[`Docs Site navbar renders and is unchanged 1`] = `"<nav class="app-nav" aria-label="secondary"><!-- markdownlint-disable first-line-h1 --><ul><li><a href="https://github.com/pgpjs/docs" target="_blank" rel="noopener">GitHub</a></li></ul></nav>"`;
+
+exports[`Docs Site sidebar renders and is unchanged 1`] = `
+"<aside id="__sidebar" class="sidebar show" tabindex="-1" role="none">
+      
+      <div class="sidebar-nav" role="navigation" aria-label="primary"><!-- markdownlint-disable first-line-h1 --><ul><li><p>Getting started</p><ul><li aria-current="page" class="active"><a href="#/" class="page-link">Home</a></li><li><a href="#/quickstart" class="page-link">Quick start</a></li></ul></li><li><a href="#/core/" class="page-link">@pgpjs/core</a><ul><li><a href="#/core/" class="page-link">Overview</a></li><li><a href="#/core/architecture" class="page-link">Architecture</a></li><li><a href="#/core/security" class="page-link">Security</a></li><li><a href="#/core/package" class="page-link">Package README</a></li><li><a href="#/core/code/pgpjs" class="page-link">Live source: pgpjs.ts</a></li><li><a href="#/core/code/index" class="page-link">Live source: index.ts</a></li></ul></li><li><a href="#/next/" class="page-link">@pgpjs/next</a><ul><li><a href="#/next/" class="page-link">Overview</a></li><li><a href="#/next/code/server" class="page-link">Live source: server.ts</a></li><li><a href="#/next/code/client" class="page-link">Live source: client.ts</a></li><li><a href="#/next/code/index" class="page-link">Live source: index.ts</a></li></ul></li><li><a href="#/react/" class="page-link">@pgpjs/react</a><ul><li><a href="#/react/" class="page-link">Overview</a></li><li><a href="#/react/code/hooks" class="page-link">Live source: hooks.ts</a></li><li><a href="#/react/code/context" class="page-link">Live source: context.tsx</a></li><li><a href="#/react/code/index" class="page-link">Live source: index.ts</a></li></ul></li></ul></div>
+    </aside>"
+`;

@@ -1,0 +1,2 @@
+# Serve real files first. Unknown paths load the PGPJS app shell.
+/*    /index.html   200

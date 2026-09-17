@@ -1,0 +1,369 @@
+/* Overlay: keep the p7 chrome intact when PGPJS/Docsify mounts. */
+
+:root {
+  --theme-color: #0b1f5c;
+  --link-color: #2563eb;
+  --pgpjs-topbar-height: 42px;
+  --pgpjs-chrome-height: 114px;
+  --scroll-padding-top: var(--pgpjs-chrome-height);
+}
+
+body.pgpjs-site {
+  overflow-x: hidden;
+}
+
+body.pgpjs-site .github-corner {
+  display: none;
+}
+
+body.pgpjs-site .skip-link {
+  z-index: 200;
+}
+
+/* Landing vs docs views */
+body.pgpjs-home .pgpjs-docs-shell,
+body.pgpjs-home .sidebar,
+body.pgpjs-home .sidebar-toggle,
+body.pgpjs-home main {
+  display: none !important;
+}
+
+body.pgpjs-docs .pgpjs-landing {
+  display: none !important;
+}
+
+body.pgpjs-docs .under-footer-wrapper,
+body.pgpjs-docs .under-subfooter {
+  display: none !important;
+}
+
+body.pgpjs-docs {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+body.pgpjs-docs .topbar,
+body.pgpjs-docs .main-header {
+  flex-shrink: 0;
+}
+
+body.pgpjs-docs .topbar {
+  position: relative;
+  top: 0;
+  z-index: 102;
+}
+
+body.pgpjs-docs .main-header {
+  position: relative;
+  top: auto;
+  z-index: 101;
+}
+
+/* Sidebar + article share one row under the P7 navbar.
+   Docsify replaces #app with <main> via outerHTML, so the shell's
+   direct child is main after mount. */
+body.pgpjs-docs .pgpjs-docs-shell {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+body.pgpjs-docs .pgpjs-docs-shell > #app,
+body.pgpjs-docs .pgpjs-docs-shell > main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  position: relative;
+  height: auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+}
+
+body.pgpjs-docs .sidebar {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: 0;
+  visibility: visible;
+  width: var(--sidebar-width);
+  flex: 0 0 var(--sidebar-width);
+  height: auto;
+  align-self: stretch;
+  overflow-y: auto;
+  background: #ffffff;
+  border-right: 1px solid var(--border-gray, #e2e8f0);
+  z-index: 90;
+}
+
+body.pgpjs-docs .sidebar.show {
+  translate: none;
+}
+
+body.pgpjs-docs .sidebar-toggle {
+  position: absolute;
+  top: 8px !important;
+}
+
+body.pgpjs-docs .app-name {
+  display: none;
+}
+
+body.pgpjs-docs main > .content {
+  position: relative !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  overflow: auto;
+  padding: 0;
+  background: #ffffff;
+}
+
+body.pgpjs-docs .markdown-section {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 20px clamp(20px, 3.5vw, 48px) 48px;
+  box-sizing: border-box;
+}
+
+body.pgpjs-docs .markdown-section pre,
+body.pgpjs-docs .markdown-section pre[data-lang] {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+body.pgpjs-docs .markdown-section.pgpjs-live-source pre {
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 641px) {
+  body.pgpjs-docs .sidebar-toggle {
+    display: none;
+  }
+}
+
+body.pgpjs-docs .app-name-link {
+  color: var(--navy, #0b1f5c);
+  font-weight: 700;
+}
+
+/* Header search hosts the Docsify search plugin */
+.search-wrap {
+  position: relative;
+  min-width: min(420px, 46vw);
+  width: min(420px, 46vw);
+  padding-right: 8px;
+}
+
+.search-wrap .search {
+  margin: 0;
+  width: 100%;
+  flex: 1;
+}
+
+.search-wrap .search .input-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.search-wrap .search input[type='search'] {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.search-wrap .search .kbd-group {
+  display: none;
+}
+
+.search-wrap .search .results-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 250;
+  max-height: min(420px, 70vh);
+  overflow: auto;
+  background: #ffffff;
+  border: 1px solid var(--border-gray, #e2e8f0);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  padding: 8px 12px;
+}
+
+.search-wrap .search .results-status {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 12px;
+  z-index: 251;
+  background: #ffffff;
+  padding: 6px 0 0;
+}
+
+.search-wrap .search:has(.results-panel:not(:empty)) ~ *,
+.search-wrap
+  .search:where(:has(input:valid:focus), :has(.results-panel::empty))
+  ~ * {
+  display: initial;
+  opacity: 1;
+}
+
+.main-header .search:has(.results-panel:not(:empty)) ~ * {
+  display: flex;
+  opacity: 1;
+}
+
+/* Docsify's global `a` styles turn chrome links blue + underlined */
+.topbar .top-links a,
+.topbar .top-links a:visited,
+.topbar .top-links a:hover,
+.topbar .top-links a:active,
+.topbar .top-links a:focus,
+.topbar .top-links a span {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-thickness: 0 !important;
+  opacity: 1;
+}
+
+.topbar .top-links a:hover,
+.topbar .top-links a:focus {
+  opacity: 0.85;
+}
+
+.main-nav a,
+.main-nav a:visited,
+.main-nav a:hover,
+.main-nav a:active,
+.main-nav a:focus,
+.main-nav a.active,
+.main-nav a[aria-current='page'] {
+  color: var(--text-dark, #1e293b) !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-thickness: 0 !important;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  color: var(--navy, #0b1f5c) !important;
+}
+
+.main-nav a.active,
+.main-nav a[aria-current='page'] {
+  color: var(--navy, #0b1f5c) !important;
+}
+
+.main-nav a.active::after,
+.main-nav a[aria-current='page']::after {
+  content: none;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.live-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+body.pgpjs-home .code-card {
+  width: 52%;
+  max-width: 340px;
+  left: -40px;
+  bottom: -6%;
+  overflow: hidden;
+}
+
+body.pgpjs-home .code-tab {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+body.pgpjs-home .code-body {
+  max-height: 250px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 10px 12px 14px;
+}
+
+body.pgpjs-home .code-line {
+  display: block;
+  white-space: pre;
+  color: #cfd6ea;
+}
+
+body.pgpjs-home .code-line .line-no {
+  display: inline-block;
+  width: 16px;
+  margin-right: 10px;
+}
+
+@media (max-width: 900px) {
+  .search-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  body.pgpjs-docs .pgpjs-docs-shell > main {
+    display: block;
+  }
+
+  body.pgpjs-docs .sidebar {
+    position: fixed !important;
+    top: var(--pgpjs-chrome-height) !important;
+    bottom: 0 !important;
+    height: auto;
+    flex: none;
+    z-index: 200;
+  }
+
+  body.pgpjs-docs .sidebar.show {
+    translate: 0;
+  }
+
+  body.pgpjs-docs main > .content {
+    width: 100%;
+    height: 100%;
+  }
+}
