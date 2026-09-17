@@ -365,8 +365,8 @@ body {
 
 .code-line {
   display: flex;
-  gap: 14px;
-  white-space: pre;
+  gap: 0;
+  white-space: nowrap;
 }
 
 .line-no {

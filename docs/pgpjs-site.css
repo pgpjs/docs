@@ -309,15 +309,24 @@ body.pgpjs-docs .app-name-link {
   overflow: auto;
 }
 
-.code-line {
-  display: block;
-  white-space: pre;
+body.pgpjs-home .code-line {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
 }
 
-.code-line .line-no {
-  display: inline-block;
+body.pgpjs-home .code-line .line-no {
+  flex: 0 0 18px;
   width: 18px;
   margin-right: 14px;
+}
+
+body.pgpjs-home .code-line > span:not(.line-no) {
+  flex: 0 0 auto;
+}
+
+body.pgpjs-home .code-card {
+  width: min(72%, 640px);
 }
 
 @media (max-width: 900px) {
