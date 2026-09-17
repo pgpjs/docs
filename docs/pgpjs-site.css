@@ -309,6 +309,17 @@ body.pgpjs-docs .app-name-link {
   overflow: auto;
 }
 
+.code-line {
+  display: block;
+  white-space: pre;
+}
+
+.code-line .line-no {
+  display: inline-block;
+  width: 18px;
+  margin-right: 14px;
+}
+
 @media (max-width: 900px) {
   .search-wrap {
     width: 100%;
