@@ -278,6 +278,7 @@ function liveDocsPlugin(hook, vm) {
     const current = path.replace(/\/$/, '');
     document.body.classList.toggle('pgpjs-home', isHome);
     document.body.classList.toggle('pgpjs-docs', !isHome);
+    document.querySelector('main > .content')?.scrollTo(0, 0);
 
     document.querySelectorAll('.main-nav a[data-nav]').forEach(link => {
       const pkg = link.getAttribute('data-nav');
