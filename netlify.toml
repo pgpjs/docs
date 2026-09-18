@@ -20,6 +20,31 @@
   skip_processing = true
 
 # Existing files (index.html, *.md, assets, vendor) win over this rewrite.
+# Nested Docsify sidebar fetches must not receive index.html.
+[[redirects]]
+  from = "/core/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/next/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/react/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*.md"
+  to = "/_404.md"
+  status = 404
+  force = false
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
