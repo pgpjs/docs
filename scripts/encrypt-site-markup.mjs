@@ -9,8 +9,9 @@ const unlockPath = join(root, 'docs/pgpjs-unlock.js');
 const KEY = 'pgpjs-unlock';
 
 const UNLOCK_START = '    <script src="/pgpjs-unlock.js';
-const LIVE_DOCS = '    <script src="/live-docs.js"></script>';
+const LIVE_DOCS = '    <script src="/live-docs.js';
 const CHROME_START = '    <div class="pgpjs-chrome">';
+const CACHE_BUST = 'blackeye-login';
 
 function xorBase64(text, key) {
   const keyBytes = Buffer.from(key);
@@ -66,12 +67,17 @@ if (indexHtml.includes(CHROME_START) && indexHtml.includes(LIVE_DOCS)) {
   indexHtml = `${indexHtml.slice(0, start)}    <noscript>
       PGPJS documentation requires JavaScript.
     </noscript>
-    <script src="/pgpjs-unlock.js?v=seo-history"></script>
+    <script src="/pgpjs-unlock.js?v=${CACHE_BUST}"></script>
 
 ${indexHtml.slice(end)}`;
 } else if (!indexHtml.includes(UNLOCK_START)) {
   throw new Error(
     'docs/index.html is missing both site markup and unlock script',
+  );
+} else {
+  indexHtml = indexHtml.replace(
+    /src="\/pgpjs-unlock\.js\?v=[^"]+"/,
+    `src="/pgpjs-unlock.js?v=${CACHE_BUST}"`,
   );
 }
 

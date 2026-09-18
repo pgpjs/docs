@@ -127,6 +127,7 @@ function aliasMap() {
     '/next': '/next/',
     '/react': '/react/',
     '/mpc': '/mpc/',
+    '/auth': '/auth/',
   };
 }
 
@@ -600,8 +601,138 @@ function liveDocsPlugin(hook, vm) {
         (current === `/${pkg}` || current.startsWith(`/${pkg}/`));
       link.classList.toggle('active', active);
     });
+    bindBlackeyeLogin();
     closeMobileSidebar();
   });
+}
+
+const BLACKEYE_HASHES_URL = '/auth/tokens.hashes.json';
+const BLACKEYE_SESSION_KEY = 'pgpjs-blackeye';
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function normalizeCodeid(codeid) {
+  try {
+    const decoded = decodeURIComponent(codeid || '');
+    return decoded === '-' ? '' : decoded;
+  } catch {
+    return codeid === '-' ? '' : codeid || '';
+  }
+}
+
+async function sha256Hex(text) {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+let blackeyeHashesPromise;
+
+function loadBlackeyeHashes() {
+  if (!blackeyeHashesPromise) {
+    blackeyeHashesPromise = fetch(BLACKEYE_HASHES_URL, { cache: 'no-store' })
+      .then(response => (response.ok ? response.json() : { hashes: [] }))
+      .then(data => (Array.isArray(data.hashes) ? data.hashes : []))
+      .catch(() => []);
+  }
+  return blackeyeHashesPromise;
+}
+
+async function verifyBlackeyeToken(pgpid, codeid) {
+  const hash = await sha256Hex(
+    `${String(pgpid).toLowerCase()}:${normalizeCodeid(codeid)}`,
+  );
+  const hashes = await loadBlackeyeHashes();
+  return hashes.includes(hash);
+}
+
+function blackeyeSessionMarkdown(ok, pgpid) {
+  const short = escapeHtml(`${String(pgpid).slice(0, 8)}…`);
+  if (ok) {
+    return `# Signed in
+
+<p class="blog-kicker">Blackeye</p>
+
+This PGP ID is valid. You are signed in for this browser tab.
+
+- PGP ID: \`${short}\`
+- [Sign in with another token](/auth/)
+- [Make a token](/auth/token)
+
+<button type="button" class="install-copy" data-blackeye-logout>Sign out</button>
+`;
+  }
+  return `# Login failed
+
+<p class="blog-kicker">Blackeye</p>
+
+That PGP ID and Code ID were not found. Create a token first, then deploy \`docs/auth/tokens.hashes.json\`.
+
+- [Sign in](/auth/)
+- [Make a token](/auth/token)
+`;
+}
+
+function navigateDocsify(path) {
+  const url = new URL(path, window.location.origin);
+  window.history.pushState({ key: url.href }, '', url.pathname);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+}
+
+function bindBlackeyeLogin() {
+  document.querySelectorAll('[data-blackeye-login]').forEach(form => {
+    if (form.dataset.bound === '1') {
+      return;
+    }
+    form.dataset.bound = '1';
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const pgpid = (form.querySelector('[name="pgpid"]')?.value || '')
+        .trim()
+        .toLowerCase();
+      let codeid = form.querySelector('[name="codeid"]')?.value ?? '';
+      const status = form.querySelector('.blackeye-login-status');
+      if (!/^[0-9a-f]{64}$/i.test(pgpid)) {
+        if (status) {
+          status.hidden = false;
+          status.textContent =
+            'PGP ID must be the 64-character hex token from pig create token.';
+        }
+        return;
+      }
+      if (!codeid) {
+        codeid = '-';
+      }
+      navigateDocsify(
+        `/auth/${encodeURIComponent(pgpid)}/${encodeURIComponent(codeid)}`,
+      );
+    });
+  });
+
+  document.querySelectorAll('[data-blackeye-logout]').forEach(btn => {
+    if (btn.dataset.bound === '1') {
+      return;
+    }
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => {
+      sessionStorage.removeItem(BLACKEYE_SESSION_KEY);
+      navigateDocsify('/auth/');
+    });
+  });
+}
+
+function isAuthSessionPath(path) {
+  return /^\/auth\/(?!token(?:\/|$))[^/]+\/[^/]+/.test(
+    String(path || '').replace(/\/$/, ''),
+  );
 }
 
 const HOME_TITLE =
@@ -746,6 +877,18 @@ const PAGE_META = {
       'Install pgpjs-cli on the Prysel Robotics Studio bench and seal telemetry with the same OpenPGP toolkit.',
     markdown: '/prysel/cli/git.md',
   },
+  '/auth': {
+    title: 'Login — PGPJS',
+    description:
+      'Sign in with a Blackeye PGP ID and Code ID. Login URL: /auth/{pgpid}/{codeid}.',
+    markdown: '/auth/README.md',
+  },
+  '/auth/token': {
+    title: 'Make a login token — PGPJS',
+    description:
+      'Create a Blackeye login token with node scripts/pig.mjs create token, then deploy the hash file.',
+    markdown: '/auth/token.md',
+  },
 };
 
 function setMeta(name, content, attr = 'name') {
@@ -824,7 +967,10 @@ function syncPageMeta(path, isHome) {
   const section = document.querySelector('.markdown-section');
   const heading = section?.querySelector('h1');
   const paragraph = section?.querySelector('p');
-  const known = PAGE_META[path] || PAGE_META[path.replace(/\/$/, '')];
+  const session = isAuthSessionPath(path);
+  const known = session
+    ? PAGE_META['/auth']
+    : PAGE_META[path] || PAGE_META[path.replace(/\/$/, '')];
   const rawTitle = isHome
     ? HOME_TITLE
     : known?.title || (heading?.textContent || 'Documentation').trim();
@@ -836,8 +982,15 @@ function syncPageMeta(path, isHome) {
         .trim()
         .replace(/\s+/g, ' ')
         .slice(0, 180);
-  const canonicalPath = isHome ? '/' : path.startsWith('/') ? path : `/${path}`;
+  const canonicalPath = isHome
+    ? '/'
+    : session
+      ? '/auth/'
+      : path.startsWith('/')
+        ? path
+        : `/${path}`;
   const url = `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath}`;
+  setMeta('robots', session ? 'noindex, nofollow' : 'index, follow');
 
   document.title = title;
   setMeta('description', desc);
@@ -846,7 +999,7 @@ function syncPageMeta(path, isHome) {
   setMeta('og:url', url, 'property');
   setMeta('twitter:title', title);
   setMeta('twitter:description', desc);
-  setAlternateMarkdown(isHome ? '/' : path);
+  setAlternateMarkdown(isHome || session ? canonicalPath : path);
   setJsonLd(canonicalPath, title, isHome);
 
   let canonical = document.querySelector('link[rel="canonical"]');
@@ -862,5 +1015,23 @@ probeStandalone();
 
 window.$pgpjs = window.$pgpjs || {};
 window.$pgpjs.alias = Object.assign({}, aliasMap(), window.$pgpjs.alias);
+window.$pgpjs.routes = Object.assign({}, window.$pgpjs.routes, {
+  '/auth/([^/]+)/([^/]+?)(?:\\.md)?/?': function (route, matched, next) {
+    const pgpid = matched[1];
+    const codeid = matched[2];
+    if (pgpid === 'token') {
+      next(false);
+      return;
+    }
+    verifyBlackeyeToken(pgpid, codeid)
+      .then(ok => {
+        if (ok) {
+          sessionStorage.setItem(BLACKEYE_SESSION_KEY, '1');
+        }
+        next(blackeyeSessionMarkdown(ok, pgpid));
+      })
+      .catch(() => next(blackeyeSessionMarkdown(false, pgpid)));
+  },
+});
 
 window.$pgpjs.plugins = [liveDocsPlugin, ...(window.$pgpjs.plugins || [])];

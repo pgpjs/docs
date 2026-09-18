@@ -908,3 +908,55 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     align-items: stretch;
   }
 }
+
+body.pgpjs-docs .markdown-section .blackeye-login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  margin: 1.5rem 0 2rem;
+  padding: 22px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.08),
+    0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+body.pgpjs-docs .markdown-section .blackeye-login label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0b1f5c;
+}
+
+body.pgpjs-docs .markdown-section .blackeye-login input {
+  border: 1px solid #dbe3f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+body.pgpjs-docs .markdown-section .blackeye-login button[type='submit'],
+body.pgpjs-docs .markdown-section [data-blackeye-logout] {
+  margin-top: 8px;
+  background: #0b1f5c;
+  color: #ffffff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+body.pgpjs-docs .markdown-section .blackeye-login button[type='submit']:hover,
+body.pgpjs-docs .markdown-section [data-blackeye-logout]:hover {
+  background: #163a8a;
+}
+
+body.pgpjs-docs .markdown-section .blackeye-login-status {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 14px;
+}

@@ -31,6 +31,8 @@ const PATHS = [
   '/crypterchat/chatscan/git',
   '/prysel/robotics-studio/git',
   '/prysel/cli/git',
+  '/auth/',
+  '/auth/token',
 ];
 
 function loc(path) {
