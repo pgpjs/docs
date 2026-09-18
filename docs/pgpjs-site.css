@@ -10,6 +10,7 @@
 
 body.pgpjs-site {
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body.pgpjs-site .github-corner {
@@ -337,10 +338,335 @@ body.pgpjs-home .code-line .line-no {
   margin-right: 10px;
 }
 
+.sidebar .pgpjs-landing,
+.sidebar .topbar,
+.sidebar .main-header,
+.sidebar .hero,
+.sidebar .install-band,
+.sidebar .under-footer-wrapper,
+.sidebar .under-subfooter {
+  display: none !important;
+}
+
+.install-band {
+  background: #0b1f5c;
+  color: #ffffff;
+  padding: clamp(40px, 5vw, 72px) clamp(20px, 3.5vw, 48px);
+  text-align: center;
+}
+
+.install-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.install-kicker {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #93c5fd;
+}
+
+.install-band h2 {
+  margin: 0 0 28px;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.install-cmd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 640px;
+  margin: 0 auto 20px;
+  padding: 18px 18px 18px 22px;
+  background: #081549;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  text-align: left;
+}
+
+.install-cmd code {
+  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: #ffffff;
+  background: transparent;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.install-copy {
+  flex-shrink: 0;
+  background: #ffffff;
+  color: #0b1f5c;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.install-copy:hover,
+.install-copy.copied {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.install-lead {
+  margin: 0;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.6;
+  color: #dbeafe;
+}
+
+.install-lead a {
+  color: #93c5fd;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.install-lead a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.install-lead code {
+  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+#overview,
+#install {
+  scroll-margin-top: calc(var(--pgpjs-chrome-height) + 8px);
+}
+
+.sidebar-nav > ul > li > p,
+.sidebar-nav > ul > li > strong {
+  color: var(--navy, #0b1f5c);
+}
+
+.under-swipe-controls {
+  display: none;
+}
+
 @media (max-width: 900px) {
+  .under-cards-swipe {
+    margin-inline: -1.5rem;
+  }
+
+  .logo-strip {
+    padding-inline: 0;
+  }
+
+  [data-swipe] {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    grid-template-columns: none !important;
+    gap: 12px !important;
+    width: auto;
+    max-width: none;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pinch-zoom;
+    padding-inline: 1.5rem;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    cursor: grab;
+  }
+
+  [data-swipe]::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-swipe] > .under-card,
+  [data-swipe] > .logo-slot {
+    flex: 0 0 min(78vw, 320px) !important;
+    width: min(78vw, 320px) !important;
+    min-width: min(78vw, 320px) !important;
+    max-width: min(78vw, 320px) !important;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  [data-swipe].is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  [data-swipe] .under-card:hover,
+  [data-swipe] .logo-slot:hover {
+    transform: none;
+  }
+
+  .under-swipe-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin: 14px 0 0;
+  }
+
+  .under-swipe-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .under-swipe-dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: #cbd5e1;
+    cursor: pointer;
+  }
+
+  .under-swipe-dots button[aria-current='true'] {
+    width: 18px;
+    background: #0b1f5c;
+  }
+
+  .under-swipe-arrow {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #0b1f5c;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  }
+
+  .under-swipe-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --pgpjs-topbar-height: 34px;
+    --pgpjs-chrome-height: 90px;
+  }
+
   .search-wrap {
+    width: auto;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  body.pgpjs-site .topbar {
+    padding: 8px 12px;
+  }
+
+  body.pgpjs-site .topbar .bio-text {
+    display: none;
+  }
+
+  body.pgpjs-site .topbar-inner,
+  body.pgpjs-site .header-inner {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+  }
+
+  body.pgpjs-site .topbar-inner {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+  }
+
+  body.pgpjs-site .topbar .top-links {
+    width: 100%;
+    justify-content: center;
+    gap: 22px;
+    font-size: 13px;
+  }
+
+  body.pgpjs-site .main-header {
+    padding: 8px 12px;
+  }
+
+  body.pgpjs-site .header-inner {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  body.pgpjs-site .header-left {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  body.pgpjs-site .search-wrap {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    height: 40px;
+    flex: 1 1 auto;
+  }
+
+  body.pgpjs-site .search-wrap img {
+    width: 36px;
+    height: 36px;
+  }
+
+  body.pgpjs-site .search-input,
+  body.pgpjs-site .search-wrap .search input[type='search'] {
     width: 100%;
     min-width: 0;
+    font-size: 13px;
+  }
+
+  body.pgpjs-site .header-right {
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  body.pgpjs-site .git-btn {
+    padding: 7px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  body.pgpjs-site .git-btn .copy-icon {
+    display: none;
+  }
+
+  body.pgpjs-site .git-btn {
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+
+  body.pgpjs-site .topbar .top-links {
+    gap: 16px;
+    font-size: 12px;
   }
 }
 
@@ -365,5 +691,10 @@ body.pgpjs-home .code-line .line-no {
   body.pgpjs-docs main > .content {
     width: 100%;
     height: 100%;
+  }
+
+  .install-cmd {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
