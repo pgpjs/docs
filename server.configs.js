@@ -22,14 +22,24 @@ export function spaFallback(req, res, next) {
     return;
   }
 
+  const query =
+    (req.url || '').indexOf('?') >= 0
+      ? req.url.slice(req.url.indexOf('?'))
+      : '';
+
+  if (/\/_sidebar\.md$/.test(pathOnly) && pathOnly !== '/_sidebar.md') {
+    req.url = `/_sidebar.md${query}`;
+    next();
+    return;
+  }
+
   const basename = pathOnly.split('/').filter(Boolean).pop() || '';
   if (basename.includes('.')) {
     next();
     return;
   }
 
-  const queryIndex = (req.url || '').indexOf('?');
-  req.url = `/index.html${queryIndex >= 0 ? req.url.slice(queryIndex) : ''}`;
+  req.url = `/index.html${query}`;
   next();
 }
 
