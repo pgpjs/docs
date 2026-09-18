@@ -46,6 +46,24 @@
   force = true
 
 [[redirects]]
+  from = "/centraldb/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/crypterchat/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/prysel/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*.md"
   to = "/_404.md"
   status = 404
@@ -62,6 +80,12 @@
   [headers.values]
     Content-Type = "text/plain; charset=utf-8"
     X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.mp4"
+  [headers.values]
+    Content-Type = "video/mp4"
+    Accept-Ranges = "bytes"
 
 [[headers]]
   for = "/*"

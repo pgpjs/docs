@@ -7,6 +7,12 @@
   - [Quick start](quickstart.md)
   - [CLI](https://github.com/pgpjs/cli)
 
+- Built with PGPJS
+
+  - [CentralDB / CDCI](centraldb/cdci/git.md)
+  - [CrypterChat / ChatScan](crypterchat/chatscan/git.md)
+  - [Prysel Robotics Studio](prysel/robotics-studio/git.md)
+
 - [MPC](mpc/)
 
   - [Overview](mpc/)
