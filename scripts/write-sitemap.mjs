@@ -33,6 +33,8 @@ const PATHS = [
   '/prysel/cli/git',
   '/auth/',
   '/auth/token',
+  '/scan/chat',
+  '/scan/sdk',
 ];
 
 function loc(path) {

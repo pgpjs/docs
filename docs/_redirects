@@ -1,3 +1,6 @@
+/api/*    /.netlify/functions/chatscan    200
+/healthz  /.netlify/functions/chatscan    200
+
 # Serve real files first.
 # Nested Docsify sidebar files fall back to the root sidebar.
 # Missing markdown must 404 so Docsify does not treat index.html as the sidebar.

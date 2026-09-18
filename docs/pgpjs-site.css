@@ -960,3 +960,65 @@ body.pgpjs-docs .markdown-section .blackeye-login-status {
   color: #b91c1c;
   font-size: 14px;
 }
+
+body.pgpjs-docs .markdown-section .scan-board {
+  margin: 1.5rem 0 2rem;
+}
+
+body.pgpjs-docs .markdown-section .scan-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+body.pgpjs-docs .markdown-section .scan-card {
+  margin: 0;
+  padding: 16px 18px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.08),
+    0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+body.pgpjs-docs .markdown-section .scan-card h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+body.pgpjs-docs .markdown-section .scan-ok {
+  margin: 0 0 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  color: #b91c1c;
+}
+
+body.pgpjs-docs .markdown-section .scan-ok.is-good {
+  color: #047857;
+}
+
+body.pgpjs-docs .markdown-section .scan-summary {
+  color: #475569;
+}
+
+body.pgpjs-docs .markdown-section .scan-table-wrap {
+  overflow-x: auto;
+}
+
+body.pgpjs-docs .markdown-section .scan-table-wrap table {
+  width: 100%;
+}
+
+body.pgpjs-docs .markdown-section .scan-table-wrap code {
+  font-size: 0.78rem;
+  word-break: break-all;
+}
+
+@media (max-width: 800px) {
+  body.pgpjs-docs .markdown-section .scan-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,5 +1,6 @@
 import * as path from 'node:path';
 import * as url from 'node:url';
+import { chatscanBackend } from './backend/middleware.mjs';
 import { rewriteRules } from './middleware.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
@@ -16,7 +17,9 @@ export function spaFallback(req, res, next) {
   if (
     pathOnly.startsWith('/browser-sync/') ||
     pathOnly.startsWith('/dist/') ||
-    pathOnly.startsWith('/node_modules/')
+    pathOnly.startsWith('/node_modules/') ||
+    pathOnly.startsWith('/api/') ||
+    pathOnly === '/healthz'
   ) {
     next();
     return;
@@ -53,7 +56,7 @@ export const prodConfig = {
   rewriteRules,
   server: {
     baseDir: './docs',
-    middleware: [spaFallback],
+    middleware: [chatscanBackend, spaFallback],
     routes: {
       '/changelog.md': path.resolve(__dirname, 'CHANGELOG.md'),
       '/dist': path.resolve(__dirname, 'dist'),
@@ -89,6 +92,7 @@ export const testConfig = {
   server: {
     ...devConfig.server,
     middleware: [
+      chatscanBackend,
       spaFallback,
       // Blank page required for test environment
       {

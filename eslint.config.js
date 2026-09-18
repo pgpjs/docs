@@ -14,6 +14,7 @@ export default [
       'docs',
       'lib',
       'node_modules',
+      'backend/chatscan',
       // Files
       '**/*.md',
       'CHANGELOG.md',

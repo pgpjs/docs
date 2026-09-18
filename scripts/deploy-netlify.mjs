@@ -1,8 +1,10 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rollup } from 'rollup';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const API = 'https://api.netlify.com/api/v1';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -68,15 +70,35 @@ async function waitForDeploy(token, deployId) {
   fail('Timed out waiting for Netlify deploy');
 }
 
-function zipDocs() {
+async function bundleChatscanFunction(siteDir) {
+  const functionsDir = join(siteDir, 'netlify', 'functions');
+  mkdirSync(functionsDir, { recursive: true });
+  const bundle = await rollup({
+    input: join(root, 'netlify/functions/chatscan.mjs'),
+    external: id => id.startsWith('node:'),
+    plugins: [nodeResolve({ exportConditions: ['node'] })],
+  });
+  await bundle.write({
+    file: join(functionsDir, 'chatscan.mjs'),
+    format: 'es',
+    inlineDynamicImports: true,
+  });
+  await bundle.close();
+}
+
+async function zipDocs() {
   const work = mkdtempSync(join(tmpdir(), 'pgpjs-netlify-'));
+  const siteDir = join(work, 'site');
+  mkdirSync(siteDir, { recursive: true });
+  cpSync(docsDir, siteDir, { recursive: true });
+  await bundleChatscanFunction(siteDir);
   const zipPath = join(work, 'site.zip');
-  execFileSync('zip', ['-r', '-q', zipPath, '.'], { cwd: docsDir });
+  execFileSync('zip', ['-r', '-q', zipPath, '.'], { cwd: siteDir });
   return { work, zipPath, body: readFileSync(zipPath) };
 }
 
 async function uploadZip({ token, siteId, prod }) {
-  const { work, body } = zipDocs();
+  const { work, body } = await zipDocs();
   try {
     const query = prod ? '' : '?draft=true';
     const created = await netlifyFetch(

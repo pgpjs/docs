@@ -17,6 +17,11 @@
   - [Prysel Robotics Studio](prysel/robotics-studio/git.md)
   - [Prysel CLI](prysel/cli/git.md)
 
+- Scan
+
+  - [ChatScan explorer](scan/chat.md)
+  - [Scan SDK](scan/sdk.md)
+
 - [MPC](mpc/)
 
   - [Overview](mpc/)

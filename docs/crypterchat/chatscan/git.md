@@ -6,6 +6,8 @@ ChatScan is a block explorer for **encrypted messages** instead of coin transfer
 
 **Message content is never viewable.** CrypterChat encrypts on the client. ChatScan only receives a digest of the ciphertext, its byte length, and opaque routing metadata. The ingest API refuses any request that carries message content, and the explorer has no code path that could render it.
 
+This site runs ChatScan as the book of the chain. Open the live explorer at [/scan/chat](/scan/chat). Other PGPJS apps can check the connection with the [Scan SDK](/scan/sdk).
+
 ![CrypterChat ChatScan](../../../assets/img/crpyterchat_chatscan.png)
 
 ![ChatScan banner](../../../assets/blog/crypterchat/banner.jpg)
@@ -71,6 +73,8 @@ A 90-second walk through the explorer: live figures, a message record with its o
 | `/privacy`               | The exact fields ChatScan stores, and everything it refuses    |
 
 Sending a `content`, `body`, `text`, `message`, `plaintext`, `payload` or `attachment` field fails with HTTP 400 and `"code": "content_rejected"`.
+
+On this site the book is at [/scan/chat](/scan/chat) and the REST surface is `/api/v1`.
 
 ## Git
 

@@ -4,6 +4,8 @@ dist
 lib
 docs/assets
 docs/vendor
+docs/sdk/chatscan
+backend/chatscan
 .agents
 
 # Files

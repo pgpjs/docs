@@ -128,6 +128,7 @@ function aliasMap() {
     '/react': '/react/',
     '/mpc': '/mpc/',
     '/auth': '/auth/',
+    '/scan': '/scan/chat',
   };
 }
 
@@ -602,6 +603,7 @@ function liveDocsPlugin(hook, vm) {
       link.classList.toggle('active', active);
     });
     bindBlackeyeLogin();
+    bindPgpjsScan();
     closeMobileSidebar();
   });
 }
@@ -727,6 +729,121 @@ function bindBlackeyeLogin() {
       navigateDocsify('/auth/');
     });
   });
+}
+
+function recordLoginOnChatScan(pgpid) {
+  import('/sdk/pgpjs-scan.js')
+    .then(({ PgpjsScan }) =>
+      new PgpjsScan({ appVersion: 'pgpjs-docs-1.0' }).recordLogin({ pgpid }),
+    )
+    .catch(() => {});
+}
+
+function setScanText(root, selector, text) {
+  const el = root.querySelector(selector);
+  if (el) {
+    el.textContent = text;
+  }
+}
+
+function bindPgpjsScan() {
+  const board = document.querySelector('[data-pgpjs-scan]');
+  if (!board) {
+    return;
+  }
+  if (board.dataset.bound === '1') {
+    return;
+  }
+  board.dataset.bound = '1';
+
+  const paint = health => {
+    const ok = Boolean(health?.ok);
+    setScanText(
+      board,
+      '[data-scan-summary]',
+      ok
+        ? 'Connection is good. ChatScan is indexing; the daemon is sealing local blocks.'
+        : health?.cdci?.note ||
+            'ChatScan did not answer. Retry check connection.',
+    );
+    setScanText(
+      board,
+      '[data-scan-chatscan-ok]',
+      health?.chatscan?.ok ? 'connected' : 'down',
+    );
+    setScanText(
+      board,
+      '[data-scan-chatscan-detail]',
+      `${health?.chatscan?.status || 'unknown'} · ${health?.chatscan?.records ?? 0} records · ${health?.chatscan?.chainId || ''}`,
+    );
+    setScanText(
+      board,
+      '[data-scan-daemon-ok]',
+      health?.daemon?.ok ? 'connected' : 'down',
+    );
+    setScanText(
+      board,
+      '[data-scan-daemon-detail]',
+      `${health?.daemon?.name || 'daemon'} · height ${health?.daemon?.height ?? '—'}`,
+    );
+    setScanText(
+      board,
+      '[data-scan-cdci-ok]',
+      health?.cdci?.ok ? 'connected' : 'local sealer',
+    );
+    setScanText(
+      board,
+      '[data-scan-cdci-detail]',
+      health?.cdci?.ok
+        ? `CDCI ${health.cdci.network}`
+        : health?.cdci?.note || 'CDCI node not configured',
+    );
+    board.querySelectorAll('.scan-ok').forEach(el => {
+      el.classList.toggle('is-good', /connected/i.test(el.textContent || ''));
+    });
+  };
+
+  const paintRecords = payload => {
+    const body = board.querySelector('[data-scan-records]');
+    if (!body) {
+      return;
+    }
+    const records = payload?.records || [];
+    if (!records.length) {
+      body.innerHTML =
+        '<tr><td colspan="4">No records yet. Sign in or submit a digest from the SDK.</td></tr>';
+      return;
+    }
+    body.innerHTML = records
+      .slice(0, 20)
+      .map(record => {
+        const ref = String(record.ref || '').replace(/[<>&]/g, '');
+        const status = String(record.status || '').replace(/[<>&]/g, '');
+        const protocol = String(record.protocol || '').replace(/[<>&]/g, '');
+        const size = Number(record.size) || 0;
+        return `<tr><td><code>${ref}</code></td><td>${status}</td><td>${protocol}</td><td>${size}</td></tr>`;
+      })
+      .join('');
+  };
+
+  const refresh = async () => {
+    try {
+      const { PgpjsScan } = await import('/sdk/pgpjs-scan.js');
+      const scan = new PgpjsScan({ appVersion: 'pgpjs-docs-1.0' });
+      const health = await scan.checkConnection();
+      paint(health);
+      const ledger = await scan.listRecords({ limit: 20 });
+      paintRecords(ledger);
+    } catch {
+      paint({ ok: false });
+      paintRecords({ records: [] });
+    }
+  };
+
+  board.querySelector('[data-scan-refresh]')?.addEventListener('click', () => {
+    refresh();
+  });
+  refresh();
 }
 
 function isAuthSessionPath(path) {
@@ -889,6 +1006,18 @@ const PAGE_META = {
       'Create a Blackeye login token with node scripts/pig.mjs create token, then deploy the hash file.',
     markdown: '/auth/token.md',
   },
+  '/scan/chat': {
+    title: 'ChatScan explorer — PGPJS',
+    description:
+      'ChatScan is the accountant for encrypted records. Check ChatScan, the CentralDB daemon, and CDCI from /scan/chat.',
+    markdown: '/scan/chat.md',
+  },
+  '/scan/sdk': {
+    title: 'PGPJS Scan SDK',
+    description:
+      'JavaScript SDK for PGPJS apps: check ChatScan connection and submit ciphertext metadata only.',
+    markdown: '/scan/sdk.md',
+  },
 };
 
 function setMeta(name, content, attr = 'name') {
@@ -1027,6 +1156,7 @@ window.$pgpjs.routes = Object.assign({}, window.$pgpjs.routes, {
       .then(ok => {
         if (ok) {
           sessionStorage.setItem(BLACKEYE_SESSION_KEY, '1');
+          recordLoginOnChatScan(pgpid);
         }
         next(blackeyeSessionMarkdown(ok, pgpid));
       })

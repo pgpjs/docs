@@ -1,0 +1,11 @@
+ChatScan, the CDCI JSON-RPC client, the local sealer (daemon), and the
+ChatScan SDK in this directory are copied from:
+
+  https://github.com/crypterchat/chatscan
+
+MIT License — see backend/chatscan/LICENSE.
+
+github.com/Centraldb/CDCI and github.com/Centraldb/Daemon are not publicly
+cloneable. This site therefore runs ChatScan's local sealer as the chain
+daemon, and talks to a real `centraldatabased` node only when CDCI_RPC_URL
+is set.

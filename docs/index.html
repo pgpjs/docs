@@ -83,7 +83,7 @@
     <link rel="stylesheet" href="/assets/css/bss-overrides.css" />
     <link rel="stylesheet" href="/assets/css/pgpjs.css?v=os-brand" />
     <link rel="stylesheet" href="/vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="/pgpjs-site.css?v=blackeye-login" />
+    <link rel="stylesheet" href="/pgpjs-site.css?v=chatscan-backend" />
   </head>
   <body class="pgpjs-site pgpjs-home">
     <noscript>
@@ -112,11 +112,13 @@
         </li>
         <li><a href="/auth/">login</a></li>
         <li><a href="/auth/token">Make a login token</a></li>
+        <li><a href="/scan/chat">ChatScan explorer</a></li>
+        <li><a href="/scan/sdk">Scan SDK</a></li>
       </ul>
     </noscript>
     <script src="/pgpjs-unlock.js?v=blackeye-login"></script>
 
-    <script src="/live-docs.js?v=blackeye-login"></script>
+    <script src="/live-docs.js?v=chatscan-backend"></script>
     <script>
       window.$pgpjs = Object.assign(window.$pgpjs || {}, {
         name: 'PGPJS',
@@ -141,6 +143,7 @@
           '/react': '/react/',
           '/mpc': '/mpc/',
           '/auth': '/auth/',
+          '/scan': '/scan/chat',
         },
         search: {
           paths: 'auto',

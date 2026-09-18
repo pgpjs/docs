@@ -127,6 +127,7 @@
     "pub": "sh build/release.sh",
     "serve:dev": "npm run serve -- --dev",
     "serve": "node server",
+    "chatscan": "node backend/chatscan/src/index.js",
     "test:e2e": "playwright test",
     "test:e2e:chromium": "playwright test --project='chromium'",
     "test:e2e:ui": "playwright test --ui",
