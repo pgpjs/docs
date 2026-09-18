@@ -369,10 +369,11 @@ body.pgpjs-home .code-line .line-no {
 }
 
 .install-band {
-  background: #0b1f5c;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0b1f5c;
   padding: clamp(40px, 5vw, 72px) clamp(20px, 3.5vw, 48px);
   text-align: center;
+  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.08);
 }
 
 .install-inner {
@@ -386,16 +387,19 @@ body.pgpjs-home .code-line .line-no {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #93c5fd;
+  color: #2563eb;
 }
 
 .install-band h2 {
   margin: 0 0 28px;
+  padding-bottom: 0;
+  border: 0;
+  border-bottom: none;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.15;
-  color: #ffffff;
+  color: #0b1f5c;
 }
 
 .install-cmd {
@@ -406,10 +410,10 @@ body.pgpjs-home .code-line .line-no {
   max-width: 640px;
   margin: 0 auto 20px;
   padding: 18px 18px 18px 22px;
-  background: #081549;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #0b1f5c;
+  border: 0;
   border-radius: 10px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  box-shadow: none;
   text-align: left;
 }
 
@@ -444,24 +448,24 @@ body.pgpjs-home .code-line .line-no {
   margin: 0;
   font-size: clamp(14px, 1.1vw, 16px);
   line-height: 1.6;
-  color: #dbeafe;
+  color: #475569;
 }
 
 .install-lead a {
-  color: #93c5fd;
+  color: #2563eb;
   text-decoration: none;
   font-weight: 600;
 }
 
 .install-lead a:hover {
-  color: #ffffff;
+  color: #0b1f5c;
   text-decoration: underline;
 }
 
 .install-lead code {
   font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  color: #0b1f5c;
+  background: #f1f5f9;
   padding: 1px 6px;
   border-radius: 4px;
 }
@@ -473,16 +477,23 @@ body.pgpjs-home .code-line .line-no {
 
 body.pgpjs-docs .markdown-section .install-band {
   margin: 1.5rem 0 2rem;
+  border: 0;
   border-radius: 12px;
+  background: #ffffff;
 }
 
 body.pgpjs-docs .markdown-section .install-band h2 {
-  color: #ffffff;
+  color: #0b1f5c;
+  margin-top: 0;
+  margin-bottom: 28px;
+  padding-bottom: 0;
+  border: 0;
+  border-bottom: none;
 }
 
 body.pgpjs-docs .markdown-section .install-copy {
-  background: #0b1f5c;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0b1f5c;
   margin: 0 0 1.25rem;
 }
 
@@ -493,12 +504,12 @@ body.pgpjs-docs .markdown-section .install-band .install-copy {
 }
 
 body.pgpjs-docs .markdown-section .install-lead a {
-  color: #93c5fd;
+  color: #2563eb;
   text-decoration: none;
 }
 
 body.pgpjs-docs .markdown-section .install-lead a:hover {
-  color: #ffffff;
+  color: #0b1f5c;
   text-decoration: underline;
 }
 
