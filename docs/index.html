@@ -9,7 +9,7 @@
     <title>
       PGPJS — Modern OpenPGP &amp; Cryptography for JavaScript &amp; Next.js
     </title>
-    <link rel="icon" href="assets/img/91474692.png" />
+    <link rel="icon" href="/assets/img/91474692.png" />
     <link rel="canonical" href="https://pgpjs.org/" />
     <meta
       name="description"
@@ -46,22 +46,44 @@
     <meta name="google-adsense-account" content="ca-pub-7937178184064127" />
     <script>
       (function () {
-        var path = location.pathname.replace(/\/index\.html$/i, '/');
-        if (path.length > 1 && (!location.hash || location.hash === '#')) {
-          location.replace('/#' + path.replace(/\/+$/, '') + location.search);
+        var hash = location.hash || '';
+        if (hash.indexOf('#/') === 0) {
+          var dest = hash.slice(1);
+          if (!dest || dest === '/') {
+            dest = '/';
+          }
+          location.replace(dest + location.search);
         }
       })();
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "PGPJS",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows, macOS, Linux",
+        "url": "https://pgpjs.org/",
+        "description": "A modern JavaScript toolkit for OpenPGP (RFC 9580). Install the CLI, then seal and open data in React, Next.js, and Node.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "softwareRequirements": "Node.js 20.10 or newer",
+        "license": "https://opensource.org/licenses/MIT"
+      }
     </script>
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7937178184064127"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/bss-overrides.css" />
-    <link rel="stylesheet" href="assets/css/pgpjs.css?v=os-brand" />
-    <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=badge-size" />
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/bss-overrides.css" />
+    <link rel="stylesheet" href="/assets/css/pgpjs.css?v=os-brand" />
+    <link rel="stylesheet" href="/vendor/pgpjs/core.min.css" />
+    <link rel="stylesheet" href="/pgpjs-site.css?v=badge-size" />
   </head>
   <body class="pgpjs-site pgpjs-home">
     <noscript>
@@ -71,41 +93,50 @@
         CLI, then seal and open data in React, Next.js, and Node.
       </p>
       <ul>
-        <li><a href="/overview.md">Downloads / PGPJS CLI</a></li>
-        <li><a href="/cli/windows.md">Install on Windows</a></li>
-        <li><a href="/cli/macos.md">Install on macOS</a></li>
-        <li><a href="/quickstart.md">Quick start</a></li>
-        <li><a href="/core/README.md">@pgpjs/core</a></li>
-        <li><a href="/next/README.md">@pgpjs/next</a></li>
-        <li><a href="/react/README.md">@pgpjs/react</a></li>
-        <li><a href="/centraldb/cdci/git.md">CentralDB / CDCI</a></li>
+        <li><a href="/overview">Downloads / PGPJS CLI</a></li>
+        <li><a href="/cli/windows">Install on Windows</a></li>
+        <li><a href="/cli/macos">Install on macOS</a></li>
+        <li><a href="/quickstart">Quick start</a></li>
+        <li><a href="/core/">@pgpjs/core</a></li>
+        <li><a href="/next/">@pgpjs/next</a></li>
+        <li><a href="/react/">@pgpjs/react</a></li>
+        <li><a href="/centraldb/cdci/git">CentralDB / CDCI</a></li>
         <li>
-          <a href="/crypterchat/chatscan/git.md">CrypterChat / ChatScan</a>
+          <a href="/crypterchat/chatscan/git">CrypterChat / ChatScan</a>
         </li>
         <li>
-          <a href="/prysel/robotics-studio/git.md">Prysel Robotics Studio</a>
+          <a href="/prysel/robotics-studio/git">Prysel Robotics Studio</a>
         </li>
         <li>
-          <a href="/prysel/cli/git.md">PGPJS CLI in Prysel Robotics Studio</a>
+          <a href="/prysel/cli/git">PGPJS CLI in Prysel Robotics Studio</a>
         </li>
       </ul>
     </noscript>
-    <script src="pgpjs-unlock.js?v=os-brand"></script>
+    <script src="/pgpjs-unlock.js?v=seo-history"></script>
 
-    <script src="live-docs.js?v=seo-meta"></script>
+    <script src="/live-docs.js?v=seo-history"></script>
     <script>
       window.$pgpjs = Object.assign(window.$pgpjs || {}, {
         name: 'PGPJS',
+        nameLink: '/',
         repo: '',
         auto2top: true,
         coverpage: false,
+        homepage: '_home.md',
+        routerMode: 'history',
+        basePath: '/',
         loadNavbar: false,
         loadSidebar: true,
         maxLevel: 4,
         subMaxLevel: 0,
         executeScript: false,
+        notFoundPage: true,
         alias: {
           '/.*/_sidebar.md': '/_sidebar.md',
+          '/core': '/core/',
+          '/next': '/next/',
+          '/react': '/react/',
+          '/mpc': '/mpc/',
         },
         search: {
           paths: 'auto',
@@ -118,11 +149,11 @@
         },
       });
     </script>
-    <script src="vendor/pgpjs/pgpjs.min.js"></script>
-    <script src="vendor/pgpjs/plugins/search.min.js"></script>
+    <script src="/vendor/pgpjs/pgpjs.min.js"></script>
+    <script src="/vendor/pgpjs/plugins/search.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
     <script>
       (function () {
         async function copyCommand(command) {

@@ -8,8 +8,8 @@ const indexPath = join(root, 'docs/index.html');
 const unlockPath = join(root, 'docs/pgpjs-unlock.js');
 const KEY = 'pgpjs-unlock';
 
-const UNLOCK_START = '    <script src="pgpjs-unlock.js';
-const LIVE_DOCS = '    <script src="live-docs.js"></script>';
+const UNLOCK_START = '    <script src="/pgpjs-unlock.js';
+const LIVE_DOCS = '    <script src="/live-docs.js"></script>';
 const CHROME_START = '    <div class="pgpjs-chrome">';
 
 function xorBase64(text, key) {
@@ -66,7 +66,7 @@ if (indexHtml.includes(CHROME_START) && indexHtml.includes(LIVE_DOCS)) {
   indexHtml = `${indexHtml.slice(0, start)}    <noscript>
       PGPJS documentation requires JavaScript.
     </noscript>
-    <script src="pgpjs-unlock.js?v=enc1"></script>
+    <script src="/pgpjs-unlock.js?v=seo-history"></script>
 
 ${indexHtml.slice(end)}`;
 } else if (!indexHtml.includes(UNLOCK_START)) {

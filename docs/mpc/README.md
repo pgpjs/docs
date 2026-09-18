@@ -21,7 +21,7 @@ PGPJS MPC is multi-party computation for OpenPGP: split trust across parties, ru
     <p class="install-lead">
       Paste that in a macOS Terminal, Linux shell, or Windows. Node.js 20.10 or
       newer. Then import <code>@pgpjs/mpc</code> in your app. Step-by-step
-      install is on the <a href="#/mpc/install">MPC install</a> page.
+      install is on the <a href="/mpc/install">MPC install</a> page.
     </p>
   </div>
 </section>

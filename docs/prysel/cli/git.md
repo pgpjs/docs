@@ -45,7 +45,6 @@ A robotics studio is a factory for identities. Every arm, every operator laptop,
 1. **Pair** a robot with `pgpjs key generate` — Ed25519 for signatures, X25519 for sealing.
 2. **Seal** a telemetry frame or a mission file with `pgpjs encrypt` before it leaves the arm, the radio, or the laptop.
 3. **Open** it only in the operator session that holds the matching private key. `@pgpjs/react` hooks and a `PGPProvider` do the same job in the studio UI.
-4. **Anchor** the fact that the frame existed, when you need a public clock, on **CDCI** the same way CrypterChat does.
 
 ```ts
 import PGPJS from '@/lib/pgpjs';
@@ -61,21 +60,11 @@ const frame = await PGPJS.seal(
 );
 ```
 
-The plaintext never belongs on the wire. The chain never belongs in the robot’s RAM. PGPJS is the seam between those two worlds — and the CLI is how the bench installs that seam.
-
-## One stack, three tools
-
-| Layer  | Who                    | What the CLI / PGPJS does              |
-| ------ | ---------------------- | -------------------------------------- |
-| Studio | Prysel Robotics Studio | `pgpjs init`, keys, sealed telemetry   |
-| Chat   | CrypterChat / ChatScan | Sealed messages; explorer sees digests |
-| Chain  | CentralDB / CDCI       | X11 + ChainLocks for the commitment    |
-
-A mission note typed in the studio can be sealed with PGPJS, posted through CrypterChat so the team can coordinate without a readable archive, and anchored on CDCI so the run is timestamped. ChatScan will show `{HASH}/{ID-number}` and refuse the body. That is the point.
+The plaintext never belongs on the wire. PGPJS is the seam between the robot and the operator — and the CLI is how the bench installs that seam.
 
 ## Git
 
 - Studio: [CerveauAnalytique/Prysel.Robotics-Studio-](https://github.com/CerveauAnalytique/Prysel.Robotics-Studio-.git)
 - CLI source: [pgpjs/cli](https://github.com/pgpjs/cli)
-- Sister stories: [Prysel Robotics Studio](/prysel/robotics-studio/git) · [CentralDB CDCI](/centraldb/cdci/git) · [CrypterChat ChatScan](/crypterchat/chatscan/git)
+- Studio story: [Prysel Robotics Studio](/prysel/robotics-studio/git)
 - Downloads: [Windows](/cli/windows) · [macOS](/cli/macos) · [Overview](/overview)

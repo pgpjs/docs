@@ -122,6 +122,10 @@ function livePages() {
 function aliasMap() {
   return {
     '/.*/_sidebar.md': '/_sidebar.md',
+    '/core': '/core/',
+    '/next': '/next/',
+    '/react': '/react/',
+    '/mpc': '/mpc/',
   };
 }
 
@@ -291,17 +295,24 @@ function decorateSearchInput(input) {
 }
 
 function stripSearchQueryFromLocation() {
-  const hash = window.location.hash || '';
-  if (!/[?&]s=/.test(hash)) {
-    return;
+  const url = new URL(window.location.href);
+  const hash = url.hash || '';
+  let changed = false;
+  if (url.searchParams.has('s')) {
+    url.searchParams.delete('s');
+    changed = true;
   }
-  const cleaned = hash
-    .replace(/([?&])s=[^&]*/g, '$1')
-    .replace(/\?&/g, '?')
-    .replace(/[?&]$/, '')
-    .replace(/\?$/, '');
-  const next = window.location.pathname + window.location.search + cleaned;
-  window.history.replaceState(null, '', next);
+  if (/[?&]s=/.test(hash)) {
+    url.hash = hash
+      .replace(/([?&])s=[^&]*/g, '$1')
+      .replace(/\?&/g, '?')
+      .replace(/[?&]$/, '')
+      .replace(/\?$/, '');
+    changed = true;
+  }
+  if (changed) {
+    window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }
 }
 
 function hardenSearch() {
@@ -598,6 +609,144 @@ const HOME_DESC =
   'PGPJS is a modern JavaScript toolkit for OpenPGP (RFC 9580). Install the CLI, then seal and open data in React, Next.js, and Node.';
 const SITE_ORIGIN = 'https://pgpjs.org';
 
+const PAGE_META = {
+  '/overview': {
+    title: 'Downloads — PGPJS CLI',
+    description:
+      'Install the PGPJS CLI and libraries. npm install -g pgpjs-cli on Windows, macOS, and Linux. Node.js 20.10 or newer.',
+    markdown: '/overview.md',
+  },
+  '/quickstart': {
+    title: 'Quick start — PGPJS',
+    description:
+      'Install pgpjs-cli, run pgpjs init, and seal data with @pgpjs/core in a TypeScript app.',
+    markdown: '/quickstart.md',
+  },
+  '/cli/windows': {
+    title: 'Install PGPJS CLI on Windows',
+    description:
+      'Install pgpjs-cli with npm in PowerShell on Windows 10 or 11. Node.js 20.10 or newer.',
+    markdown: '/cli/windows.md',
+  },
+  '/cli/macos': {
+    title: 'Install PGPJS CLI on macOS',
+    description:
+      'Install pgpjs-cli with npm in Terminal on Apple Silicon or Intel Macs. Node.js 20.10 or newer.',
+    markdown: '/cli/macos.md',
+  },
+  '/mpc': {
+    title: 'PGPJS MPC — threshold OpenPGP',
+    description:
+      'Multi-party computation for OpenPGP: split trust, threshold decrypt and sign, keep keys off a single machine.',
+    markdown: '/mpc/README.md',
+  },
+  '/mpc/install': {
+    title: 'Install PGPJS MPC',
+    description: 'Install @pgpjs/mpc on macOS, Linux, or Windows with npm.',
+    markdown: '/mpc/install.md',
+  },
+  '/core': {
+    title: '@pgpjs/core — RFC 9580 engine',
+    description:
+      'PGPJS core library: generate RFC 9580 keys, seal and open data, TypeScript API for Node and the browser.',
+    markdown: '/core/README.md',
+  },
+  '/core/architecture': {
+    title: 'Architecture — @pgpjs/core',
+    description:
+      'How the PGPJS core engine is structured: keys, seal, open, and the RFC 9580 stack.',
+    markdown: '/core/architecture.md',
+  },
+  '/core/security': {
+    title: 'Security — @pgpjs/core',
+    description:
+      'PGPJS security model, defaults, and what the library will not do.',
+    markdown: '/core/security.md',
+  },
+  '/core/package': {
+    title: 'Package README — @pgpjs/core',
+    description:
+      'The @pgpjs/core package README: install, seal, open, and TypeScript types.',
+    markdown: '/core/package.md',
+  },
+  '/core/code/pgpjs': {
+    title: 'pgpjs.ts — @pgpjs/core',
+    description: 'Live source for the PGPJS high-level seal and open API.',
+    markdown: '/core/code/pgpjs.md',
+  },
+  '/core/code/index': {
+    title: 'index.ts — @pgpjs/core',
+    description: 'Live source for the @pgpjs/core public exports.',
+    markdown: '/core/code/index.md',
+  },
+  '/next': {
+    title: '@pgpjs/next — encrypted Next.js routes',
+    description:
+      'Next.js helpers for PGPJS: encrypted route handlers, server actions, and a client/server key split.',
+    markdown: '/next/README.md',
+  },
+  '/next/code/server': {
+    title: 'server.ts — @pgpjs/next',
+    description: 'Live source for PGPJS Next.js server helpers.',
+    markdown: '/next/code/server.md',
+  },
+  '/next/code/client': {
+    title: 'client.ts — @pgpjs/next',
+    description: 'Live source for PGPJS Next.js client helpers.',
+    markdown: '/next/code/client.md',
+  },
+  '/next/code/index': {
+    title: 'index.ts — @pgpjs/next',
+    description: 'Live source for the @pgpjs/next public exports.',
+    markdown: '/next/code/index.md',
+  },
+  '/react': {
+    title: '@pgpjs/react — PGPProvider and hooks',
+    description:
+      'React bindings for PGPJS: PGPProvider, useKey, useEncryption, and hooks that never put private keys in the browser bundle by accident.',
+    markdown: '/react/README.md',
+  },
+  '/react/code/hooks': {
+    title: 'hooks.ts — @pgpjs/react',
+    description: 'Live source for PGPJS React hooks.',
+    markdown: '/react/code/hooks.md',
+  },
+  '/react/code/context': {
+    title: 'context.tsx — @pgpjs/react',
+    description: 'Live source for the PGPJS PGPProvider context.',
+    markdown: '/react/code/context.md',
+  },
+  '/react/code/index': {
+    title: 'index.ts — @pgpjs/react',
+    description: 'Live source for the @pgpjs/react public exports.',
+    markdown: '/react/code/index.md',
+  },
+  '/centraldb/cdci/git': {
+    title: 'CentralDB CDCI — built with PGPJS',
+    description:
+      'CentralDB CDCI is an X11 chain. PGPJS seals the envelope before a commitment is anchored on CDCI.',
+    markdown: '/centraldb/cdci/git.md',
+  },
+  '/crypterchat/chatscan/git': {
+    title: 'CrypterChat ChatScan — built with PGPJS',
+    description:
+      'ChatScan is a block explorer for encrypted messages. PGPJS seals on the client; ChatScan never sees plaintext.',
+    markdown: '/crypterchat/chatscan/git.md',
+  },
+  '/prysel/robotics-studio/git': {
+    title: 'Prysel Robotics Studio — built with PGPJS',
+    description:
+      'Prysel Robotics Studio uses PGPJS to generate RFC 9580 keys and seal robot telemetry.',
+    markdown: '/prysel/robotics-studio/git.md',
+  },
+  '/prysel/cli/git': {
+    title: 'PGPJS CLI in Prysel Robotics Studio',
+    description:
+      'Install pgpjs-cli on the Prysel Robotics Studio bench and seal telemetry with the same OpenPGP toolkit.',
+    markdown: '/prysel/cli/git.md',
+  },
+};
+
 function setMeta(name, content, attr = 'name') {
   let el = document.querySelector(`meta[${attr}="${name}"]`);
   if (!el) {
@@ -608,16 +757,82 @@ function setMeta(name, content, attr = 'name') {
   el.setAttribute('content', content);
 }
 
+function markdownForPath(path) {
+  if (PAGE_META[path]?.markdown) {
+    return PAGE_META[path].markdown;
+  }
+  if (path === '/' || !path) {
+    return null;
+  }
+  if (path.endsWith('/')) {
+    return `${path}README.md`;
+  }
+  return `${path}.md`;
+}
+
+function setAlternateMarkdown(path) {
+  let link = document.querySelector(
+    'link[rel="alternate"][type="text/markdown"]',
+  );
+  const href = markdownForPath(path);
+  if (!href) {
+    link?.remove();
+    return;
+  }
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'alternate';
+    link.type = 'text/markdown';
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', `${SITE_ORIGIN}${href}`);
+}
+
+function setJsonLd(path, title, isHome) {
+  let el = document.getElementById('pgpjs-breadcrumb-jsonld');
+  if (!el) {
+    el = document.createElement('script');
+    el.type = 'application/ld+json';
+    el.id = 'pgpjs-breadcrumb-jsonld';
+    document.head.appendChild(el);
+  }
+  const items = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'PGPJS',
+      item: `${SITE_ORIGIN}/`,
+    },
+  ];
+  if (!isHome) {
+    items.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: title.replace(/ · PGPJS$/, ''),
+      item: `${SITE_ORIGIN}${path}`,
+    });
+  }
+  el.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  });
+}
+
 function syncPageMeta(path, isHome) {
   const section = document.querySelector('.markdown-section');
   const heading = section?.querySelector('h1');
   const paragraph = section?.querySelector('p');
+  const known = PAGE_META[path] || PAGE_META[path.replace(/\/$/, '')];
   const title = isHome
     ? HOME_TITLE
-    : `${(heading?.textContent || 'PGPJS').trim()} · PGPJS`;
+    : known?.title
+      ? `${known.title} · PGPJS`
+      : `${(heading?.textContent || 'PGPJS').trim()} · PGPJS`;
   const desc = isHome
     ? HOME_DESC
-    : (paragraph?.textContent || HOME_DESC)
+    : known?.description ||
+      (paragraph?.textContent || HOME_DESC)
         .trim()
         .replace(/\s+/g, ' ')
         .slice(0, 180);
@@ -631,6 +846,8 @@ function syncPageMeta(path, isHome) {
   setMeta('og:url', url, 'property');
   setMeta('twitter:title', title);
   setMeta('twitter:description', desc);
+  setAlternateMarkdown(isHome ? '/' : path);
+  setJsonLd(canonicalPath, title, isHome);
 
   let canonical = document.querySelector('link[rel="canonical"]');
   if (!canonical) {

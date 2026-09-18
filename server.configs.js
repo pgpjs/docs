@@ -5,6 +5,34 @@ import { rewriteRules } from './middleware.js';
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/** Serve index.html for extensionless paths so history-mode deep links work locally. */
+export function spaFallback(req, res, next) {
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    next();
+    return;
+  }
+
+  const pathOnly = (req.url || '/').split('?')[0];
+  if (
+    pathOnly.startsWith('/browser-sync/') ||
+    pathOnly.startsWith('/dist/') ||
+    pathOnly.startsWith('/node_modules/')
+  ) {
+    next();
+    return;
+  }
+
+  const basename = pathOnly.split('/').filter(Boolean).pop() || '';
+  if (basename.includes('.')) {
+    next();
+    return;
+  }
+
+  const queryIndex = (req.url || '').indexOf('?');
+  req.url = `/index.html${queryIndex >= 0 ? req.url.slice(queryIndex) : ''}`;
+  next();
+}
+
 // Production (CDN URLs, watch disabled)
 export const prodConfig = {
   ghostMode: false,
@@ -15,6 +43,7 @@ export const prodConfig = {
   rewriteRules,
   server: {
     baseDir: './docs',
+    middleware: [spaFallback],
     routes: {
       '/changelog.md': path.resolve(__dirname, 'CHANGELOG.md'),
       '/dist': path.resolve(__dirname, 'dist'),
@@ -50,6 +79,7 @@ export const testConfig = {
   server: {
     ...devConfig.server,
     middleware: [
+      spaFallback,
       // Blank page required for test environment
       {
         route: '/_blank.html',
