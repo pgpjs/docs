@@ -455,6 +455,73 @@ body.pgpjs-home .code-line .line-no {
   color: var(--navy, #0b1f5c);
 }
 
+.under-swipe-dots {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  body.pgpjs-home .under-cards-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    width: auto;
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  body.pgpjs-home .under-cards-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.pgpjs-home .under-cards-row > .under-card {
+    flex: 0 0 min(82vw, 340px);
+    max-width: 340px;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  body.pgpjs-home .under-cards-row.is-dragging,
+  body.pgpjs-home .under-cards-row.is-dragging .under-card {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  body.pgpjs-home .under-card:hover {
+    transform: none;
+  }
+
+  body.pgpjs-home .under-swipe-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0 0;
+  }
+
+  body.pgpjs-home .under-swipe-dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: #cbd5e1;
+    cursor: pointer;
+  }
+
+  body.pgpjs-home .under-swipe-dots button[aria-current='true'] {
+    width: 18px;
+    background: #0b1f5c;
+  }
+}
+
 @media (max-width: 900px) {
   .search-wrap {
     width: 100%;

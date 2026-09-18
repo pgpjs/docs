@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/bss-overrides.css" />
     <link rel="stylesheet" href="assets/css/pgpjs.css" />
     <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=install-sidebar" />
+    <link rel="stylesheet" href="pgpjs-site.css?v=swipe-cards" />
   </head>
   <body class="pgpjs-site pgpjs-home">
     <div class="topbar">
@@ -297,7 +297,7 @@
       <div class="under-design-section" id="tools">
         <div class="under-container">
           <h1 class="under-heading">Tool what pgpjs use</h1>
-          <div class="under-cards-row">
+          <div class="under-cards-row" data-swipe>
             <div
               class="under-card"
               style="background-image: url('assets/img/tool_banner_c1_hd.png')"
@@ -330,7 +330,7 @@
             </div>
           </div>
           <h1 class="under-heading under-heading-cli" id="cli">pgpjs cli</h1>
-          <div class="under-cards-row">
+          <div class="under-cards-row" data-swipe>
             <div
               class="under-card"
               style="background-image: url('assets/img/cli_win10_hd.png')"
@@ -539,6 +539,103 @@
             }
           });
         }
+
+        function initCardSwipe() {
+          const mobile = window.matchMedia('(max-width: 900px)');
+          document.querySelectorAll('[data-swipe]').forEach(function (row) {
+            const cards = Array.prototype.slice.call(row.children);
+            if (cards.length < 2) {
+              return;
+            }
+
+            const dots = document.createElement('div');
+            dots.className = 'under-swipe-dots';
+            dots.setAttribute('role', 'tablist');
+            dots.setAttribute('aria-label', 'Card slides');
+            cards.forEach(function (card, index) {
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.setAttribute('aria-label', 'Show card ' + (index + 1));
+              btn.addEventListener('click', function () {
+                card.scrollIntoView({
+                  behavior: 'smooth',
+                  inline: 'center',
+                  block: 'nearest',
+                });
+              });
+              dots.appendChild(btn);
+            });
+            row.after(dots);
+
+            function activeIndex() {
+              const mid = row.scrollLeft + row.clientWidth / 2;
+              let best = 0;
+              let bestDist = Infinity;
+              cards.forEach(function (card, index) {
+                const center = card.offsetLeft + card.offsetWidth / 2;
+                const dist = Math.abs(center - mid);
+                if (dist < bestDist) {
+                  bestDist = dist;
+                  best = index;
+                }
+              });
+              return best;
+            }
+
+            function syncDots() {
+              const current = activeIndex();
+              Array.prototype.forEach.call(dots.children, function (btn, index) {
+                btn.setAttribute(
+                  'aria-current',
+                  index === current ? 'true' : 'false',
+                );
+              });
+            }
+
+            row.addEventListener('scroll', syncDots, { passive: true });
+            window.addEventListener('resize', syncDots);
+            syncDots();
+
+            let pointerId = null;
+            let startX = 0;
+            let startLeft = 0;
+            row.addEventListener('pointerdown', function (event) {
+              if (!mobile.matches || event.pointerType === 'touch') {
+                return;
+              }
+              pointerId = event.pointerId;
+              startX = event.clientX;
+              startLeft = row.scrollLeft;
+              row.classList.add('is-dragging');
+              row.setPointerCapture(pointerId);
+            });
+            row.addEventListener('pointermove', function (event) {
+              if (pointerId === null) {
+                return;
+              }
+              row.scrollLeft = startLeft - (event.clientX - startX);
+            });
+            function endDrag() {
+              if (pointerId === null) {
+                return;
+              }
+              pointerId = null;
+              row.classList.remove('is-dragging');
+              const card = cards[activeIndex()];
+              if (card) {
+                card.scrollIntoView({
+                  behavior: 'smooth',
+                  inline: 'center',
+                  block: 'nearest',
+                });
+              }
+            }
+            row.addEventListener('pointerup', endDrag);
+            row.addEventListener('pointercancel', endDrag);
+          });
+        }
+
+        initCardSwipe();
       })();
     </script>
   </body>
