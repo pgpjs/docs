@@ -10,6 +10,7 @@
 
 body.pgpjs-site {
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body.pgpjs-site .github-corner {
@@ -455,58 +456,73 @@ body.pgpjs-home .code-line .line-no {
   color: var(--navy, #0b1f5c);
 }
 
-.under-swipe-dots {
+.under-swipe-controls {
   display: none;
 }
 
 @media (max-width: 900px) {
-  body.pgpjs-home .under-cards-row {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    overflow-y: hidden;
+  .under-cards-swipe {
+    margin-inline: -1.5rem;
+  }
+
+  .under-cards-row[data-swipe] {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    grid-template-columns: none !important;
+    gap: 12px !important;
+    width: auto;
+    max-width: none;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: 1.5rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
-    touch-action: pan-x;
-    width: auto;
-    margin-inline: -1.5rem;
+    touch-action: pan-x pinch-zoom;
     padding-inline: 1.5rem;
     padding-bottom: 4px;
     scrollbar-width: none;
+    cursor: grab;
   }
 
-  body.pgpjs-home .under-cards-row::-webkit-scrollbar {
+  .under-cards-row[data-swipe]::-webkit-scrollbar {
     display: none;
   }
 
-  body.pgpjs-home .under-cards-row > .under-card {
-    flex: 0 0 min(82vw, 340px);
-    max-width: 340px;
+  .under-cards-row[data-swipe] > .under-card {
+    flex: 0 0 min(78vw, 320px) !important;
+    width: min(78vw, 320px) !important;
+    min-width: min(78vw, 320px) !important;
+    max-width: min(78vw, 320px) !important;
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
 
-  body.pgpjs-home .under-cards-row.is-dragging,
-  body.pgpjs-home .under-cards-row.is-dragging .under-card {
+  .under-cards-row[data-swipe].is-dragging {
     cursor: grabbing;
     scroll-snap-type: none;
   }
 
-  body.pgpjs-home .under-card:hover {
+  .under-cards-row[data-swipe] .under-card:hover {
     transform: none;
   }
 
-  body.pgpjs-home .under-swipe-dots {
+  .under-swipe-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin: 14px 0 0;
+  }
+
+  .under-swipe-dots {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin: 14px 0 0;
   }
 
-  body.pgpjs-home .under-swipe-dots button {
+  .under-swipe-dots button {
     width: 8px;
     height: 8px;
     padding: 0;
@@ -516,9 +532,28 @@ body.pgpjs-home .code-line .line-no {
     cursor: pointer;
   }
 
-  body.pgpjs-home .under-swipe-dots button[aria-current='true'] {
+  .under-swipe-dots button[aria-current='true'] {
     width: 18px;
     background: #0b1f5c;
+  }
+
+  .under-swipe-arrow {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #0b1f5c;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  }
+
+  .under-swipe-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
   }
 }
 
