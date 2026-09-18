@@ -3,7 +3,29 @@
 - Getting started
 
   - [Home](/)
+  - [Overview](overview.md)
   - [Quick start](quickstart.md)
+  - [CLI](overview.md)
+    - [Windows](cli/windows.md)
+    - [macOS](cli/macos.md)
+    - [Prysel Robotics Studio](prysel/cli/git.md)
+
+- Built with PGPJS
+
+  - [CentralDB / CDCI](centraldb/cdci/git.md)
+  - [CrypterChat / ChatScan](crypterchat/chatscan/git.md)
+  - [Prysel Robotics Studio](prysel/robotics-studio/git.md)
+  - [Prysel CLI](prysel/cli/git.md)
+
+- Scan
+
+  - [ChatScan explorer](scan/chat.md)
+  - [Scan SDK](scan/sdk.md)
+
+- [MPC](mpc/)
+
+  - [Overview](mpc/)
+  - [Install](mpc/install.md)
 
 - [@pgpjs/core](core/)
 

@@ -2,6 +2,7 @@
 .husky/_
 .idea
 .vercel
+.netlify
 _playwright-report
 _playwright-results
 node_modules
@@ -10,6 +11,12 @@ test/**/node_modules/
 # Files
 .DS_Store
 *.log
+.env
+.env.*
+!.env.example
+/tokens.json
+backend/data/
+backend/chatscan/data/
 
 # Accidental GitHub web uploads and local screenshots at repo root
 /*.png
@@ -25,6 +32,9 @@ test/**/node_modules/
 
 # Output folder for the global build only
 dist/
+
+# Bundled ChatScan Netlify function (generated)
+dist-functions/
 
 # Output folders for the legacy v4 build (root only; do not ignore src/themes)
 /lib/

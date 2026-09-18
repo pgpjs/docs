@@ -7,9 +7,12 @@
 # docs/docs and fail the deploy.
 
 [build]
-  base = "docs"
-  publish = "."
-  command = "true"
+  publish = "docs"
+  command = "node scripts/snapshot-package-docs.mjs; node scripts/write-sitemap.mjs; node scripts/bundle-chatscan-fn.mjs"
+
+[functions]
+  directory = "dist-functions"
+  node_bundler = "none"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -20,11 +23,111 @@
   skip_processing = true
 
 # Existing files (index.html, *.md, assets, vendor) win over this rewrite.
+# Nested Docsify sidebar fetches must not receive index.html.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/chatscan"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/healthz"
+  to = "/.netlify/functions/chatscan"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/core/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/next/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/react/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/mpc/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/cli/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*.md"
+  to = "/_404.md"
+  status = 404
+  force = false
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
   force = false
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/ads.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/auth/tokens.hashes.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+    Cache-Control = "no-store"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/sdk/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, HEAD, OPTIONS"
+    Cache-Control = "public, max-age=300"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, X-ChatScan-Key"
+
+[[headers]]
+  for = "/healthz"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, HEAD, OPTIONS"
+
+[[headers]]
+  for = "/*.mp4"
+  [headers.values]
+    Content-Type = "video/mp4"
+    Accept-Ranges = "bytes"
 
 [[headers]]
   for = "/*"

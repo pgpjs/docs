@@ -1,9 +1,13 @@
 # Directories
 _playwright-*
 dist
+dist-functions
 lib
 docs/assets
 docs/vendor
+docs/sdk/chatscan
+backend/chatscan
+.agents
 
 # Files
 _vars.css
@@ -11,3 +15,5 @@ _vars-advanced.css
 CHANGELOG.md
 emoji-data.*
 HISTORY.md
+docs/pgpjs-unlock.js
+skills-lock.json

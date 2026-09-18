@@ -9,6 +9,16 @@
 </p>
 
 <p align="center">
+  <a href="https://app.netlify.com/projects/pgpjs/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/2d2bad4f-7244-484a-8e3f-608ab487a382/deploy-status"></a>
+</p>
+
+<p align="center">
+  <a href="https://pgpjs.org">pgpjs.org</a>
+  ·
+  <a href="https://pgpjs.netlify.app">pgpjs.netlify.app</a>
+</p>
+
+<p align="center">
   A magical documentation site generator, rebranded from
   <a href="https://github.com/docsifyjs/docsify">Docsify</a>.
 </p>
@@ -44,6 +54,16 @@ The live documentation site is the [`docs/`](./docs) folder: P7 homepage, header
 ### Deploy on Netlify
 
 Connect this GitHub repository in [Netlify](https://app.netlify.com/) and leave Base directory, Build command, and Publish directory empty. [`netlify.toml`](./netlify.toml) publishes `docs/` as a static site (no `npm run build`). You can also drag-and-drop the `docs/` folder.
+
+To publish `docs/` from GitHub or this machine via the Netlify API, add repository secret `NETLIFY_AUTH_TOKEN` (and optionally a GitHub **production** environment as the approval gate). `NETLIFY_SITE_ID` defaults to pgpjs.org. Then run **Deploy Netlify** from Actions, or:
+
+```bash
+cp .env.example .env   # fill in NETLIFY_AUTH_TOKEN
+npx netlify-cli deploy --prod --dir=docs
+npm run deploy:netlify
+```
+
+Netlify agent skills from [netlify.ai](https://netlify.ai) live in [`.agents/skills`](./.agents/skills).
 
 ### Embed PGPJS in a page
 

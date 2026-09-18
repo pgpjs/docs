@@ -1,0 +1,54 @@
+name: Deploy Netlify
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'netlify.toml'
+      - '.github/workflows/deploy-netlify.yml'
+      - 'scripts/deploy-netlify.mjs'
+  workflow_dispatch:
+    inputs:
+      production:
+        description: Publish docs/ to the production Netlify site
+        type: boolean
+        default: true
+      hook:
+        description: Trigger a Git rebuild via NETLIFY_DEPLOY_HOOK instead of uploading docs/
+        type: boolean
+        default: false
+
+concurrency:
+  group: netlify-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy docs/ to Netlify
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://pgpjs.org
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - name: Deploy via Netlify API
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID || '2d2bad4f-7244-484a-8e3f-608ab487a382' }}
+          NETLIFY_DEPLOY_HOOK: ${{ secrets.NETLIFY_DEPLOY_HOOK }}
+        run: |
+          if [ "${{ github.event.inputs.hook }}" = "true" ]; then
+            node scripts/deploy-netlify.mjs --hook
+          elif [ "${{ github.event.inputs.production }}" = "false" ]; then
+            node scripts/deploy-netlify.mjs --draft
+          else
+            node scripts/deploy-netlify.mjs
+          fi

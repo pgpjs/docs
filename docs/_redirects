@@ -1,2 +1,14 @@
-# Serve real files first. Unknown paths load the PGPJS app shell.
+/api/*    /.netlify/functions/chatscan    200
+/healthz  /.netlify/functions/chatscan    200
+
+# Serve real files first.
+# Nested Docsify sidebar files fall back to the root sidebar.
+# Missing markdown must 404 so Docsify does not treat index.html as the sidebar.
+/core/_sidebar.md    /_sidebar.md    200
+/next/_sidebar.md    /_sidebar.md    200
+/react/_sidebar.md   /_sidebar.md    200
+/mpc/_sidebar.md     /_sidebar.md    200
+/*.md    /_404.md     404
+
+# Unknown paths load the PGPJS app shell.
 /*    /index.html   200

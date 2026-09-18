@@ -1,9 +1,50 @@
 import * as path from 'node:path';
 import * as url from 'node:url';
+import { chatscanBackend } from './backend/middleware.mjs';
 import { rewriteRules } from './middleware.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+/** Serve index.html for extensionless paths so history-mode deep links work locally. */
+export function spaFallback(req, res, next) {
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    next();
+    return;
+  }
+
+  const pathOnly = (req.url || '/').split('?')[0];
+  if (
+    pathOnly.startsWith('/browser-sync/') ||
+    pathOnly.startsWith('/dist/') ||
+    pathOnly.startsWith('/node_modules/') ||
+    pathOnly.startsWith('/api/') ||
+    pathOnly === '/healthz'
+  ) {
+    next();
+    return;
+  }
+
+  const query =
+    (req.url || '').indexOf('?') >= 0
+      ? req.url.slice(req.url.indexOf('?'))
+      : '';
+
+  if (/^\/(core|next|react|mpc|cli)(\/.*)?\/_sidebar\.md$/.test(pathOnly)) {
+    req.url = `/_sidebar.md${query}`;
+    next();
+    return;
+  }
+
+  const basename = pathOnly.split('/').filter(Boolean).pop() || '';
+  if (basename.includes('.')) {
+    next();
+    return;
+  }
+
+  req.url = `/index.html${query}`;
+  next();
+}
 
 // Production (CDN URLs, watch disabled)
 export const prodConfig = {
@@ -15,6 +56,7 @@ export const prodConfig = {
   rewriteRules,
   server: {
     baseDir: './docs',
+    middleware: [chatscanBackend, spaFallback],
     routes: {
       '/changelog.md': path.resolve(__dirname, 'CHANGELOG.md'),
       '/dist': path.resolve(__dirname, 'dist'),
@@ -50,6 +92,8 @@ export const testConfig = {
   server: {
     ...devConfig.server,
     middleware: [
+      chatscanBackend,
+      spaFallback,
       // Blank page required for test environment
       {
         route: '/_blank.html',
