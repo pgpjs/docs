@@ -39,7 +39,7 @@ Then open [http://127.0.0.1:8080](http://127.0.0.1:8080). For local development 
 npm run dev
 ```
 
-The documentation site lives in [`docs/`](./docs) and is configured with the name **PGPJS**.
+The live documentation site is the [`docs/`](./docs) folder: P7 homepage, header search, and live Core / Next.js / React docs. It is configured with the name **PGPJS**.
 
 ### Deploy on Netlify
 
@@ -73,6 +73,13 @@ Connect this GitHub repository in [Netlify](https://app.netlify.com/) and leave 
 ```
 
 `window.$docsify` continues to work for compatibility with Docsify plugins and examples.
+
+## Repository layout
+
+- `docs/` — published site (homepage, assets, vendor PGPJS, Netlify files)
+- `src/` — PGPJS engine source (Docsify fork)
+- `test/` — unit, integration, and end-to-end tests
+- `netlify.toml` — static publish of `docs/` (no library build)
 
 ## Links
 
