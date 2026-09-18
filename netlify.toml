@@ -46,24 +46,6 @@
   force = true
 
 [[redirects]]
-  from = "/centraldb/_sidebar.md"
-  to = "/_sidebar.md"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/crypterchat/_sidebar.md"
-  to = "/_sidebar.md"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/prysel/_sidebar.md"
-  to = "/_sidebar.md"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/cli/_sidebar.md"
   to = "/_sidebar.md"
   status = 200

@@ -121,7 +121,8 @@ function livePages() {
 
 function aliasMap() {
   return {
-    '/.*/_sidebar.md': '/_sidebar.md',
+    '/(core|next|react|mpc|cli)/_sidebar.md': '/_sidebar.md',
+    '/(core|next|react|mpc|cli)/.*/_sidebar.md': '/_sidebar.md',
     '/core': '/core/',
     '/next': '/next/',
     '/react': '/react/',

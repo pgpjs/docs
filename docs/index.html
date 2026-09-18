@@ -112,9 +112,9 @@
         </li>
       </ul>
     </noscript>
-    <script src="/pgpjs-unlock.js?v=seo-history2"></script>
+    <script src="/pgpjs-unlock.js?v=app-blogs"></script>
 
-    <script src="/live-docs.js?v=seo-history2"></script>
+    <script src="/live-docs.js?v=app-blogs"></script>
     <script>
       window.$pgpjs = Object.assign(window.$pgpjs || {}, {
         name: 'PGPJS',
@@ -132,7 +132,8 @@
         executeScript: false,
         notFoundPage: true,
         alias: {
-          '/.*/_sidebar.md': '/_sidebar.md',
+          '/(core|next|react|mpc|cli)/_sidebar.md': '/_sidebar.md',
+          '/(core|next|react|mpc|cli)/.*/_sidebar.md': '/_sidebar.md',
           '/core': '/core/',
           '/next': '/next/',
           '/react': '/react/',

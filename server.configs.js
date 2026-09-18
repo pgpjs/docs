@@ -27,7 +27,7 @@ export function spaFallback(req, res, next) {
       ? req.url.slice(req.url.indexOf('?'))
       : '';
 
-  if (/\/_sidebar\.md$/.test(pathOnly) && pathOnly !== '/_sidebar.md') {
+  if (/^\/(core|next|react|mpc|cli)(\/.*)?\/_sidebar\.md$/.test(pathOnly)) {
     req.url = `/_sidebar.md${query}`;
     next();
     return;
