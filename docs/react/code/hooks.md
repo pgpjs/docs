@@ -21,11 +21,13 @@ import {
   DecryptResult,
   SignOptions,
   VerifyOptions,
-  VerifyResult
+  VerifyResult,
 } from '@pgpjs/core';
 import { usePGP } from './context.js';
 
-export function useKey(options: { armoredKey?: string; binaryKey?: Uint8Array } = {}) {
+export function useKey(
+  options: { armoredKey?: string; binaryKey?: Uint8Array } = {},
+) {
   const [key, setKey] = useState<Key | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -40,7 +42,7 @@ export function useKey(options: { armoredKey?: string; binaryKey?: Uint8Array } 
     try {
       const parsed = await readKey({
         armoredKey: options.armoredKey,
-        binaryKey: options.binaryKey
+        binaryKey: options.binaryKey,
       });
       setKey(parsed);
     } catch (err: any) {
@@ -63,20 +65,23 @@ export function useKeyGeneration() {
   const [error, setError] = useState<Error | null>(null);
   const [result, setResult] = useState<KeyPairResult | null>(null);
 
-  const generate = useCallback(async (options: GenerateKeyPairOptions): Promise<KeyPairResult> => {
-    setIsGenerating(true);
-    setError(null);
-    try {
-      const kp = await generateKeyPair(options);
-      setResult(kp);
-      return kp;
-    } catch (err: any) {
-      setError(err);
-      throw err;
-    } finally {
-      setIsGenerating(false);
-    }
-  }, []);
+  const generate = useCallback(
+    async (options: GenerateKeyPairOptions): Promise<KeyPairResult> => {
+      setIsGenerating(true);
+      setError(null);
+      try {
+        const kp = await generateKeyPair(options);
+        setResult(kp);
+        return kp;
+      } catch (err: any) {
+        setError(err);
+        throw err;
+      } finally {
+        setIsGenerating(false);
+      }
+    },
+    [],
+  );
 
   return { generate, isGenerating, error, result };
 }
@@ -95,7 +100,7 @@ export function useEncryption() {
         const out = await encrypt({
           symmetricAlgorithm: config.defaultSymmetricAlgorithm,
           compression: config.defaultCompression,
-          ...options
+          ...options,
         });
         setResult(out);
         return out;
@@ -106,7 +111,7 @@ export function useEncryption() {
         setIsEncrypting(false);
       }
     },
-    [config]
+    [config],
   );
 
   return { encrypt: executeEncrypt, isEncrypting, error, result };
@@ -117,20 +122,23 @@ export function useDecryption() {
   const [error, setError] = useState<Error | null>(null);
   const [result, setResult] = useState<DecryptResult | null>(null);
 
-  const executeDecrypt = useCallback(async (options: DecryptOptions): Promise<DecryptResult> => {
-    setIsDecrypting(true);
-    setError(null);
-    try {
-      const out = await decrypt(options);
-      setResult(out);
-      return out;
-    } catch (err: any) {
-      setError(err);
-      throw err;
-    } finally {
-      setIsDecrypting(false);
-    }
-  }, []);
+  const executeDecrypt = useCallback(
+    async (options: DecryptOptions): Promise<DecryptResult> => {
+      setIsDecrypting(true);
+      setError(null);
+      try {
+        const out = await decrypt(options);
+        setResult(out);
+        return out;
+      } catch (err: any) {
+        setError(err);
+        throw err;
+      } finally {
+        setIsDecrypting(false);
+      }
+    },
+    [],
+  );
 
   return { decrypt: executeDecrypt, isDecrypting, error, result };
 }
@@ -148,7 +156,7 @@ export function useSign() {
       try {
         const out = await sign({
           hashAlgorithm: config.defaultHashAlgorithm,
-          ...options
+          ...options,
         });
         setResult(out);
         return out;
@@ -159,7 +167,7 @@ export function useSign() {
         setIsSigning(false);
       }
     },
-    [config]
+    [config],
   );
 
   return { sign: executeSign, isSigning, error, result };
@@ -170,20 +178,23 @@ export function useVerify() {
   const [error, setError] = useState<Error | null>(null);
   const [result, setResult] = useState<VerifyResult | null>(null);
 
-  const executeVerify = useCallback(async (options: VerifyOptions): Promise<VerifyResult> => {
-    setIsVerifying(true);
-    setError(null);
-    try {
-      const out = await verify(options);
-      setResult(out);
-      return out;
-    } catch (err: any) {
-      setError(err);
-      throw err;
-    } finally {
-      setIsVerifying(false);
-    }
-  }, []);
+  const executeVerify = useCallback(
+    async (options: VerifyOptions): Promise<VerifyResult> => {
+      setIsVerifying(true);
+      setError(null);
+      try {
+        const out = await verify(options);
+        setResult(out);
+        return out;
+      } catch (err: any) {
+        setError(err);
+        throw err;
+      } finally {
+        setIsVerifying(false);
+      }
+    },
+    [],
+  );
 
   return { verify: executeVerify, isVerifying, error, result };
 }

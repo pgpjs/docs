@@ -5,7 +5,14 @@
 This file is copied from GitHub at snapshot time so the page is on this site, not fetched in the browser.
 
 ```typescript
-import { Key, readPublicKey, readKey, encrypt, verify, VerifyResult } from '@pgpjs/core';
+import {
+  Key,
+  readPublicKey,
+  readKey,
+  encrypt,
+  verify,
+  VerifyResult,
+} from '@pgpjs/core';
 
 /**
  * Client-safe helper to encrypt data intended for the server.
@@ -13,20 +20,23 @@ import { Key, readPublicKey, readKey, encrypt, verify, VerifyResult } from '@pgp
  */
 export async function encryptForServer(
   message: string | Uint8Array,
-  serverPublicKey: Key | string
+  serverPublicKey: Key | string,
 ): Promise<string> {
-  const pubKey = typeof serverPublicKey === 'string'
-    ? await readPublicKey({ armoredKey: serverPublicKey })
-    : serverPublicKey;
+  const pubKey =
+    typeof serverPublicKey === 'string'
+      ? await readPublicKey({ armoredKey: serverPublicKey })
+      : serverPublicKey;
 
   if (pubKey.isPrivate()) {
-    throw new Error('Security violation: private key must never be used in client bundle');
+    throw new Error(
+      'Security violation: private key must never be used in client bundle',
+    );
   }
 
   const encrypted = await encrypt({
     message,
     encryptionKeys: pubKey,
-    format: 'armored'
+    format: 'armored',
   });
 
   return encrypted as string;
@@ -38,16 +48,17 @@ export async function encryptForServer(
 export async function verifyFromServer(
   message: string | Uint8Array,
   serverPublicKey: Key | string,
-  signature?: string
+  signature?: string,
 ): Promise<VerifyResult> {
-  const pubKey = typeof serverPublicKey === 'string'
-    ? await readPublicKey({ armoredKey: serverPublicKey })
-    : serverPublicKey;
+  const pubKey =
+    typeof serverPublicKey === 'string'
+      ? await readPublicKey({ armoredKey: serverPublicKey })
+      : serverPublicKey;
 
   return verify({
     message,
     signature,
-    verificationKeys: pubKey
+    verificationKeys: pubKey,
   });
 }
 
@@ -64,38 +75,45 @@ export interface SecureRequestOptions {
  * Client-safe helper that encrypts and optionally signs a payload, transmits it to an API route,
  * and parses the response.
  */
-export async function secureRequest<T = any>(options: SecureRequestOptions): Promise<T> {
-  const pubKey = typeof options.encryptWith === 'string'
-    ? await readPublicKey({ armoredKey: options.encryptWith })
-    : options.encryptWith;
+export async function secureRequest<T = any>(
+  options: SecureRequestOptions,
+): Promise<T> {
+  const pubKey =
+    typeof options.encryptWith === 'string'
+      ? await readPublicKey({ armoredKey: options.encryptWith })
+      : options.encryptWith;
 
   let signingKey: Key | undefined;
   if (options.signWith) {
-    signingKey = typeof options.signWith === 'string'
-      ? await readKey({ armoredKey: options.signWith })
-      : options.signWith;
+    signingKey =
+      typeof options.signWith === 'string'
+        ? await readKey({ armoredKey: options.signWith })
+        : options.signWith;
     if (options.passphrase && !signingKey.isDecrypted) {
       await signingKey.decrypt(options.passphrase);
     }
   }
 
-  const payload = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+  const payload =
+    typeof options.body === 'string'
+      ? options.body
+      : JSON.stringify(options.body);
 
   const encrypted = await encrypt({
     message: payload,
     encryptionKeys: pubKey,
     signingKeys: signingKey,
-    format: 'armored'
+    format: 'armored',
   });
 
   const response = await fetch(options.url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/pgp-encrypted',
-      ...(options.fetchOptions?.headers || {})
+      ...(options.fetchOptions?.headers || {}),
     },
     body: encrypted as string,
-    ...options.fetchOptions
+    ...options.fetchOptions,
   });
 
   const resText = await response.text();

@@ -5,7 +5,14 @@
 This file is copied from GitHub at snapshot time so the page is on this site, not fetched in the browser.
 
 ```typescript
-import { Key, decrypt, sign, readKey, readPublicKey, DecryptResult } from '@pgpjs/core';
+import {
+  Key,
+  decrypt,
+  sign,
+  readKey,
+  readPublicKey,
+  DecryptResult,
+} from '@pgpjs/core';
 import PGPJS from '@pgpjs/core';
 
 export interface PGPRouteHandlerContext<T = any> {
@@ -32,21 +39,26 @@ export interface PGPRouteHandlerOptions {
  */
 export function pgp<T = any, R = any>(
   handler: (ctx: PGPRouteHandlerContext<T>) => Promise<R> | R,
-  options: PGPRouteHandlerOptions = {}
+  options: PGPRouteHandlerOptions = {},
 ) {
   return async function POST(request: Request): Promise<Response> {
     const rawPayload = await request.text();
-    const serverPrivateKey = options.privateKey ?? process.env.PGP_SERVER_PRIVATE_KEY;
+    const serverPrivateKey =
+      options.privateKey ?? process.env.PGP_SERVER_PRIVATE_KEY;
     if (!serverPrivateKey) {
-      return new Response(JSON.stringify({ error: 'Server PGP private key is not configured' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return new Response(
+        JSON.stringify({ error: 'Server PGP private key is not configured' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
-    const secKey = typeof serverPrivateKey === 'string'
-      ? await readKey({ armoredKey: serverPrivateKey })
-      : serverPrivateKey;
+    const secKey =
+      typeof serverPrivateKey === 'string'
+        ? await readKey({ armoredKey: serverPrivateKey })
+        : serverPrivateKey;
 
     if (options.passphrase && !secKey.isDecrypted) {
       await secKey.decrypt(options.passphrase);
@@ -54,23 +66,29 @@ export function pgp<T = any, R = any>(
 
     let verificationKeys: Key | undefined;
     if (options.clientPublicKey) {
-      verificationKeys = typeof options.clientPublicKey === 'string'
-        ? await readPublicKey({ armoredKey: options.clientPublicKey })
-        : options.clientPublicKey;
+      verificationKeys =
+        typeof options.clientPublicKey === 'string'
+          ? await readPublicKey({ armoredKey: options.clientPublicKey })
+          : options.clientPublicKey;
     }
 
     const decrypted = await decrypt({
       message: rawPayload,
       decryptionKeys: secKey,
-      verificationKeys
+      verificationKeys,
     });
 
     const primarySig = decrypted.signatures[0];
     if (options.requireSignature && (!primarySig || !primarySig.valid)) {
-      return new Response(JSON.stringify({ error: 'Unauthorized: Invalid or missing client signature' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return new Response(
+        JSON.stringify({
+          error: 'Unauthorized: Invalid or missing client signature',
+        }),
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     }
 
     let parsedData: T;
@@ -91,26 +109,32 @@ export function pgp<T = any, R = any>(
 
     const result = await handler({
       data: parsedData,
-      sender: primarySig ? { keyID: primarySig.keyID, fingerprint: primarySig.fingerprint, valid: primarySig.valid } : undefined,
+      sender: primarySig
+        ? {
+            keyID: primarySig.keyID,
+            fingerprint: primarySig.fingerprint,
+            valid: primarySig.valid,
+          }
+        : undefined,
       request,
-      rawPayload
+      rawPayload,
     });
 
     // If client provided a public key, encrypt the response
     if (verificationKeys) {
       const encryptedResponse = await PGPJS.seal(result, {
         to: verificationKeys,
-        from: secKey
+        from: secKey,
       });
       return new Response(encryptedResponse as string, {
         status: 200,
-        headers: { 'Content-Type': 'application/pgp-encrypted' }
+        headers: { 'Content-Type': 'application/pgp-encrypted' },
       });
     }
 
     return new Response(JSON.stringify(result), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
   };
 }
@@ -123,13 +147,13 @@ export async function decryptInRouteHandler(
   options: {
     decryptionKeys: Key | Key[];
     passwords?: string[];
-  }
+  },
 ): Promise<DecryptResult> {
   const bodyText = await request.text();
   return decrypt({
     message: bodyText,
     decryptionKeys: options.decryptionKeys,
-    passwords: options.passwords
+    passwords: options.passwords,
   });
 }
 
@@ -142,7 +166,9 @@ export function createServerActionDecrypt(options: {
   passphrase?: string;
   passwords?: string[];
 }) {
-  return async function handleDecrypt(encryptedMessage: string): Promise<DecryptResult> {
+  return async function handleDecrypt(
+    encryptedMessage: string,
+  ): Promise<DecryptResult> {
     let keys = options.decryptionKeys;
     if (!keys && options.privateKey) {
       const k = await readKey({ armoredKey: options.privateKey });
@@ -154,7 +180,7 @@ export function createServerActionDecrypt(options: {
     return decrypt({
       message: encryptedMessage,
       decryptionKeys: keys,
-      passwords: options.passwords
+      passwords: options.passwords,
     });
   };
 }
@@ -167,7 +193,10 @@ export function createServerActionSign(options: {
   signingKeys?: Key | Key[];
   passphrase?: string;
 }) {
-  return async function handleSign(data: string | Uint8Array, detached: boolean = false): Promise<string | Uint8Array> {
+  return async function handleSign(
+    data: string | Uint8Array,
+    detached: boolean = false,
+  ): Promise<string | Uint8Array> {
     let keys = options.signingKeys;
     if (!keys && options.signingKey) {
       const k = await readKey({ armoredKey: options.signingKey });
@@ -180,7 +209,7 @@ export function createServerActionSign(options: {
       message: data,
       signingKeys: keys!,
       detached,
-      format: 'armored'
+      format: 'armored',
     });
   };
 }

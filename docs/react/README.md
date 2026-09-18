@@ -22,17 +22,23 @@ npm install @pgpjs/core @pgpjs/react
 ## Usage
 
 ```tsx
-import { PGPProvider, useEncryption, useKey } from "@pgpjs/react";
+import { PGPProvider, useEncryption, useKey } from '@pgpjs/react';
 
-function MessageEncrypter({ recipientArmoredKey }: { recipientArmoredKey: string }) {
+function MessageEncrypter({
+  recipientArmoredKey,
+}: {
+  recipientArmoredKey: string;
+}) {
   const { key: recipientKey } = useKey({ armoredKey: recipientArmoredKey });
   const { encryptMessage, loading, result, error } = useEncryption();
 
   return (
     <div>
-      <button 
-        disabled={loading || !recipientKey} 
-        onClick={() => encryptMessage({ message: "Secret", encryptionKeys: recipientKey! })}
+      <button
+        disabled={loading || !recipientKey}
+        onClick={() =>
+          encryptMessage({ message: 'Secret', encryptionKeys: recipientKey! })
+        }
       >
         Encrypt
       </button>

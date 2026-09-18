@@ -31,13 +31,13 @@ OpenPGP is historically powerful, but often notoriously complex for developers t
 
 ## Monorepo Packages
 
-| Package | Description | Version |
-|---|---|---|
-| [`@pgpjs/core`](./packages/core) | Universal RFC 9580 engine, high-level API (`seal`/`open`, `encryptJSON`), packets, keys, and streams | `0.1.0` |
-| [`@pgpjs/cli`](./packages/cli) | Developer CLI: `pgpjs init`, `pgpjs doctor`, `pgpjs key generate`, and file encryption | `0.1.0` |
-| [`@pgpjs/next`](./packages/next) | Next.js App Router route middleware (`pgp()`), Server Actions, and client fetcher (`secureRequest`) | `0.1.0` |
-| [`@pgpjs/node`](./packages/node) | Node.js filesystem adapters and Node.js `Readable` / `Writable` streaming pipelines | `0.1.0` |
-| [`@pgpjs/react`](./packages/react) | Idiomatic React hooks (`useKey`, `useEncryption`, `useDecryption`) and `PGPProvider` | `0.1.0` |
+| Package                            | Description                                                                                          | Version |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------- | ------- |
+| [`@pgpjs/core`](./packages/core)   | Universal RFC 9580 engine, high-level API (`seal`/`open`, `encryptJSON`), packets, keys, and streams | `0.1.0` |
+| [`@pgpjs/cli`](./packages/cli)     | Developer CLI: `pgpjs init`, `pgpjs doctor`, `pgpjs key generate`, and file encryption               | `0.1.0` |
+| [`@pgpjs/next`](./packages/next)   | Next.js App Router route middleware (`pgp()`), Server Actions, and client fetcher (`secureRequest`)  | `0.1.0` |
+| [`@pgpjs/node`](./packages/node)   | Node.js filesystem adapters and Node.js `Readable` / `Writable` streaming pipelines                  | `0.1.0` |
+| [`@pgpjs/react`](./packages/react) | Idiomatic React hooks (`useKey`, `useEncryption`, `useDecryption`) and `PGPProvider`                 | `0.1.0` |
 
 ---
 
@@ -53,6 +53,7 @@ npx pgpjs init
 ```
 
 The CLI inspects your project and scaffolds your integration:
+
 ```
 🔍 Detecting project environment...
   ✓ TypeScript detected
@@ -73,22 +74,25 @@ The CLI inspects your project and scaffolds your integration:
 ### Step 2: Use in Your Application
 
 ```typescript
-import PGPJS from "@/lib/pgpjs";
+import PGPJS from '@/lib/pgpjs';
 
 // 1. Generate an RFC 9580 keypair (Ed25519 / X25519)
 const keys = await PGPJS.generateKey({
-  name: "Alice",
-  email: "alice@example.com"
+  name: 'Alice',
+  email: 'alice@example.com',
 });
 
 // 2. Seal data (accepts objects, strings, arrays)
-const ciphertext = await PGPJS.seal({ user: "Bob", balance: 500 }, {
-  to: keys.publicKey
-});
+const ciphertext = await PGPJS.seal(
+  { user: 'Bob', balance: 500 },
+  {
+    to: keys.publicKey,
+  },
+);
 
 // 3. Open data
 const data = await PGPJS.open(ciphertext, {
-  privateKey: keys.privateKey
+  privateKey: keys.privateKey,
 });
 
 console.log(data.balance); // 500
@@ -102,34 +106,42 @@ Build end-to-end encrypted API routes with zero boilerplate:
 
 ```typescript
 // app/api/payment/route.ts
-import { pgp } from "@pgpjs/next/server";
+import { pgp } from '@pgpjs/next/server';
 
-export const POST = pgp(async ({ data, sender }) => {
-  // data is automatically decrypted and typed!
-  // sender contains verified client signature metadata
-  console.log("Received payment request:", data, "from:", sender?.fingerprint);
+export const POST = pgp(
+  async ({ data, sender }) => {
+    // data is automatically decrypted and typed!
+    // sender contains verified client signature metadata
+    console.log(
+      'Received payment request:',
+      data,
+      'from:',
+      sender?.fingerprint,
+    );
 
-  return {
-    status: "confirmed",
-    transactionId: "tx_123456"
-  };
-}, {
-  privateKey: process.env.PGP_SERVER_PRIVATE_KEY,
-  requireSignature: true
-});
+    return {
+      status: 'confirmed',
+      transactionId: 'tx_123456',
+    };
+  },
+  {
+    privateKey: process.env.PGP_SERVER_PRIVATE_KEY,
+    requireSignature: true,
+  },
+);
 ```
 
 And in your client component:
 
 ```typescript
-"use client";
-import { secureRequest } from "@pgpjs/next/client";
+'use client';
+import { secureRequest } from '@pgpjs/next/client';
 
 const response = await secureRequest({
-  url: "/api/payment",
-  body: { amount: 500, recipient: "Alice" },
+  url: '/api/payment',
+  body: { amount: 500, recipient: 'Alice' },
   encryptWith: serverPublicKeyArmor,
-  signWith: clientPrivateKeyArmor
+  signWith: clientPrivateKeyArmor,
 });
 ```
 

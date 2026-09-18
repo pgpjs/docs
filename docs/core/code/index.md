@@ -15,7 +15,7 @@ export {
   encryptKey,
   decryptKey,
   revokeKey,
-  type KeyPairResult
+  type KeyPairResult,
 } from './key/index.js';
 
 export {
@@ -26,7 +26,7 @@ export {
   encrypt,
   decrypt,
   sign,
-  verify
+  verify,
 } from './api/index.js';
 
 export {
@@ -38,7 +38,7 @@ export {
   parseCRC24,
   canonicalizeCleartext,
   formatCleartextSignedMessage,
-  parseCleartextSignedMessage
+  parseCleartextSignedMessage,
 } from './armor/index.js';
 
 // Message & Key Objects
@@ -70,7 +70,7 @@ export {
   parsePacketHeader,
   serializePacketHeader,
   wrapPacket,
-  SubpacketBuilder
+  SubpacketBuilder,
 } from './packet/index.js';
 
 // Crypto Primitives & Utilities
@@ -97,7 +97,7 @@ export {
   signECC,
   verifyECC,
   encryptECDH,
-  decryptECDH
+  decryptECDH,
 } from './crypto/index.js';
 
 export {
@@ -116,7 +116,7 @@ export {
   getRandomBytes,
   parseMPI,
   serializeMPI,
-  mpiToBigInt
+  mpiToBigInt,
 } from './utils/index.js';
 
 // Compression
@@ -128,7 +128,7 @@ export {
   createDecryptStream,
   createSignStream,
   createVerifyStream,
-  asyncIterableToStream
+  asyncIterableToStream,
 } from './stream/index.js';
 
 // Types & Enums

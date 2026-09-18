@@ -5,18 +5,28 @@
 This file is copied from GitHub at snapshot time so the page is on this site, not fetched in the browser.
 
 ```typescript
-import { Key } from "../key/key.js";
-import { generateKeyPair, readKey, KeyPairResult } from "../key/index.js";
-import { encrypt } from "../api/encrypt.js";
-import { decrypt } from "../api/decrypt.js";
-import { sign } from "../api/sign.js";
-import { verify } from "../api/verify.js";
-import { inspectKey, KeyInfo } from "../inspection/index.js";
-import { createKeyStore, KeyStore, KeyStoreOptions } from "../store/index.js";
-import { findKey, FindKeyOptions } from "../discovery/index.js";
-import { SecurityPolicy, DEFAULT_SECURITY_POLICY, validatePolicyKey } from "../policy/index.js";
-import { utf8ToBytes, bytesToUtf8 } from "../utils/bytes.js";
-import { DecryptResult, EncryptOptions, DecryptOptions, SignOptions, VerifyOptions } from "../types/interfaces.js";
+import { Key } from '../key/key.js';
+import { generateKeyPair, readKey, KeyPairResult } from '../key/index.js';
+import { encrypt } from '../api/encrypt.js';
+import { decrypt } from '../api/decrypt.js';
+import { sign } from '../api/sign.js';
+import { verify } from '../api/verify.js';
+import { inspectKey, KeyInfo } from '../inspection/index.js';
+import { createKeyStore, KeyStore, KeyStoreOptions } from '../store/index.js';
+import { findKey, FindKeyOptions } from '../discovery/index.js';
+import {
+  SecurityPolicy,
+  DEFAULT_SECURITY_POLICY,
+  validatePolicyKey,
+} from '../policy/index.js';
+import { utf8ToBytes, bytesToUtf8 } from '../utils/bytes.js';
+import {
+  DecryptResult,
+  EncryptOptions,
+  DecryptOptions,
+  SignOptions,
+  VerifyOptions,
+} from '../types/interfaces.js';
 
 export interface PGPJSConfig {
   policy?: SecurityPolicy;
@@ -28,7 +38,7 @@ export interface SealOptions {
   to: Key | string | Array<Key | string>;
   from?: Key | string;
   passphrase?: string;
-  format?: "armored" | "binary";
+  format?: 'armored' | 'binary';
 }
 
 export interface OpenOptions {
@@ -64,21 +74,23 @@ export class PGPJS {
     email?: string;
     comment?: string;
     passphrase?: string;
-    type?: "ecc" | "rsa";
-    curve?: "ed25519" | "curve25519" | "p256" | "p384" | "p521";
+    type?: 'ecc' | 'rsa';
+    curve?: 'ed25519' | 'curve25519' | 'p256' | 'p384' | 'p521';
     rsaBits?: 2048 | 3072 | 4096;
   }): Promise<KeyPairResult> {
-    const userIDs = [{
-      name: options.name,
-      email: options.email,
-      comment: options.comment
-    }];
+    const userIDs = [
+      {
+        name: options.name,
+        email: options.email,
+        comment: options.comment,
+      },
+    ];
     return generateKeyPair({
       userIDs,
       passphrase: options.passphrase,
-      type: options.type ?? "ecc",
-      curve: options.curve ?? "ed25519",
-      rsaBits: options.rsaBits ?? 2048
+      type: options.type ?? 'ecc',
+      curve: options.curve ?? 'ed25519',
+      rsaBits: options.rsaBits ?? 2048,
     });
   }
 
@@ -87,10 +99,13 @@ export class PGPJS {
    */
   async seal(data: any, options: SealOptions): Promise<string | Uint8Array> {
     // 1. Resolve recipient encryption keys
-    const recipientInputs = Array.isArray(options.to) ? options.to : [options.to];
+    const recipientInputs = Array.isArray(options.to)
+      ? options.to
+      : [options.to];
     const encryptionKeys: Key[] = [];
     for (const item of recipientInputs) {
-      const k = item instanceof Key ? item : await readKey({ armoredKey: item });
+      const k =
+        item instanceof Key ? item : await readKey({ armoredKey: item });
       validatePolicyKey(k, this.policy);
       encryptionKeys.push(k);
     }
@@ -98,7 +113,10 @@ export class PGPJS {
     // 2. Resolve optional signing key
     let signingKeys: Key | undefined;
     if (options.from) {
-      signingKeys = options.from instanceof Key ? options.from : await readKey({ armoredKey: options.from });
+      signingKeys =
+        options.from instanceof Key
+          ? options.from
+          : await readKey({ armoredKey: options.from });
       if (options.passphrase && !signingKeys.isDecrypted) {
         await signingKeys.decrypt(options.passphrase);
       }
@@ -107,29 +125,33 @@ export class PGPJS {
 
     // 3. Encode data with envelope prefix
     let payloadText: string;
-    if (typeof data === "string") {
-      payloadText = "str:" + data;
+    if (typeof data === 'string') {
+      payloadText = 'str:' + data;
     } else if (data instanceof Uint8Array) {
-      payloadText = "bin:" + Buffer.from(data).toString("base64");
+      payloadText = 'bin:' + Buffer.from(data).toString('base64');
     } else {
-      payloadText = "json:" + JSON.stringify(data);
+      payloadText = 'json:' + JSON.stringify(data);
     }
 
     return encrypt({
       message: payloadText,
       encryptionKeys,
       signingKeys,
-      format: options.format ?? "armored"
+      format: options.format ?? 'armored',
     });
   }
 
   /**
    * High-level PGPJS.open(): Decrypts and unpacks sealed payload to its original JavaScript type.
    */
-  async open<T = any>(ciphertext: string | Uint8Array, options: OpenOptions): Promise<T> {
-    const secKey = options.privateKey instanceof Key
-      ? options.privateKey
-      : await readKey({ armoredKey: options.privateKey });
+  async open<T = any>(
+    ciphertext: string | Uint8Array,
+    options: OpenOptions,
+  ): Promise<T> {
+    const secKey =
+      options.privateKey instanceof Key
+        ? options.privateKey
+        : await readKey({ armoredKey: options.privateKey });
 
     if (options.passphrase && !secKey.isDecrypted) {
       await secKey.decrypt(options.passphrase);
@@ -137,34 +159,40 @@ export class PGPJS {
 
     let verificationKeys: Key[] | undefined;
     if (options.from) {
-      const inputs = Array.isArray(options.from) ? options.from : [options.from];
+      const inputs = Array.isArray(options.from)
+        ? options.from
+        : [options.from];
       verificationKeys = [];
       for (const item of inputs) {
-        verificationKeys.push(item instanceof Key ? item : await readKey({ armoredKey: item }));
+        verificationKeys.push(
+          item instanceof Key ? item : await readKey({ armoredKey: item }),
+        );
       }
     }
 
     const res = await decrypt({
       message: ciphertext,
       decryptionKeys: secKey,
-      verificationKeys
+      verificationKeys,
     });
 
     if (this.policy.requireSignature && verificationKeys) {
-      const hasValidSig = res.signatures.some((s) => s.valid);
+      const hasValidSig = res.signatures.some(s => s.valid);
       if (!hasValidSig) {
-        throw new Error("Signature verification failed: no valid signature under current policy");
+        throw new Error(
+          'Signature verification failed: no valid signature under current policy',
+        );
       }
     }
 
     const text = res.text ?? bytesToUtf8(res.data);
 
-    if (text.startsWith("json:")) {
+    if (text.startsWith('json:')) {
       return JSON.parse(text.slice(5)) as T;
-    } else if (text.startsWith("str:")) {
+    } else if (text.startsWith('str:')) {
       return text.slice(4) as unknown as T;
-    } else if (text.startsWith("bin:")) {
-      return Buffer.from(text.slice(4), "base64") as unknown as T;
+    } else if (text.startsWith('bin:')) {
+      return Buffer.from(text.slice(4), 'base64') as unknown as T;
     }
 
     // Fallback if not prefixed
@@ -178,14 +206,25 @@ export class PGPJS {
   /**
    * Encrypts a JSON-serializable object or value.
    */
-  async encryptJSON<T = any>(data: T, options: { to: Key | string; from?: Key | string; passphrase?: string }): Promise<string> {
-    return this.seal(data, { to: options.to, from: options.from, passphrase: options.passphrase, format: "armored" }) as Promise<string>;
+  async encryptJSON<T = any>(
+    data: T,
+    options: { to: Key | string; from?: Key | string; passphrase?: string },
+  ): Promise<string> {
+    return this.seal(data, {
+      to: options.to,
+      from: options.from,
+      passphrase: options.passphrase,
+      format: 'armored',
+    }) as Promise<string>;
   }
 
   /**
    * Decrypts ciphertext and parses as JSON.
    */
-  async decryptJSON<T = any>(ciphertext: string | Uint8Array, options: OpenOptions): Promise<T> {
+  async decryptJSON<T = any>(
+    ciphertext: string | Uint8Array,
+    options: OpenOptions,
+  ): Promise<T> {
     return this.open<T>(ciphertext, options);
   }
 
@@ -200,7 +239,7 @@ export class PGPJS {
     from?: any;
     signingKeys?: any;
     passwords?: any;
-    format?: "armored" | "binary";
+    format?: 'armored' | 'binary';
   }): Promise<string | Uint8Array> {
     const rawMessage = options.text ?? options.message;
     const rawKeys = options.to ?? options.encryptionKeys;
@@ -211,7 +250,7 @@ export class PGPJS {
       encryptionKeys: rawKeys,
       signingKeys: rawSigners,
       passwords: options.passwords,
-      format: options.format ?? "armored"
+      format: options.format ?? 'armored',
     });
   }
 
@@ -229,10 +268,14 @@ export class PGPJS {
   }): Promise<DecryptResult> {
     let decKeys = options.privateKey ?? options.decryptionKeys;
     if (decKeys) {
-      if (typeof decKeys === "string") {
+      if (typeof decKeys === 'string') {
         decKeys = await readKey({ armoredKey: decKeys });
       }
-      if (options.passphrase && decKeys instanceof Key && !decKeys.isDecrypted) {
+      if (
+        options.passphrase &&
+        decKeys instanceof Key &&
+        !decKeys.isDecrypted
+      ) {
         await decKeys.decrypt(options.passphrase);
       }
     }
@@ -241,14 +284,17 @@ export class PGPJS {
       message: options.message,
       decryptionKeys: decKeys,
       passwords: options.passwords,
-      verificationKeys: options.from ?? options.verificationKeys
+      verificationKeys: options.from ?? options.verificationKeys,
     });
   }
 
   /**
    * Developer-friendly verify() with simplified result object.
    */
-  async verify(message: any, options: { key?: any; verificationKeys?: any; signature?: any }): Promise<{
+  async verify(
+    message: any,
+    options: { key?: any; verificationKeys?: any; signature?: any },
+  ): Promise<{
     valid: boolean;
     signer?: string;
     fingerprint?: string;
@@ -259,7 +305,7 @@ export class PGPJS {
     const res = await verify({
       message,
       verificationKeys: keys,
-      signature: options.signature
+      signature: options.signature,
     });
 
     const primarySig = res.signatures[0];
@@ -267,8 +313,11 @@ export class PGPJS {
       valid: primarySig ? primarySig.valid : false,
       signer: primarySig ? primarySig.keyID : undefined,
       fingerprint: primarySig ? primarySig.fingerprint : undefined,
-      createdAt: primarySig && primarySig.signature ? primarySig.signature.creationTime : undefined,
-      signatures: res.signatures
+      createdAt:
+        primarySig && primarySig.signature
+          ? primarySig.signature.creationTime
+          : undefined,
+      signatures: res.signatures,
     };
   }
 

@@ -24,25 +24,30 @@ npm install @pgpjs/core @pgpjs/next
 ## Usage
 
 ### Server Action
+
 ```typescript
-"use server";
-import { createServerActionDecrypt } from "@pgpjs/next/server";
+'use server';
+import { createServerActionDecrypt } from '@pgpjs/next/server';
 
 export const handleEncryptedUpload = createServerActionDecrypt({
   privateKey: process.env.SERVER_PRIVATE_KEY!,
-  passphrase: process.env.SERVER_PASSPHRASE
+  passphrase: process.env.SERVER_PASSPHRASE,
 });
 ```
 
 ### Client Component
+
 ```tsx
-"use client";
-import { encryptForServer } from "@pgpjs/next/client";
-import { handleEncryptedUpload } from "./actions";
+'use client';
+import { encryptForServer } from '@pgpjs/next/client';
+import { handleEncryptedUpload } from './actions';
 
 export function Form() {
   async function onSubmit(text: string) {
-    const ciphertext = await encryptForServer(text, process.env.NEXT_PUBLIC_PGP_KEY!);
+    const ciphertext = await encryptForServer(
+      text,
+      process.env.NEXT_PUBLIC_PGP_KEY!,
+    );
     await handleEncryptedUpload(ciphertext);
   }
 }

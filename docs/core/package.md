@@ -24,25 +24,25 @@ npm install @pgpjs/core
 ## Usage
 
 ```typescript
-import { generateKeyPair, encrypt, decrypt, readKey } from "@pgpjs/core";
+import { generateKeyPair, encrypt, decrypt, readKey } from '@pgpjs/core';
 
 // Generate an ECC key pair
 const { privateKey, publicKey } = await generateKeyPair({
-  userIDs: [{ name: "Alice", email: "alice@example.com" }],
-  type: "ecc",
-  curve: "ed25519"
+  userIDs: [{ name: 'Alice', email: 'alice@example.com' }],
+  type: 'ecc',
+  curve: 'ed25519',
 });
 
 // Encrypt
 const ciphertext = await encrypt({
-  message: "Hello World",
-  encryptionKeys: publicKey
+  message: 'Hello World',
+  encryptionKeys: publicKey,
 });
 
 // Decrypt
 const { text } = await decrypt({
   message: ciphertext,
-  decryptionKeys: privateKey
+  decryptionKeys: privateKey,
 });
 ```
 

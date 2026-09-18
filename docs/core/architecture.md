@@ -7,6 +7,7 @@
 PGPJS is designed as a modular, lightweight, modern TypeScript library implementing the OpenPGP standard (**RFC 4880**, **RFC 6637**, and **RFC 9580**).
 
 Key principles:
+
 1. **Zero Native C/C++ Addons**: Eliminates compilation issues, platform incompatibilities (Node vs Web vs Edge vs React Native), and C-level memory vulnerabilities.
 2. **First-Principles Standard Compliance**: Fully implements the RFC binary packet layout, OpenPGP CFB cipher mode, S2K string-to-key derivations, Radix-64 ASCII armor, and MPI serialization.
 3. **Audited Cryptographic Foundations**: Primitives rely on audited implementations from the [`@noble`](https://github.com/paulmillr) family (`@noble/hashes`, `@noble/curves`, `@noble/ciphers`) and standard WebCrypto CSPRNG.
@@ -71,6 +72,7 @@ The OpenPGP format is a sequence of discrete binary packets. PGPJS parses and em
 ## 4. Streaming Architecture
 
 PGPJS uses standard WHATWG Web Streams (`ReadableStream`, `WritableStream`, `TransformStream`) in `@pgpjs/core`. This allows streaming encryption and decryption in:
+
 - Node.js (via `stream.Readable.toWeb` and `@pgpjs/node`)
 - Modern web browsers (direct fetch streaming)
 - Cloudflare Workers and Edge runtimes
