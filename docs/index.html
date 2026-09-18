@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/bss-overrides.css" />
     <link rel="stylesheet" href="assets/css/pgpjs.css" />
     <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=hero-code-5" />
+    <link rel="stylesheet" href="pgpjs-site.css?v=install-sidebar" />
   </head>
   <body class="pgpjs-site pgpjs-home">
     <div class="topbar">
@@ -107,14 +107,8 @@
               cryptography, built for React, Next.js, and the modern web.
             </p>
             <div class="hero-buttons">
-              <a href="#/quickstart" class="btn">Get Started</a>
-              <a
-                href="https://github.com/pgpjs"
-                target="_blank"
-                rel="noopener"
-                class="btn btn-secondary"
-                >View on GitHub</a
-              >
+              <a href="#install" class="btn">Install CLI</a>
+              <a href="#/quickstart" class="btn btn-secondary">Get Started</a>
             </div>
           </div>
           <div class="hero-visual">
@@ -153,6 +147,35 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      <section class="install-band" id="install">
+        <div class="install-inner">
+          <p class="install-kicker">Install PGPJS CLI</p>
+          <h2>The terminal toolkit for OpenPGP.</h2>
+          <div class="install-cmd">
+            <code id="copyInstallText">npm install -g pgpjs-cli</code>
+            <button
+              type="button"
+              class="install-copy"
+              id="copyInstallBtn"
+              title="Copy install command"
+              aria-label="Copy npm install -g pgpjs-cli"
+            >
+              Copy
+            </button>
+          </div>
+          <p class="install-lead">
+            Paste that in a macOS Terminal, Linux shell, or Windows. Node.js
+            20.10 or newer. Then run <code>pgpjs</code> or
+            <code>pgpjs --help</code>.
+            <a
+              href="https://github.com/pgpjs/cli"
+              target="_blank"
+              rel="noopener"
+              >pgpjs/cli on GitHub</a
+            >
+          </p>
         </div>
       </section>
       <div class="logo-strip">
@@ -435,8 +458,11 @@
         loadNavbar: false,
         loadSidebar: true,
         maxLevel: 4,
-        subMaxLevel: 3,
+        subMaxLevel: 2,
         executeScript: false,
+        alias: {
+          '/.*/_sidebar.md': '/_sidebar.md',
+        },
         search: {
           paths: 'auto',
           placeholder: 'Search documentation...',
@@ -455,43 +481,64 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script>
       (function () {
-        const copyBtn = document.getElementById('copyCliBtn');
-        const copyText = document.getElementById('copyCliText');
-        const copyIcon = copyBtn ? copyBtn.querySelector('.copy-icon') : null;
-        if (!copyBtn) {
-          return;
-        }
-        copyBtn.addEventListener('click', async function () {
-          const cmd = 'npx pgpjs init';
-          try {
-            if (navigator.clipboard && window.isSecureContext) {
-              await navigator.clipboard.writeText(cmd);
-            } else {
-              const ta = document.createElement('textarea');
-              ta.value = cmd;
-              ta.style.position = 'fixed';
-              ta.style.top = '-9999px';
-              document.body.appendChild(ta);
-              ta.select();
-              document.execCommand('copy');
-              ta.remove();
-            }
-            copyBtn.classList.add('copied');
-            copyText.innerHTML = '&#10003;&nbsp;Copied!';
-            if (copyIcon) {
-              copyIcon.style.display = 'none';
-            }
-            setTimeout(function () {
-              copyBtn.classList.remove('copied');
-              copyText.innerHTML = '$&nbsp;npx pgpjs init';
-              if (copyIcon) {
-                copyIcon.style.display = 'inline-block';
-              }
-            }, 2000);
-          } catch (err) {
-            console.error('Failed to copy to clipboard:', err);
+        async function copyCommand(command) {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(command);
+            return;
           }
-        });
+          const ta = document.createElement('textarea');
+          ta.value = command;
+          ta.style.position = 'fixed';
+          ta.style.top = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        }
+
+        const copyBtn = document.getElementById('copyCliBtn');
+        const copyLabel = document.getElementById('copyCliText');
+        const copyIcon = copyBtn ? copyBtn.querySelector('.copy-icon') : null;
+        if (copyBtn && copyLabel) {
+          const idle = copyLabel.innerHTML;
+          copyBtn.addEventListener('click', async function () {
+            try {
+              await copyCommand('npx pgpjs init');
+              copyBtn.classList.add('copied');
+              copyLabel.innerHTML = '&#10003;&nbsp;Copied!';
+              if (copyIcon) {
+                copyIcon.style.display = 'none';
+              }
+              setTimeout(function () {
+                copyBtn.classList.remove('copied');
+                copyLabel.innerHTML = idle;
+                if (copyIcon) {
+                  copyIcon.style.display = 'inline-block';
+                }
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy to clipboard:', err);
+            }
+          });
+        }
+
+        const installBtn = document.getElementById('copyInstallBtn');
+        if (installBtn) {
+          const idle = installBtn.innerHTML;
+          installBtn.addEventListener('click', async function () {
+            try {
+              await copyCommand('npm install -g pgpjs-cli');
+              installBtn.classList.add('copied');
+              installBtn.textContent = 'Copied';
+              setTimeout(function () {
+                installBtn.classList.remove('copied');
+                installBtn.textContent = idle;
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy to clipboard:', err);
+            }
+          });
+        }
       })();
     </script>
   </body>
