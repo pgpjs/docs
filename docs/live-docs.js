@@ -120,7 +120,9 @@ function livePages() {
 }
 
 function aliasMap() {
-  const aliases = {};
+  const aliases = {
+    '/.*/_sidebar.md': '/_sidebar.md',
+  };
   const pages = livePages();
 
   Object.entries(pages).forEach(([pkg, entries]) => {
@@ -260,11 +262,33 @@ function refreshAliases(vm) {
   }
 }
 
+function isHtmlShell(text) {
+  return /pgpjs-landing|<!doctype html/i.test(text || '');
+}
+
+function repairSidebar(vm) {
+  const nav = document.querySelector('.sidebar-nav');
+  if (!nav || !isHtmlShell(nav.innerHTML)) {
+    return;
+  }
+
+  fetch('_sidebar.md', { cache: 'no-store' })
+    .then(response => (response.ok ? response.text() : ''))
+    .then(text => {
+      if (!text || isHtmlShell(text) || !vm?.compiler?.sidebar) {
+        return;
+      }
+      nav.innerHTML = vm.compiler.sidebar(text, vm.config.maxLevel);
+    })
+    .catch(() => {});
+}
+
 function liveDocsPlugin(hook, vm) {
   hook.mounted(() => {
     refreshAliases(vm);
     relocateSearch();
     measureChrome();
+    repairSidebar(vm);
     window.addEventListener('resize', measureChrome);
   });
 
@@ -272,6 +296,7 @@ function liveDocsPlugin(hook, vm) {
     refreshAliases(vm);
     relocateSearch();
     measureChrome();
+    repairSidebar(vm);
 
     const path = (vm.route.path || '/').replace(/\.md$/, '');
     const isHome = path === '/' || path === '/README' || path === '';

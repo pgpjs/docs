@@ -1,6 +1,18 @@
 # Quick start
 
-Install PGPJS in an existing project:
+Install the PGPJS CLI:
+
+```bash
+npm install -g pgpjs-cli
+```
+
+Then initialize a project:
+
+```bash
+pgpjs init
+```
+
+Or add the core library to an existing app:
 
 ```bash
 npm install @pgpjs/core
