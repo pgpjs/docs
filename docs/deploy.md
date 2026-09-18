@@ -103,6 +103,26 @@ This repository already includes `netlify.toml`. It publishes the static `docs/`
 
 Do **not** set the Netlify UI Base directory to `docs` on top of `netlify.toml` — Netlify would look for `docs/docs` and the deploy would fail.
 
+### API deploy gate
+
+The **Deploy Netlify** GitHub Action uploads `docs/` with the [Netlify Deploys API](https://docs.netlify.com/api/get-started/#deploy-with-the-api). It runs on push to `main` (when `docs/` changes) and from **Actions → Deploy Netlify → Run workflow**.
+
+1. Create a Netlify personal access token: [User settings → Applications](https://app.netlify.com/user/applications#personal-access-tokens).
+2. Copy the Site ID from **Site configuration → General → Site details**.
+3. In this GitHub repo, add secrets:
+   - `NETLIFY_AUTH_TOKEN`
+   - `NETLIFY_SITE_ID`
+   - optional `NETLIFY_DEPLOY_HOOK` (Build hooks URL) to rebuild from Git instead of uploading files
+4. Optional gate: GitHub **Settings → Environments → production** and add required reviewers. The workflow uses that environment.
+
+From this repo (or a Cursor agent with those env vars):
+
+```bash
+npm run deploy:netlify           # upload docs/ as production
+npm run deploy:netlify -- --draft
+npm run deploy:netlify -- --hook # POST NETLIFY_DEPLOY_HOOK
+```
+
 ### Drag and drop
 
 - Upload the **`docs`** folder, or
