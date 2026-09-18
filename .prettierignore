@@ -1,6 +1,7 @@
 # Directories
 _playwright-*
 dist
+dist-functions
 lib
 docs/assets
 docs/vendor

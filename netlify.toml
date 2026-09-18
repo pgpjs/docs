@@ -8,12 +8,11 @@
 
 [build]
   publish = "docs"
-  command = "node scripts/snapshot-package-docs.mjs; node scripts/write-sitemap.mjs"
+  command = "node scripts/snapshot-package-docs.mjs; node scripts/write-sitemap.mjs; node scripts/bundle-chatscan-fn.mjs"
 
 [functions]
-  directory = "netlify/functions"
+  directory = "dist-functions"
   node_bundler = "esbuild"
-  included_files = ["backend/**"]
 
 [build.environment]
   NODE_VERSION = "20"

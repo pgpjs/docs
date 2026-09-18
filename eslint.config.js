@@ -11,6 +11,7 @@ export default [
       // Directories
       '_playwright-*',
       'dist',
+      'dist-functions',
       'docs',
       'lib',
       'node_modules',

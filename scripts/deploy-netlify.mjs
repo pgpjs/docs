@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const docsDir = join(root, 'docs');
-const functionsDir = join(root, 'netlify/functions');
 
 function fail(message) {
   console.error(message);
@@ -27,19 +26,23 @@ async function triggerHook(hookUrl) {
 }
 
 function deployWithCli({ token, siteId, prod }) {
+  execFileSync('node', [join(root, 'scripts/bundle-chatscan-fn.mjs')], {
+    cwd: root,
+    stdio: 'inherit',
+  });
   const args = [
     'deploy',
     '--dir',
     docsDir,
     '--functions',
-    functionsDir,
+    join(root, 'dist-functions'),
     '--site',
     siteId,
   ];
   if (prod) {
     args.push('--prod');
   }
-  execFileSync('netlify', args, {
+  execFileSync('npx', ['--yes', 'netlify-cli', ...args], {
     cwd: root,
     env: { ...process.env, NETLIFY_AUTH_TOKEN: token },
     stdio: 'inherit',
