@@ -224,6 +224,65 @@ function wrapMarkdown(text, url) {
   return badge + source + rewriteRelativeUrls(text, url);
 }
 
+function liveSpecFromUrl(url) {
+  const raw = String(url || '').split('?')[0];
+  let path = raw;
+  try {
+    path = new URL(raw, location.origin).pathname;
+  } catch {
+    path = raw;
+  }
+  const match = path.match(/\/(core|next|react)(?:\/(.*))?$/i);
+  if (!match) {
+    return null;
+  }
+  const pkg = match[1].toLowerCase();
+  const rest = (match[2] || '')
+    .replace(/\.md$/i, '')
+    .replace(/\/+$/, '')
+    .replace(/^README$/i, '');
+  const page = livePages()[pkg]?.[rest];
+  if (!page) {
+    return null;
+  }
+  return Array.isArray(page) ? { urls: page } : page;
+}
+
+function renderLivePage(spec, result) {
+  if (!result) {
+    return '';
+  }
+  if (spec.code) {
+    return wrapCode(spec.code, result.text, result.url);
+  }
+  return wrapMarkdown(result.text, result.url);
+}
+
+function patchDocsifyGet() {
+  const docsify = window.Docsify;
+  if (!docsify?.get || docsify.get.__pgpjsLive) {
+    return;
+  }
+  const original = docsify.get.bind(docsify);
+  function get(url, hasBar, headers) {
+    const spec = liveSpecFromUrl(url);
+    if (!spec) {
+      return original(url, hasBar, headers);
+    }
+    const pending = fetchFirst(spec.urls).then(result =>
+      renderLivePage(spec, result),
+    );
+    return {
+      then(success, error) {
+        pending.then(success, error);
+      },
+      abort() {},
+    };
+  }
+  get.__pgpjsLive = true;
+  docsify.get = get;
+}
+
 function decorateSearchInput(input) {
   if (!input) {
     return;
@@ -485,7 +544,11 @@ function bindMobileSidebarClose() {
 }
 
 function liveDocsPlugin(hook, vm) {
+  hook.init(() => {
+    patchDocsifyGet();
+  });
   hook.mounted(() => {
+    patchDocsifyGet();
     refreshAliases(vm);
     relocateSearch();
     measureChrome();
