@@ -325,10 +325,13 @@ function relocateSearch() {
 }
 
 function measureChrome() {
+  const chrome = document.querySelector('.pgpjs-chrome');
   const topbar = document.querySelector('.topbar');
   const header = document.querySelector('.main-header');
   const topbarHeight = topbar?.getBoundingClientRect().height || 0;
   const headerHeight = header?.getBoundingClientRect().height || 0;
+  const chromeHeight =
+    chrome?.getBoundingClientRect().height || topbarHeight + headerHeight;
   const root = document.documentElement;
 
   root.style.setProperty(
@@ -337,7 +340,7 @@ function measureChrome() {
   );
   root.style.setProperty(
     '--pgpjs-chrome-height',
-    `${Math.round(topbarHeight + headerHeight)}px`,
+    `${Math.round(chromeHeight)}px`,
   );
 }
 

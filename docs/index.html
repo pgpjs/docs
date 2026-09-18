@@ -18,88 +18,93 @@
     <link rel="stylesheet" href="assets/css/bss-overrides.css" />
     <link rel="stylesheet" href="assets/css/pgpjs.css" />
     <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=mobile-sidebar-close-2" />
+    <link rel="stylesheet" href="pgpjs-site.css?v=mobile-chrome-sticky" />
   </head>
   <body class="pgpjs-site pgpjs-home">
-    <div class="topbar">
-      <div class="topbar-inner">
-        <div class="bio-text">
-          <span
-            >Pretty Good Privacy &bull; Modern Cryptography for React, Next.js
-            &amp; Modern Web</span
-          >
-        </div>
-        <div class="top-links">
-          <a href="https://github.com/pgpjs" target="_blank" rel="noopener"
-            ><span>GitHub</span></a
-          >
-          <a href="#/mpc/"><span>MPC</span></a>
-          <a href="https://twitter.com/PGPJS_Dev" target="_blank" rel="noopener"
-            ><span>@PGPJS_Dev</span></a
-          >
-        </div>
-      </div>
-    </div>
-    <header class="main-header">
-      <div class="header-inner">
-        <div class="header-left">
-          <div class="search-wrap" id="pgpjs-search">
-            <a href="#/"
-              ><img
-                src="assets/img/91474692.png"
-                width="46"
-                height="46"
-                alt="PGPJS Logo"
-                style="border-radius: 4px"
-            /></a>
-            <input
-              type="search"
-              class="search-input"
-              placeholder="Search documentation..."
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="none"
-              spellcheck="false"
-              enterkeyhint="search"
-            />
+    <div class="pgpjs-chrome">
+      <div class="topbar">
+        <div class="topbar-inner">
+          <div class="bio-text">
+            <span
+              >Pretty Good Privacy &bull; Modern Cryptography for React, Next.js
+              &amp; Modern Web</span
+            >
+          </div>
+          <div class="top-links">
+            <a href="https://github.com/pgpjs" target="_blank" rel="noopener"
+              ><span>GitHub</span></a
+            >
+            <a href="#/mpc/"><span>MPC</span></a>
+            <a
+              href="https://twitter.com/PGPJS_Dev"
+              target="_blank"
+              rel="noopener"
+              ><span>@PGPJS_Dev</span></a
+            >
           </div>
         </div>
-        <div class="header-right">
-          <nav class="main-nav">
-            <a href="#/overview" data-nav="overview">Overview</a>
-            <a href="#/core/" data-nav="core">Core</a>
-            <a href="#/next/" data-nav="next">Next.js</a>
-            <a href="#/react/" data-nav="react">React</a>
-            <a href="#/mpc/" data-nav="mpc">MPC</a>
-          </nav>
-          <button
-            type="button"
-            class="git-btn"
-            id="copyCliBtn"
-            title="Click to copy: npx pgpjs init"
-            aria-label="Copy CLI command to clipboard"
-          >
-            <span id="copyCliText">$&nbsp;npx pgpjs init</span>
-            <svg
-              class="copy-icon"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path
-                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-              ></path>
-            </svg>
-          </button>
-        </div>
       </div>
-    </header>
+      <header class="main-header">
+        <div class="header-inner">
+          <div class="header-left">
+            <div class="search-wrap" id="pgpjs-search">
+              <a href="#/"
+                ><img
+                  src="assets/img/91474692.png"
+                  width="46"
+                  height="46"
+                  alt="PGPJS Logo"
+                  style="border-radius: 4px"
+              /></a>
+              <input
+                type="search"
+                class="search-input"
+                placeholder="Search documentation..."
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="none"
+                spellcheck="false"
+                enterkeyhint="search"
+              />
+            </div>
+          </div>
+          <div class="header-right">
+            <nav class="main-nav">
+              <a href="#/overview" data-nav="overview">Overview</a>
+              <a href="#/core/" data-nav="core">Core</a>
+              <a href="#/next/" data-nav="next">Next.js</a>
+              <a href="#/react/" data-nav="react">React</a>
+              <a href="#/mpc/" data-nav="mpc">MPC</a>
+            </nav>
+            <button
+              type="button"
+              class="git-btn"
+              id="copyCliBtn"
+              title="Click to copy: npx pgpjs init"
+              aria-label="Copy CLI command to clipboard"
+            >
+              <span id="copyCliText">$&nbsp;npx pgpjs init</span>
+              <svg
+                class="copy-icon"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+    </div>
 
     <div class="pgpjs-landing">
       <section class="hero" id="hero">
