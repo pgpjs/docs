@@ -106,7 +106,10 @@ async function uploadZip({ token, siteId, prod }) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const token = process.env.NETLIFY_AUTH_TOKEN;
-  const siteId = process.env.NETLIFY_SITE_ID || process.env.NETLIFY_SITE;
+  const siteId =
+    process.env.NETLIFY_SITE_ID ||
+    process.env.NETLIFY_SITE ||
+    '2d2bad4f-7244-484a-8e3f-608ab487a382';
   const hookUrl = process.env.NETLIFY_DEPLOY_HOOK;
 
   if (args.hookOnly || (!token && hookUrl)) {

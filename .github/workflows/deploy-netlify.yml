@@ -42,7 +42,7 @@ jobs:
       - name: Deploy via Netlify API
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID || '2d2bad4f-7244-484a-8e3f-608ab487a382' }}
           NETLIFY_DEPLOY_HOOK: ${{ secrets.NETLIFY_DEPLOY_HOOK }}
         run: |
           if [ "${{ github.event.inputs.hook }}" = "true" ]; then
