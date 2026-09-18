@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/bss-overrides.css" />
     <link rel="stylesheet" href="assets/css/pgpjs.css" />
     <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=swipe-lr" />
+    <link rel="stylesheet" href="pgpjs-site.css?v=swipe-logos" />
   </head>
   <body class="pgpjs-site pgpjs-home">
     <div class="topbar">
@@ -179,7 +179,12 @@
         </div>
       </section>
       <div class="logo-strip">
-        <div class="logo-strip-inner">
+        <div
+          class="logo-strip-inner"
+          data-swipe
+          tabindex="0"
+          aria-label="PGPJS stack"
+        >
           <div class="logo-slot">
             <svg
               width="26"
@@ -564,7 +569,7 @@
           const mobile = window.matchMedia('(max-width: 900px)');
           document.querySelectorAll('[data-swipe]').forEach(function (row) {
             const cards = Array.prototype.slice.call(
-              row.querySelectorAll(':scope > .under-card'),
+              row.querySelectorAll(':scope > .under-card, :scope > .logo-slot'),
             );
             if (cards.length < 2) {
               return;

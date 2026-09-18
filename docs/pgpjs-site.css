@@ -465,9 +465,15 @@ body.pgpjs-home .code-line .line-no {
     margin-inline: -1.5rem;
   }
 
-  .under-cards-row[data-swipe] {
+  .logo-strip {
+    padding-inline: 0;
+  }
+
+  [data-swipe] {
     display: flex !important;
     flex-flow: row nowrap !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
     grid-template-columns: none !important;
     gap: 12px !important;
     width: auto;
@@ -485,11 +491,12 @@ body.pgpjs-home .code-line .line-no {
     cursor: grab;
   }
 
-  .under-cards-row[data-swipe]::-webkit-scrollbar {
+  [data-swipe]::-webkit-scrollbar {
     display: none;
   }
 
-  .under-cards-row[data-swipe] > .under-card {
+  [data-swipe] > .under-card,
+  [data-swipe] > .logo-slot {
     flex: 0 0 min(78vw, 320px) !important;
     width: min(78vw, 320px) !important;
     min-width: min(78vw, 320px) !important;
@@ -498,12 +505,13 @@ body.pgpjs-home .code-line .line-no {
     scroll-snap-stop: always;
   }
 
-  .under-cards-row[data-swipe].is-dragging {
+  [data-swipe].is-dragging {
     cursor: grabbing;
     scroll-snap-type: none;
   }
 
-  .under-cards-row[data-swipe] .under-card:hover {
+  [data-swipe] .under-card:hover,
+  [data-swipe] .logo-slot:hover {
     transform: none;
   }
 
