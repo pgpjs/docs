@@ -824,11 +824,10 @@ function syncPageMeta(path, isHome) {
   const heading = section?.querySelector('h1');
   const paragraph = section?.querySelector('p');
   const known = PAGE_META[path] || PAGE_META[path.replace(/\/$/, '')];
-  const title = isHome
+  const rawTitle = isHome
     ? HOME_TITLE
-    : known?.title
-      ? `${known.title} · PGPJS`
-      : `${(heading?.textContent || 'PGPJS').trim()} · PGPJS`;
+    : known?.title || (heading?.textContent || 'Documentation').trim();
+  const title = /pgpjs/i.test(rawTitle) ? rawTitle : `${rawTitle} · PGPJS`;
   const desc = isHome
     ? HOME_DESC
     : known?.description ||
