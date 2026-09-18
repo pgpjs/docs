@@ -117,10 +117,13 @@ The **Deploy Netlify** GitHub Action uploads `docs/` with the [Netlify Deploys A
 From this repo (or a Cursor agent with those env vars):
 
 ```bash
+npx netlify-cli deploy --prod --dir=docs
 npm run deploy:netlify           # upload docs/ as production
 npm run deploy:netlify -- --draft
 npm run deploy:netlify -- --hook # POST NETLIFY_DEPLOY_HOOK
 ```
+
+This repository also vendors Netlify agent skills in `.agents/skills` (installed from [netlify/context-and-tools](https://github.com/netlify/context-and-tools) via [netlify.ai](https://netlify.ai)). The CLI reads `NETLIFY_AUTH_TOKEN` instead of an interactive `netlify login` in CI. Link state is in `.netlify/` and is gitignored.
 
 ### Drag and drop
 

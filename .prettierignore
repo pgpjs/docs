@@ -4,6 +4,7 @@ dist
 lib
 docs/assets
 docs/vendor
+.agents
 
 # Files
 _vars.css
@@ -12,3 +13,4 @@ CHANGELOG.md
 emoji-data.*
 HISTORY.md
 docs/pgpjs-unlock.js
+skills-lock.json

@@ -2,6 +2,7 @@
 .husky/_
 .idea
 .vercel
+.netlify
 _playwright-report
 _playwright-results
 node_modules

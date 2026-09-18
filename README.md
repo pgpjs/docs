@@ -9,6 +9,16 @@
 </p>
 
 <p align="center">
+  <a href="https://app.netlify.com/projects/pgpjs/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/2d2bad4f-7244-484a-8e3f-608ab487a382/deploy-status"></a>
+</p>
+
+<p align="center">
+  <a href="https://pgpjs.org">pgpjs.org</a>
+  ·
+  <a href="https://pgpjs.netlify.app">pgpjs.netlify.app</a>
+</p>
+
+<p align="center">
   A magical documentation site generator, rebranded from
   <a href="https://github.com/docsifyjs/docsify">Docsify</a>.
 </p>
@@ -49,8 +59,11 @@ To publish `docs/` from GitHub or this machine via the Netlify API, add reposito
 
 ```bash
 cp .env.example .env   # fill in NETLIFY_AUTH_TOKEN
+npx netlify-cli deploy --prod --dir=docs
 npm run deploy:netlify
 ```
+
+Netlify agent skills from [netlify.ai](https://netlify.ai) live in [`.agents/skills`](./.agents/skills).
 
 ### Embed PGPJS in a page
 
