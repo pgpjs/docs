@@ -495,7 +495,7 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
   color: var(--navy, #0b1f5c);
 }
 
-.under-swipe-controls {
+.pgpjs-sidebar-backdrop {
   display: none;
 }
 
@@ -621,6 +621,26 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     top: 0;
     z-index: 102;
     padding: 8px 12px;
+  }
+
+  body.pgpjs-home .topbar,
+  body.pgpjs-home .main-header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  body.pgpjs-home .topbar {
+    top: 0;
+  }
+
+  body.pgpjs-home .main-header {
+    top: var(--pgpjs-topbar-height);
+  }
+
+  body.pgpjs-home {
+    padding-top: var(--pgpjs-chrome-height);
   }
 
   body.pgpjs-site .topbar .bio-text {
@@ -778,6 +798,25 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
     translate: none;
+  }
+
+  .pgpjs-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    top: var(--pgpjs-chrome-height);
+    right: 0;
+    bottom: 0;
+    left: var(--sidebar-width);
+    z-index: 198;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(15, 23, 42, 0.35);
+    cursor: pointer;
+  }
+
+  .pgpjs-sidebar-backdrop[hidden] {
+    display: none;
   }
 
   body.pgpjs-docs main > .content {

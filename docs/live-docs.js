@@ -379,6 +379,7 @@ function closeMobileSidebar() {
     return;
   }
   sidebar.classList.remove('show');
+  document.body.classList.remove('pgpjs-sidebar-open');
   document.querySelectorAll('[aria-controls="__sidebar"]').forEach(toggle => {
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-label', 'Show primary navigation');
@@ -386,6 +387,10 @@ function closeMobileSidebar() {
   document
     .querySelectorAll('[inert]')
     .forEach(el => el.removeAttribute('inert'));
+  const backdrop = document.querySelector('.pgpjs-sidebar-backdrop');
+  if (backdrop) {
+    backdrop.hidden = true;
+  }
 }
 
 function repairInertChrome() {
@@ -396,11 +401,55 @@ function repairInertChrome() {
     .forEach(el => el.removeAttribute('inert'));
 }
 
+function ensureSidebarBackdrop() {
+  let backdrop = document.querySelector('.pgpjs-sidebar-backdrop');
+  if (backdrop) {
+    return backdrop;
+  }
+  backdrop = document.createElement('button');
+  backdrop.type = 'button';
+  backdrop.className = 'pgpjs-sidebar-backdrop';
+  backdrop.hidden = true;
+  backdrop.setAttribute('aria-label', 'Close navigation');
+  document.body.appendChild(backdrop);
+  backdrop.addEventListener('click', event => {
+    event.preventDefault();
+    closeMobileSidebar();
+  });
+  return backdrop;
+}
+
+function syncMobileSidebarUi() {
+  const sidebar = document.querySelector('.sidebar');
+  const open =
+    Boolean(sidebar?.classList.contains('show')) &&
+    window.matchMedia('(max-width: 640px)').matches;
+  document.body.classList.toggle('pgpjs-sidebar-open', open);
+  const backdrop = ensureSidebarBackdrop();
+  backdrop.hidden = !open;
+}
+
+function observeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar || sidebar.dataset.sidebarObserved === '1') {
+    return;
+  }
+  sidebar.dataset.sidebarObserved = '1';
+  new MutationObserver(syncMobileSidebarUi).observe(sidebar, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+  syncMobileSidebarUi();
+}
+
 function bindMobileSidebarClose() {
   if (document.body.dataset.sidebarCloseBound === '1') {
+    observeSidebar();
     return;
   }
   document.body.dataset.sidebarCloseBound = '1';
+  ensureSidebarBackdrop();
+  observeSidebar();
 
   new MutationObserver(repairInertChrome).observe(document.body, {
     attributes: true,
@@ -408,23 +457,30 @@ function bindMobileSidebarClose() {
     attributeFilter: ['inert'],
   });
 
-  document.addEventListener(
-    'pointerdown',
-    event => {
-      const sidebar = document.querySelector('.sidebar.show');
-      if (!sidebar || window.matchMedia('(min-width: 641px)').matches) {
-        return;
-      }
-      if (event.target.closest('.sidebar-toggle')) {
-        return;
-      }
-      if (sidebar.contains(event.target)) {
-        return;
-      }
+  const closeIfOpen = event => {
+    const sidebar = document.querySelector('.sidebar.show');
+    if (!sidebar || window.matchMedia('(min-width: 641px)').matches) {
+      return;
+    }
+    const onToggle = event.target.closest(
+      '.sidebar-toggle, .sidebar-toggle-button, .pgpjs-sidebar-backdrop',
+    );
+    if (sidebar.contains(event.target) && !onToggle) {
+      return;
+    }
+    if (onToggle) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    closeMobileSidebar();
+  };
+
+  document.addEventListener('click', closeIfOpen, true);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
       closeMobileSidebar();
-    },
-    true,
-  );
+    }
+  });
 }
 
 function liveDocsPlugin(hook, vm) {
@@ -451,6 +507,7 @@ function liveDocsPlugin(hook, vm) {
     relocateSearch();
     measureChrome();
     repairSidebar(vm);
+    bindMobileSidebarClose();
 
     const path = (vm.route.path || '/').replace(/\.md$/, '');
     const isHome = path === '/' || path === '/README' || path === '';
