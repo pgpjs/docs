@@ -3,8 +3,14 @@
 - Getting started
 
   - [Home](/)
+  - [Overview](overview.md)
   - [Quick start](quickstart.md)
   - [CLI](https://github.com/pgpjs/cli)
+
+- [MPC](mpc/)
+
+  - [Overview](mpc/)
+  - [Install](mpc/install.md)
 
 - [@pgpjs/core](core/)
 

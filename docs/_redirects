@@ -4,6 +4,7 @@
 /core/_sidebar.md    /_sidebar.md    200
 /next/_sidebar.md    /_sidebar.md    200
 /react/_sidebar.md   /_sidebar.md    200
+/mpc/_sidebar.md     /_sidebar.md    200
 /*.md    /_404.md     404
 
 # Unknown paths load the PGPJS app shell.

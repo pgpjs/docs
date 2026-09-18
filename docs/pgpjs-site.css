@@ -446,9 +446,40 @@ body.pgpjs-home .code-line .line-no {
   border-radius: 4px;
 }
 
-#overview,
+#hero,
 #install {
   scroll-margin-top: calc(var(--pgpjs-chrome-height) + 8px);
+}
+
+body.pgpjs-docs .markdown-section .install-band {
+  margin: 1.5rem 0 2rem;
+  border-radius: 12px;
+}
+
+body.pgpjs-docs .markdown-section .install-band h2 {
+  color: #ffffff;
+}
+
+body.pgpjs-docs .markdown-section .install-copy {
+  background: #0b1f5c;
+  color: #ffffff;
+  margin: 0 0 1.25rem;
+}
+
+body.pgpjs-docs .markdown-section .install-band .install-copy {
+  background: #ffffff;
+  color: #0b1f5c;
+  margin: 0;
+}
+
+body.pgpjs-docs .markdown-section .install-lead a {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+body.pgpjs-docs .markdown-section .install-lead a:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .sidebar-nav > ul > li > p,

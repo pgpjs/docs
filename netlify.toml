@@ -40,6 +40,12 @@
   force = true
 
 [[redirects]]
+  from = "/mpc/_sidebar.md"
+  to = "/_sidebar.md"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*.md"
   to = "/_404.md"
   status = 404

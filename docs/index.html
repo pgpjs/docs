@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/bss-overrides.css" />
     <link rel="stylesheet" href="assets/css/pgpjs.css" />
     <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=mobile-nav-2" />
+    <link rel="stylesheet" href="pgpjs-site.css?v=overview-mpc" />
   </head>
   <body class="pgpjs-site pgpjs-home">
     <div class="topbar">
@@ -33,7 +33,7 @@
           <a href="https://github.com/pgpjs" target="_blank" rel="noopener"
             ><span>GitHub</span></a
           >
-          <a href="#/core/"><span>Documentation</span></a>
+          <a href="#/mpc/"><span>MPC</span></a>
           <a href="https://twitter.com/PGPJS_Dev" target="_blank" rel="noopener"
             ><span>@PGPJS_Dev</span></a
           >
@@ -62,11 +62,11 @@
         </div>
         <div class="header-right">
           <nav class="main-nav">
-            <a href="#overview">Overview</a>
+            <a href="#/overview" data-nav="overview">Overview</a>
             <a href="#/core/" data-nav="core">Core</a>
             <a href="#/next/" data-nav="next">Next.js</a>
             <a href="#/react/" data-nav="react">React</a>
-            <a href="#/core/">Documentation</a>
+            <a href="#/mpc/" data-nav="mpc">MPC</a>
           </nav>
           <button
             type="button"
@@ -98,7 +98,7 @@
     </header>
 
     <div class="pgpjs-landing">
-      <section class="hero" id="overview">
+      <section class="hero" id="hero">
         <div class="hero-inner">
           <div class="hero-text">
             <h1>OpenPGP Without the Complexity.</h1>
@@ -107,7 +107,7 @@
               cryptography, built for React, Next.js, and the modern web.
             </p>
             <div class="hero-buttons">
-              <a href="#install" class="btn">Install CLI</a>
+              <a href="#/overview" class="btn">Install CLI</a>
               <a href="#/quickstart" class="btn btn-secondary">Get Started</a>
             </div>
           </div>
@@ -147,35 +147,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <section class="install-band" id="install">
-        <div class="install-inner">
-          <p class="install-kicker">Install PGPJS CLI</p>
-          <h2>The terminal toolkit for OpenPGP.</h2>
-          <div class="install-cmd">
-            <code id="copyInstallText">npm install -g pgpjs-cli</code>
-            <button
-              type="button"
-              class="install-copy"
-              id="copyInstallBtn"
-              title="Copy install command"
-              aria-label="Copy npm install -g pgpjs-cli"
-            >
-              Copy
-            </button>
-          </div>
-          <p class="install-lead">
-            Paste that in a macOS Terminal, Linux shell, or Windows. Node.js
-            20.10 or newer. Then run <code>pgpjs</code> or
-            <code>pgpjs --help</code>.
-            <a
-              href="https://github.com/pgpjs/cli"
-              target="_blank"
-              rel="noopener"
-              >pgpjs/cli on GitHub</a
-            >
-          </p>
         </div>
       </section>
       <div class="logo-strip">
@@ -423,7 +394,7 @@
                   rel="noopener"
                   >GitHub</a
                 >
-                <a href="#/core/">Documentation</a>
+                <a href="#/mpc/">MPC</a>
                 <a href="#/quickstart">Quickstart</a>
                 <a
                   href="https://datatracker.ietf.org/doc/rfc9580/"
@@ -547,23 +518,28 @@
           });
         }
 
-        const installBtn = document.getElementById('copyInstallBtn');
-        if (installBtn) {
-          const idle = installBtn.innerHTML;
-          installBtn.addEventListener('click', async function () {
-            try {
-              await copyCommand('npm install -g pgpjs-cli');
-              installBtn.classList.add('copied');
-              installBtn.textContent = 'Copied';
-              setTimeout(function () {
-                installBtn.classList.remove('copied');
-                installBtn.textContent = idle;
-              }, 2000);
-            } catch (err) {
-              console.error('Failed to copy to clipboard:', err);
-            }
-          });
-        }
+        document.addEventListener('click', async function (event) {
+          const installBtn = event.target.closest('[data-copy]');
+          if (!installBtn) {
+            return;
+          }
+          const command = installBtn.getAttribute('data-copy');
+          if (!command) {
+            return;
+          }
+          const idle = installBtn.textContent;
+          try {
+            await copyCommand(command);
+            installBtn.classList.add('copied');
+            installBtn.textContent = 'Copied';
+            setTimeout(function () {
+              installBtn.classList.remove('copied');
+              installBtn.textContent = idle;
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy to clipboard:', err);
+          }
+        });
 
         function initCardSwipe() {
           const mobile = window.matchMedia('(max-width: 900px)');
