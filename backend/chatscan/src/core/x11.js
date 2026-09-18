@@ -38,16 +38,37 @@ export const X11_ALGORITHM_ID = 'x11-chatscan-r11';
 export const X11_DIGEST_BYTES = 32;
 
 let verified = false;
+let fallbackSha256 = false;
 
 function assertRoundsAvailable() {
   if (verified) return;
   const available = new Set(getHashes());
-  const missing = X11_ROUNDS.filter((round) => !available.has(round.digest));
+  const missing = X11_ROUNDS.filter(round => !available.has(round.digest));
   if (missing.length > 0) {
-    const names = missing.map((round) => `${round.slot} (${round.digest})`).join(', ');
-    throw new Error(`X11 round digests unavailable in this Node build: ${names}`);
+    if (!available.has('sha256')) {
+      const names = missing
+        .map(round => `${round.slot} (${round.digest})`)
+        .join(', ');
+      throw new Error(
+        `X11 round digests unavailable in this Node build: ${names}`,
+      );
+    }
+    fallbackSha256 = true;
+    process.emitWarning(
+      `ChatScan X11 stand-ins missing (${missing
+        .map(round => round.digest)
+        .join(', ')}); using sha256 for those rounds. Local sealer hashes are not CDCI consensus hashes.`,
+    );
   }
   verified = true;
+}
+
+function roundDigest(round) {
+  if (!fallbackSha256) {
+    return round.digest;
+  }
+  const available = new Set(getHashes());
+  return available.has(round.digest) ? round.digest : 'sha256';
 }
 
 /**
@@ -59,7 +80,7 @@ export function x11(input) {
   assertRoundsAvailable();
   let state = Buffer.isBuffer(input) ? input : Buffer.from(input);
   for (const round of X11_ROUNDS) {
-    state = createHash(round.digest).update(state).digest();
+    state = createHash(roundDigest(round)).update(state).digest();
   }
   return state;
 }
