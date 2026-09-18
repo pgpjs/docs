@@ -8,6 +8,11 @@
   --scroll-padding-top: var(--pgpjs-chrome-height);
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body.pgpjs-site {
   overflow-x: hidden;
   overflow-x: clip;
@@ -42,6 +47,7 @@ body.pgpjs-docs {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: #f8fafc;
 }
@@ -609,6 +615,9 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
   }
 
   body.pgpjs-site .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 102;
     padding: 8px 12px;
   }
 
@@ -639,6 +648,11 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
   }
 
   body.pgpjs-site .main-header {
+    position: sticky;
+    top: var(--pgpjs-topbar-height);
+    z-index: 101;
+    height: 56px;
+    overflow: visible;
     padding: 8px 12px;
   }
 
@@ -666,22 +680,18 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     height: 36px;
   }
 
-  body.pgpjs-site .main-header {
-    height: 56px;
-    overflow: visible;
-  }
-
   body.pgpjs-site .header-inner {
     height: 40px;
     overflow: visible;
   }
 
   body.pgpjs-site .search-input,
-  body.pgpjs-site .search-wrap .search input[type='search'] {
+  body.pgpjs-site .search-wrap .search input[type='search'],
+  body.pgpjs-site .search-wrap input {
     width: 100%;
     min-width: 0;
     /* 16px stops iOS Safari from zooming the page when the field is focused. */
-    font-size: 16px;
+    font-size: 16px !important;
     line-height: 20px;
     min-height: 40px;
     touch-action: manipulation;
@@ -744,10 +754,28 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     height: auto;
     flex: none;
     z-index: 200;
+    visibility: hidden;
+    translate: calc(0px - var(--sidebar-width));
   }
 
   body.pgpjs-docs .sidebar.show {
+    visibility: visible;
     translate: 0;
+  }
+
+  body.pgpjs-docs .sidebar-toggle {
+    display: flex !important;
+    position: fixed !important;
+    top: var(--pgpjs-chrome-height) !important;
+    bottom: 0 !important;
+    left: 0;
+    z-index: 201;
+  }
+
+  body.pgpjs-docs:has(.sidebar.show) .sidebar-toggle {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    translate: none;
   }
 
   body.pgpjs-docs main > .content {

@@ -350,12 +350,70 @@ function repairSidebar(vm) {
     .catch(() => {});
 }
 
+function closeMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar || !sidebar.classList.contains('show')) {
+    return;
+  }
+  if (window.matchMedia('(min-width: 641px)').matches) {
+    return;
+  }
+  sidebar.classList.remove('show');
+  document.querySelectorAll('[aria-controls="__sidebar"]').forEach(toggle => {
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Show primary navigation');
+  });
+  document
+    .querySelectorAll('[inert]')
+    .forEach(el => el.removeAttribute('inert'));
+}
+
+function repairInertChrome() {
+  document
+    .querySelectorAll(
+      '.pgpjs-docs-shell[inert], .topbar[inert], .main-header[inert], .sidebar-toggle[inert], .sidebar[inert]',
+    )
+    .forEach(el => el.removeAttribute('inert'));
+}
+
+function bindMobileSidebarClose() {
+  if (document.body.dataset.sidebarCloseBound === '1') {
+    return;
+  }
+  document.body.dataset.sidebarCloseBound = '1';
+
+  new MutationObserver(repairInertChrome).observe(document.body, {
+    attributes: true,
+    subtree: true,
+    attributeFilter: ['inert'],
+  });
+
+  document.addEventListener(
+    'pointerdown',
+    event => {
+      const sidebar = document.querySelector('.sidebar.show');
+      if (!sidebar || window.matchMedia('(min-width: 641px)').matches) {
+        return;
+      }
+      if (event.target.closest('.sidebar-toggle')) {
+        return;
+      }
+      if (sidebar.contains(event.target)) {
+        return;
+      }
+      closeMobileSidebar();
+    },
+    true,
+  );
+}
+
 function liveDocsPlugin(hook, vm) {
   hook.mounted(() => {
     refreshAliases(vm);
     relocateSearch();
     measureChrome();
     repairSidebar(vm);
+    bindMobileSidebarClose();
     let chromeWidth = window.innerWidth;
     window.addEventListener('resize', () => {
       // Ignore keyboard-driven visual-viewport resizes so the compact
@@ -392,6 +450,7 @@ function liveDocsPlugin(hook, vm) {
         (current === `/${pkg}` || current.startsWith(`/${pkg}/`));
       link.classList.toggle('active', active);
     });
+    closeMobileSidebar();
   });
 }
 
