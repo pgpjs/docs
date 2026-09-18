@@ -262,6 +262,26 @@ function hardenSearch() {
   }
   host.dataset.searchHardened = '1';
 
+  const lockViewport = () => {
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport) {
+      return;
+    }
+    viewport.setAttribute(
+      'content',
+      'width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no, viewport-fit=cover, interactive-widget=overlays-content',
+    );
+    if (window.visualViewport?.scale && window.visualViewport.scale !== 1) {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  host.addEventListener('focusin', lockViewport, true);
+  host.addEventListener('touchstart', lockViewport, {
+    capture: true,
+    passive: true,
+  });
+
   const stopSubmit = event => {
     const input = event.target?.closest?.('input[type="search"]');
     if (!input || !host.contains(input)) {
