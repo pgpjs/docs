@@ -373,7 +373,10 @@ body.pgpjs-home .code-line .line-no {
   color: #0b1f5c;
   padding: clamp(40px, 5vw, 72px) clamp(20px, 3.5vw, 48px);
   text-align: center;
-  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.08),
+    0 12px 28px rgba(15, 23, 42, 0.12),
+    0 28px 56px rgba(15, 23, 42, 0.1);
 }
 
 .install-inner {
@@ -413,7 +416,7 @@ body.pgpjs-home .code-line .line-no {
   background: #0b1f5c;
   border: 0;
   border-radius: 10px;
-  box-shadow: none;
+  box-shadow: 0 10px 24px rgba(11, 31, 92, 0.28);
   text-align: left;
 }
 
@@ -476,10 +479,14 @@ body.pgpjs-home .code-line .line-no {
 }
 
 body.pgpjs-docs .markdown-section .install-band {
-  margin: 1.5rem 0 2rem;
+  margin: 1.5rem 0 2.5rem;
   border: 0;
   border-radius: 12px;
   background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.08),
+    0 12px 28px rgba(15, 23, 42, 0.12),
+    0 28px 56px rgba(15, 23, 42, 0.1);
 }
 
 body.pgpjs-docs .markdown-section .install-band h2 {
