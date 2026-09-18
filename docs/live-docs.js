@@ -395,9 +395,7 @@ function closeMobileSidebar() {
 
 function repairInertChrome() {
   document
-    .querySelectorAll(
-      '.pgpjs-docs-shell[inert], .topbar[inert], .main-header[inert], .sidebar-toggle[inert], .sidebar[inert]',
-    )
+    .querySelectorAll('[inert]')
     .forEach(el => el.removeAttribute('inert'));
 }
 

@@ -623,26 +623,6 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     padding: 8px 12px;
   }
 
-  body.pgpjs-home .topbar,
-  body.pgpjs-home .main-header {
-    position: fixed;
-    left: 0;
-    right: 0;
-    width: 100%;
-  }
-
-  body.pgpjs-home .topbar {
-    top: 0;
-  }
-
-  body.pgpjs-home .main-header {
-    top: var(--pgpjs-topbar-height);
-  }
-
-  body.pgpjs-home {
-    padding-top: var(--pgpjs-chrome-height);
-  }
-
   body.pgpjs-site .topbar .bio-text {
     display: none;
   }
@@ -746,6 +726,26 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     font-size: 11px;
     gap: 4px;
   }
+
+  body.pgpjs-home.pgpjs-site .topbar,
+  body.pgpjs-home.pgpjs-site .main-header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  body.pgpjs-home.pgpjs-site .topbar {
+    top: 0;
+  }
+
+  body.pgpjs-home.pgpjs-site .main-header {
+    top: var(--pgpjs-topbar-height);
+  }
+
+  body.pgpjs-home.pgpjs-site {
+    padding-top: var(--pgpjs-chrome-height);
+  }
 }
 
 @media (max-width: 400px) {
@@ -807,7 +807,7 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     right: 0;
     bottom: 0;
     left: var(--sidebar-width);
-    z-index: 198;
+    z-index: 202;
     margin: 0;
     padding: 0;
     border: 0;
