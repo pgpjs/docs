@@ -2,6 +2,7 @@
 .husky/_
 .idea
 .vercel
+.netlify
 _playwright-report
 _playwright-results
 node_modules
@@ -10,6 +11,10 @@ test/**/node_modules/
 # Files
 .DS_Store
 *.log
+.env
+.env.*
+!.env.example
+/tokens.json
 
 # Accidental GitHub web uploads and local screenshots at repo root
 /*.png
