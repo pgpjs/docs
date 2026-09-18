@@ -12,7 +12,6 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   touch-action: manipulation;
-  overflow-x: hidden;
 }
 
 body.pgpjs-site {
@@ -526,6 +525,10 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
 }
 
 .pgpjs-sidebar-backdrop {
+  display: none;
+}
+
+.under-swipe-controls {
   display: none;
 }
 
