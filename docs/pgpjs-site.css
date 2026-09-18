@@ -666,11 +666,42 @@ body.pgpjs-docs .markdown-section .install-lead a:hover {
     height: 36px;
   }
 
+  body.pgpjs-site .main-header {
+    height: 56px;
+    overflow: visible;
+  }
+
+  body.pgpjs-site .header-inner {
+    height: 40px;
+    overflow: visible;
+  }
+
   body.pgpjs-site .search-input,
   body.pgpjs-site .search-wrap .search input[type='search'] {
     width: 100%;
     min-width: 0;
-    font-size: 13px;
+    /* 16px stops iOS Safari from zooming the page when the field is focused. */
+    font-size: 16px;
+    line-height: 20px;
+    min-height: 40px;
+    touch-action: manipulation;
+  }
+
+  body.pgpjs-site .search-wrap .search .results-panel,
+  body.pgpjs-site .search-wrap .search .results-status {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    top: var(--pgpjs-chrome-height);
+    z-index: 400;
+  }
+
+  body.pgpjs-site .search-wrap .search .results-status {
+    top: calc(var(--pgpjs-chrome-height) + 8px);
+    left: 24px;
+    right: auto;
+    z-index: 401;
   }
 
   body.pgpjs-site .header-right {

@@ -56,6 +56,6 @@ const session = await MPC.createSession({
 
 ## Next
 
-- [MPC overview](mpc.md)
+- [MPC overview](/mpc/)
 - Live [Core](core/) docs
 - [Quick start](quickstart.md)

@@ -224,17 +224,84 @@ function wrapMarkdown(text, url) {
   return badge + source + rewriteRelativeUrls(text, url);
 }
 
+function decorateSearchInput(input) {
+  if (!input) {
+    return;
+  }
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('autocapitalize', 'none');
+  input.setAttribute('spellcheck', 'false');
+  input.setAttribute('enterkeyhint', 'search');
+}
+
+function stripSearchQueryFromLocation() {
+  const hash = window.location.hash || '';
+  if (!/[?&]s=/.test(hash)) {
+    return;
+  }
+  const cleaned = hash
+    .replace(/([?&])s=[^&]*/g, '$1')
+    .replace(/\?&/g, '?')
+    .replace(/[?&]$/, '')
+    .replace(/\?$/, '');
+  const next = window.location.pathname + window.location.search + cleaned;
+  window.history.replaceState(null, '', next);
+}
+
+function hardenSearch() {
+  const host = document.getElementById('pgpjs-search');
+  if (!host) {
+    return;
+  }
+
+  decorateSearchInput(host.querySelector('input[type="search"]'));
+
+  if (host.dataset.searchHardened === '1') {
+    return;
+  }
+  host.dataset.searchHardened = '1';
+
+  const stopSubmit = event => {
+    const input = event.target?.closest?.('input[type="search"]');
+    if (!input || !host.contains(input)) {
+      return;
+    }
+    if (event.type === 'keydown' && event.key !== 'Enter') {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    // Keep the typed query in the field. Do not write it to the URL or reload.
+    stripSearchQueryFromLocation();
+    input.blur();
+  };
+
+  host.addEventListener('keydown', stopSubmit, true);
+  host.addEventListener('search', stopSubmit, true);
+  host.addEventListener(
+    'submit',
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
+}
+
 function relocateSearch() {
   const host = document.getElementById('pgpjs-search');
   const search =
     document.querySelector('#pgpjs-search .search') ||
     document.querySelector('.sidebar .search');
   if (!host || !search || search.parentElement === host) {
+    hardenSearch();
     return;
   }
 
   host.querySelector('.search-input')?.remove();
   host.appendChild(search);
+  hardenSearch();
 }
 
 function measureChrome() {
@@ -289,7 +356,16 @@ function liveDocsPlugin(hook, vm) {
     relocateSearch();
     measureChrome();
     repairSidebar(vm);
-    window.addEventListener('resize', measureChrome);
+    let chromeWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      // Ignore keyboard-driven visual-viewport resizes so the compact
+      // header does not jump after typing in search.
+      if (window.innerWidth === chromeWidth) {
+        return;
+      }
+      chromeWidth = window.innerWidth;
+      measureChrome();
+    });
   });
 
   hook.doneEach(() => {
