@@ -120,31 +120,9 @@ function livePages() {
 }
 
 function aliasMap() {
-  const aliases = {
+  return {
     '/.*/_sidebar.md': '/_sidebar.md',
   };
-  const pages = livePages();
-
-  Object.entries(pages).forEach(([pkg, entries]) => {
-    Object.entries(entries).forEach(([key, page]) => {
-      const spec = Array.isArray(page) ? { urls: page } : page;
-      const url = spec.urls[0];
-      if (!url) {
-        return;
-      }
-
-      const busted = bust(url);
-      if (!key) {
-        aliases[`/${pkg}.md`] = busted;
-        aliases[`/${pkg}/README.md`] = busted;
-        return;
-      }
-
-      aliases[`/${pkg}/${key}.md`] = busted;
-    });
-  });
-
-  return aliases;
 }
 
 async function fetchFirst(urls) {
@@ -266,17 +244,35 @@ function patchDocsifyGet() {
   const original = docsify.get.bind(docsify);
   function get(url, hasBar, headers) {
     const spec = liveSpecFromUrl(url);
+    const orig = original(url, hasBar, headers);
     if (!spec) {
-      return original(url, hasBar, headers);
+      return orig;
     }
-    const pending = fetchFirst(spec.urls).then(result =>
-      renderLivePage(spec, result),
-    );
     return {
       then(success, error) {
-        pending.then(success, error);
+        const take = text => {
+          if (
+            text &&
+            !isHtmlShell(text) &&
+            String(text).trim() &&
+            !/^404/.test(text)
+          ) {
+            success(text);
+            return;
+          }
+          fetchFirst(spec.urls)
+            .then(result => success(renderLivePage(spec, result) || text || ''))
+            .catch(error);
+        };
+        if (orig && typeof orig.then === 'function') {
+          orig.then(take, error);
+        } else {
+          take(orig);
+        }
       },
-      abort() {},
+      abort() {
+        orig?.abort?.();
+      },
     };
   }
   get.__pgpjsLive = true;
@@ -578,6 +574,7 @@ function liveDocsPlugin(hook, vm) {
     const current = path.replace(/\/$/, '');
     document.body.classList.toggle('pgpjs-home', isHome);
     document.body.classList.toggle('pgpjs-docs', !isHome);
+    syncPageMeta(current || '/', isHome);
     document.querySelector('main > .content')?.scrollTo(0, 0);
     document
       .querySelector('.markdown-section')
@@ -595,41 +592,58 @@ function liveDocsPlugin(hook, vm) {
   });
 }
 
+const HOME_TITLE =
+  'PGPJS — Modern OpenPGP & Cryptography for JavaScript & Next.js';
+const HOME_DESC =
+  'PGPJS is a modern JavaScript toolkit for OpenPGP (RFC 9580). Install the CLI, then seal and open data in React, Next.js, and Node.';
+const SITE_ORIGIN = 'https://pgpjs.org';
+
+function setMeta(name, content, attr = 'name') {
+  let el = document.querySelector(`meta[${attr}="${name}"]`);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(attr, name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
+}
+
+function syncPageMeta(path, isHome) {
+  const section = document.querySelector('.markdown-section');
+  const heading = section?.querySelector('h1');
+  const paragraph = section?.querySelector('p');
+  const title = isHome
+    ? HOME_TITLE
+    : `${(heading?.textContent || 'PGPJS').trim()} · PGPJS`;
+  const desc = isHome
+    ? HOME_DESC
+    : (paragraph?.textContent || HOME_DESC)
+        .trim()
+        .replace(/\s+/g, ' ')
+        .slice(0, 180);
+  const canonicalPath = isHome ? '/' : path.startsWith('/') ? path : `/${path}`;
+  const url = `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath}`;
+
+  document.title = title;
+  setMeta('description', desc);
+  setMeta('og:title', title, 'property');
+  setMeta('og:description', desc, 'property');
+  setMeta('og:url', url, 'property');
+  setMeta('twitter:title', title);
+  setMeta('twitter:description', desc);
+
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.rel = 'canonical';
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute('href', url);
+}
+
 probeStandalone();
 
 window.$pgpjs = window.$pgpjs || {};
 window.$pgpjs.alias = Object.assign({}, aliasMap(), window.$pgpjs.alias);
-window.$pgpjs.routes = Object.assign({}, window.$pgpjs.routes, {
-  '/(core|next|react)/?(.*)': function livePackageRoute(route, matched, next) {
-    const pkg = matched[1];
-    const rest = (matched[2] || '')
-      .replace(/\.md$/i, '')
-      .replace(/\/+$/, '')
-      .replace(/^README$/i, '');
-    const page = livePages()[pkg]?.[rest];
-
-    if (!page) {
-      next();
-      return;
-    }
-
-    const spec = Array.isArray(page) ? { urls: page } : page;
-
-    fetchFirst(spec.urls).then(result => {
-      if (!result) {
-        next(
-          `# ${pkg}\n\nCould not load live docs. Check GitHub availability for \`pgpjs/${pkg}\` or \`pgpjs/core\`.`,
-        );
-        return;
-      }
-
-      if (spec.code) {
-        next(wrapCode(spec.code, result.text, result.url));
-      } else {
-        next(wrapMarkdown(result.text, result.url));
-      }
-    });
-  },
-});
 
 window.$pgpjs.plugins = [liveDocsPlugin, ...(window.$pgpjs.plugins || [])];

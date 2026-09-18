@@ -60,5 +60,6 @@ If a robotics log ever grew an explorer, it should look like that page: indexed 
 - Studio: [CerveauAnalytique/Prysel.Robotics-Studio-](https://github.com/CerveauAnalytique/Prysel.Robotics-Studio-.git)
 - Org: [github.com/CerveauAnalytique](https://github.com/CerveauAnalytique)
 - Site mark: [prysel.com](https://prysel.com)
+- CLI on the bench: [PGPJS CLI in Prysel Robotics Studio](/prysel/cli/git)
 - PGPJS React bindings: [@pgpjs/react](/react/)
 - Sister stories: [CentralDB CDCI](/centraldb/cdci/git) · [CrypterChat ChatScan](/crypterchat/chatscan/git)

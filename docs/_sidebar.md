@@ -5,13 +5,17 @@
   - [Home](/)
   - [Overview](overview.md)
   - [Quick start](quickstart.md)
-  - [CLI](https://github.com/pgpjs/cli)
+  - [CLI](overview.md)
+    - [Windows](cli/windows.md)
+    - [macOS](cli/macos.md)
+    - [Prysel Robotics Studio](prysel/cli/git.md)
 
 - Built with PGPJS
 
   - [CentralDB / CDCI](centraldb/cdci/git.md)
   - [CrypterChat / ChatScan](crypterchat/chatscan/git.md)
   - [Prysel Robotics Studio](prysel/robotics-studio/git.md)
+  - [Prysel CLI](prysel/cli/git.md)
 
 - [MPC](mpc/)
 

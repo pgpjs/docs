@@ -105,6 +105,7 @@
     "clean": "rimraf --glob \"dist/**\" \"_playwright*/**\" \"src/**/*.d.ts\" \"src/**/*.d.ts.map\"",
     "clean:v4": "rimraf lib/ themes/",
     "encrypt:site": "node scripts/encrypt-site-markup.mjs",
+    "snapshot:docs": "node scripts/snapshot-package-docs.mjs",
     "deploy:netlify": "node scripts/deploy-netlify.mjs",
     "dev": "run-p serve:dev watch:*",
     "docker:build:test": "npm run docker:cli -- build:test",

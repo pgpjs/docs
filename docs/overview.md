@@ -39,3 +39,45 @@ Install the PGPJS CLI and libraries. This page is the download hub — the homep
 | MPC     | `npm install @pgpjs/mpc`   |
 
 After the CLI is installed, run `pgpjs init` in a project. For multi-party computation, see [MPC](mpc/).
+
+## Install on Windows
+
+The homepage card **PGPJS on Windows** opens this path. Full walkthrough: [PGPJS CLI on Windows](cli/windows.md).
+
+![PGPJS on Windows](assets/img/windows.png)
+
+In **PowerShell**:
+
+```powershell
+npm install -g pgpjs-cli
+pgpjs --help
+```
+
+<button type="button" class="install-copy" data-copy="npm install -g pgpjs-cli">Copy</button>
+
+Node.js 20.10 or newer. Source: [pgpjs/cli](https://github.com/pgpjs/cli).
+
+## Install on macOS
+
+The homepage card **PGPJS on macOS** opens this path. Full walkthrough: [PGPJS CLI on macOS](cli/macos.md).
+
+![PGPJS on macOS](assets/img/macos.png)
+
+In **Terminal**:
+
+```bash
+npm install -g pgpjs-cli
+pgpjs --help
+```
+
+<button type="button" class="install-copy" data-copy="npm install -g pgpjs-cli">Copy</button>
+
+Node.js 20.10 or newer. Homebrew users can `brew install node` first.
+
+## Install in Prysel Robotics Studio
+
+The homepage card **PGPJS on Prysel Robotics Studio** is a blog: how the robotics workbench installs the same CLI and seals telemetry with PGPJS.
+
+[Read the Prysel CLI story](prysel/cli/git.md)
+
+![PGPJS CLI on Prysel Robotics Studio](assets/img/prs.png)

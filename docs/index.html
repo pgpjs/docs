@@ -10,11 +10,48 @@
       PGPJS — Modern OpenPGP &amp; Cryptography for JavaScript &amp; Next.js
     </title>
     <link rel="icon" href="assets/img/91474692.png" />
+    <link rel="canonical" href="https://pgpjs.org/" />
     <meta
       name="description"
-      content="PGPJS — Pretty Good Privacy | JavaScript documentation. Live docs from core, next, and react."
+      content="PGPJS is a modern JavaScript toolkit for OpenPGP (RFC 9580). Install the CLI, then seal and open data in React, Next.js, and Node."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PGPJS" />
+    <meta
+      property="og:title"
+      content="PGPJS — Modern OpenPGP for JavaScript &amp; Next.js"
+    />
+    <meta
+      property="og:description"
+      content="Install the PGPJS CLI and seal data with RFC 9580 keys in React, Next.js, and Node. Built with PGPJS: CentralDB, CrypterChat, and Prysel Robotics Studio."
+    />
+    <meta property="og:url" content="https://pgpjs.org/" />
+    <meta
+      property="og:image"
+      content="https://pgpjs.org/assets/img/pgpjs_banner.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="PGPJS — Modern OpenPGP for JavaScript &amp; Next.js"
+    />
+    <meta
+      name="twitter:description"
+      content="Install the PGPJS CLI and seal data with RFC 9580 keys in React, Next.js, and Node."
+    />
+    <meta
+      name="twitter:image"
+      content="https://pgpjs.org/assets/img/pgpjs_banner.png"
     />
     <meta name="google-adsense-account" content="ca-pub-7937178184064127" />
+    <script>
+      (function () {
+        var path = location.pathname.replace(/\/index\.html$/i, '/');
+        if (path.length > 1 && (!location.hash || location.hash === '#')) {
+          location.replace('/#' + path.replace(/\/+$/, '') + location.search);
+        }
+      })();
+    </script>
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7937178184064127"
@@ -22,15 +59,40 @@
     ></script>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/bss-overrides.css" />
-    <link rel="stylesheet" href="assets/css/pgpjs.css?v=tool-cards-clean" />
+    <link rel="stylesheet" href="assets/css/pgpjs.css?v=cli-os-cards" />
     <link rel="stylesheet" href="vendor/pgpjs/core.min.css" />
-    <link rel="stylesheet" href="pgpjs-site.css?v=built-with-pgpjs" />
+    <link rel="stylesheet" href="pgpjs-site.css?v=cli-os-cards" />
   </head>
   <body class="pgpjs-site pgpjs-home">
-    <noscript> PGPJS documentation requires JavaScript. </noscript>
-    <script src="pgpjs-unlock.js?v=enc-apps"></script>
+    <noscript>
+      <h1>PGPJS — OpenPGP without the complexity</h1>
+      <p>
+        PGPJS is a modern JavaScript toolkit for OpenPGP (RFC 9580). Install the
+        CLI, then seal and open data in React, Next.js, and Node.
+      </p>
+      <ul>
+        <li><a href="/overview.md">Downloads / PGPJS CLI</a></li>
+        <li><a href="/cli/windows.md">Install on Windows</a></li>
+        <li><a href="/cli/macos.md">Install on macOS</a></li>
+        <li><a href="/quickstart.md">Quick start</a></li>
+        <li><a href="/core/README.md">@pgpjs/core</a></li>
+        <li><a href="/next/README.md">@pgpjs/next</a></li>
+        <li><a href="/react/README.md">@pgpjs/react</a></li>
+        <li><a href="/centraldb/cdci/git.md">CentralDB / CDCI</a></li>
+        <li>
+          <a href="/crypterchat/chatscan/git.md">CrypterChat / ChatScan</a>
+        </li>
+        <li>
+          <a href="/prysel/robotics-studio/git.md">Prysel Robotics Studio</a>
+        </li>
+        <li>
+          <a href="/prysel/cli/git.md">PGPJS CLI in Prysel Robotics Studio</a>
+        </li>
+      </ul>
+    </noscript>
+    <script src="pgpjs-unlock.js?v=cli-os-cards"></script>
 
-    <script src="live-docs.js?v=live-no-404"></script>
+    <script src="live-docs.js?v=seo-meta"></script>
     <script>
       window.$pgpjs = Object.assign(window.$pgpjs || {}, {
         name: 'PGPJS',

@@ -853,6 +853,7 @@ body {
   line-height: 1.15;
   margin: 0 0 clamp(18px, 2vw, 24px) 0;
   letter-spacing: -0.3px;
+  border-bottom: none;
 }
 
 .under-heading-cli {
