@@ -450,6 +450,11 @@ body.pgpjs-home .code-line .line-no {
   scroll-margin-top: calc(var(--pgpjs-chrome-height) + 8px);
 }
 
+.sidebar-nav > ul > li > p,
+.sidebar-nav > ul > li > strong {
+  color: var(--navy, #0b1f5c);
+}
+
 @media (max-width: 900px) {
   .search-wrap {
     width: 100%;
