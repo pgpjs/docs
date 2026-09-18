@@ -40,4 +40,22 @@ test.describe('ChatScan explorer', () => {
     expect(body).toContain('export class PgpjsScan');
     expect(body).toContain('checkConnection');
   });
+
+  test('browser can import PgpjsScan and check connection', async ({
+    page,
+  }) => {
+    await page.goto('/scan/sdk');
+    const result = await page.evaluate(async () => {
+      try {
+        const { PgpjsScan } = await import('/sdk/pgpjs-scan.js');
+        const scan = new PgpjsScan({ appVersion: 'pgpjs-1.0' });
+        return await scan.checkConnection();
+      } catch (error) {
+        return { error: String(error) };
+      }
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.ok).toBe(true);
+    expect(result.chatscan.ok).toBe(true);
+  });
 });

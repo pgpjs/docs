@@ -828,15 +828,34 @@ function bindPgpjsScan() {
 
   const refresh = async () => {
     try {
-      const { PgpjsScan } = await import('/sdk/pgpjs-scan.js');
-      const scan = new PgpjsScan({ appVersion: 'pgpjs-docs-1.0' });
-      const health = await scan.checkConnection();
+      const healthRes = await fetch('/api/v1/connection', {
+        headers: { accept: 'application/json' },
+      });
+      if (!healthRes.ok) {
+        throw new Error(`Connection check failed (${healthRes.status})`);
+      }
+      const health = await healthRes.json();
       paint(health);
-      const ledger = await scan.listRecords({ limit: 20 });
-      paintRecords(ledger);
-    } catch {
+      try {
+        const ledgerRes = await fetch('/api/v1/records?limit=20', {
+          headers: { accept: 'application/json' },
+        });
+        if (ledgerRes.ok) {
+          paintRecords(await ledgerRes.json());
+        }
+      } catch {
+        paintRecords({ records: [] });
+      }
+    } catch (error) {
       paint({ ok: false });
       paintRecords({ records: [] });
+      setScanText(
+        board,
+        '[data-scan-summary]',
+        error instanceof Error
+          ? error.message
+          : 'ChatScan did not answer. Retry check connection.',
+      );
     }
   };
 

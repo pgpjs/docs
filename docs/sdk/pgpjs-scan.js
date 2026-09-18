@@ -7,15 +7,15 @@
  *   const health = await scan.checkConnection();
  */
 import { ChatScanClient } from './chatscan/client.js';
-import { ChatSession } from './chatscan/session.js';
 import { ChatScanError } from './chatscan/errors.js';
 import {
   digestCiphertext,
   generateNonce,
   channelHash,
 } from './chatscan/crypto.js';
+import { ChatSession } from './chatscan/session.js';
 
-export { ChatScanClient, ChatSession, ChatScanError };
+export { ChatScanClient, ChatScanError, ChatSession };
 export {
   digestCiphertext,
   generateNonce,
