@@ -45,10 +45,10 @@ The live documentation site is the [`docs/`](./docs) folder: P7 homepage, header
 
 Connect this GitHub repository in [Netlify](https://app.netlify.com/) and leave Base directory, Build command, and Publish directory empty. [`netlify.toml`](./netlify.toml) publishes `docs/` as a static site (no `npm run build`). You can also drag-and-drop the `docs/` folder.
 
-To publish `docs/` from GitHub or this machine via the Netlify API, add `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` as repository secrets (and optionally a GitHub **production** environment as the approval gate). Then run **Deploy Netlify** from Actions, or:
+To publish `docs/` from GitHub or this machine via the Netlify API, add repository secret `NETLIFY_AUTH_TOKEN` (and optionally a GitHub **production** environment as the approval gate). `NETLIFY_SITE_ID` defaults to pgpjs.org. Then run **Deploy Netlify** from Actions, or:
 
 ```bash
-cp .env.example .env   # fill in the token and site ID
+cp .env.example .env   # fill in NETLIFY_AUTH_TOKEN
 npm run deploy:netlify
 ```
 

@@ -120,12 +120,12 @@ async function main() {
     return;
   }
 
-  if (!token || !siteId) {
+  if (!token) {
     fail(
       [
-        'Set NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID to deploy docs/ via the Netlify API.',
+        'Set NETLIFY_AUTH_TOKEN to deploy docs/ via the Netlify API.',
         'Create a token at https://app.netlify.com/user/applications#personal-access-tokens',
-        'Site ID is in Site configuration → General → Site details.',
+        'NETLIFY_SITE_ID defaults to the pgpjs.org site; override it if needed.',
         'Or set NETLIFY_DEPLOY_HOOK and run: npm run deploy:netlify -- --hook',
       ].join('\n'),
     );

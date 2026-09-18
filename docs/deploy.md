@@ -108,11 +108,10 @@ Do **not** set the Netlify UI Base directory to `docs` on top of `netlify.toml` 
 The **Deploy Netlify** GitHub Action uploads `docs/` with the [Netlify Deploys API](https://docs.netlify.com/api/get-started/#deploy-with-the-api). It runs on push to `main` (when `docs/` changes) and from **Actions → Deploy Netlify → Run workflow**.
 
 1. Create a Netlify personal access token: [User settings → Applications](https://app.netlify.com/user/applications#personal-access-tokens).
-2. Copy the Site ID from **Site configuration → General → Site details**.
-3. In this GitHub repo, add secrets:
-   - `NETLIFY_AUTH_TOKEN`
-   - `NETLIFY_SITE_ID`
-   - optional `NETLIFY_DEPLOY_HOOK` (Build hooks URL) to rebuild from Git instead of uploading files
+2. In this GitHub repo, add secret `NETLIFY_AUTH_TOKEN`.
+3. Optional secrets:
+   - `NETLIFY_SITE_ID` (defaults to the pgpjs.org site)
+   - `NETLIFY_DEPLOY_HOOK` (Build hooks URL) to rebuild from Git instead of uploading files
 4. Optional gate: GitHub **Settings → Environments → production** and add required reviewers. The workflow uses that environment.
 
 From this repo (or a Cursor agent with those env vars):
