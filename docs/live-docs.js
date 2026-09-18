@@ -120,7 +120,9 @@ function livePages() {
 }
 
 function aliasMap() {
-  const aliases = {};
+  const aliases = {
+    '/.*/_sidebar.md': '/_sidebar.md',
+  };
   const pages = livePages();
 
   Object.entries(pages).forEach(([pkg, entries]) => {
@@ -222,24 +224,173 @@ function wrapMarkdown(text, url) {
   return badge + source + rewriteRelativeUrls(text, url);
 }
 
+function liveSpecFromUrl(url) {
+  const raw = String(url || '').split('?')[0];
+  let path = raw;
+  try {
+    path = new URL(raw, location.origin).pathname;
+  } catch {
+    path = raw;
+  }
+  const match = path.match(/\/(core|next|react)(?:\/(.*))?$/i);
+  if (!match) {
+    return null;
+  }
+  const pkg = match[1].toLowerCase();
+  const rest = (match[2] || '')
+    .replace(/\.md$/i, '')
+    .replace(/\/+$/, '')
+    .replace(/^README$/i, '');
+  const page = livePages()[pkg]?.[rest];
+  if (!page) {
+    return null;
+  }
+  return Array.isArray(page) ? { urls: page } : page;
+}
+
+function renderLivePage(spec, result) {
+  if (!result) {
+    return '';
+  }
+  if (spec.code) {
+    return wrapCode(spec.code, result.text, result.url);
+  }
+  return wrapMarkdown(result.text, result.url);
+}
+
+function patchDocsifyGet() {
+  const docsify = window.Docsify;
+  if (!docsify?.get || docsify.get.__pgpjsLive) {
+    return;
+  }
+  const original = docsify.get.bind(docsify);
+  function get(url, hasBar, headers) {
+    const spec = liveSpecFromUrl(url);
+    if (!spec) {
+      return original(url, hasBar, headers);
+    }
+    const pending = fetchFirst(spec.urls).then(result =>
+      renderLivePage(spec, result),
+    );
+    return {
+      then(success, error) {
+        pending.then(success, error);
+      },
+      abort() {},
+    };
+  }
+  get.__pgpjsLive = true;
+  docsify.get = get;
+}
+
+function decorateSearchInput(input) {
+  if (!input) {
+    return;
+  }
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('autocapitalize', 'none');
+  input.setAttribute('spellcheck', 'false');
+  input.setAttribute('enterkeyhint', 'search');
+}
+
+function stripSearchQueryFromLocation() {
+  const hash = window.location.hash || '';
+  if (!/[?&]s=/.test(hash)) {
+    return;
+  }
+  const cleaned = hash
+    .replace(/([?&])s=[^&]*/g, '$1')
+    .replace(/\?&/g, '?')
+    .replace(/[?&]$/, '')
+    .replace(/\?$/, '');
+  const next = window.location.pathname + window.location.search + cleaned;
+  window.history.replaceState(null, '', next);
+}
+
+function hardenSearch() {
+  const host = document.getElementById('pgpjs-search');
+  if (!host) {
+    return;
+  }
+
+  decorateSearchInput(host.querySelector('input[type="search"]'));
+
+  if (host.dataset.searchHardened === '1') {
+    return;
+  }
+  host.dataset.searchHardened = '1';
+
+  const lockViewport = () => {
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport) {
+      return;
+    }
+    viewport.setAttribute(
+      'content',
+      'width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no, viewport-fit=cover, interactive-widget=overlays-content',
+    );
+    if (window.visualViewport?.scale && window.visualViewport.scale !== 1) {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  host.addEventListener('focusin', lockViewport, true);
+  host.addEventListener('touchstart', lockViewport, {
+    capture: true,
+    passive: true,
+  });
+
+  const stopSubmit = event => {
+    const input = event.target?.closest?.('input[type="search"]');
+    if (!input || !host.contains(input)) {
+      return;
+    }
+    if (event.type === 'keydown' && event.key !== 'Enter') {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    // Keep the typed query in the field. Do not write it to the URL or reload.
+    stripSearchQueryFromLocation();
+    input.blur();
+  };
+
+  host.addEventListener('keydown', stopSubmit, true);
+  host.addEventListener('search', stopSubmit, true);
+  host.addEventListener(
+    'submit',
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
+}
+
 function relocateSearch() {
   const host = document.getElementById('pgpjs-search');
   const search =
     document.querySelector('#pgpjs-search .search') ||
     document.querySelector('.sidebar .search');
   if (!host || !search || search.parentElement === host) {
+    hardenSearch();
     return;
   }
 
   host.querySelector('.search-input')?.remove();
   host.appendChild(search);
+  hardenSearch();
 }
 
 function measureChrome() {
+  const chrome = document.querySelector('.pgpjs-chrome');
   const topbar = document.querySelector('.topbar');
   const header = document.querySelector('.main-header');
   const topbarHeight = topbar?.getBoundingClientRect().height || 0;
   const headerHeight = header?.getBoundingClientRect().height || 0;
+  const chromeHeight =
+    chrome?.getBoundingClientRect().height || topbarHeight + headerHeight;
   const root = document.documentElement;
 
   root.style.setProperty(
@@ -248,7 +399,7 @@ function measureChrome() {
   );
   root.style.setProperty(
     '--pgpjs-chrome-height',
-    `${Math.round(topbarHeight + headerHeight)}px`,
+    `${Math.round(chromeHeight)}px`,
   );
 }
 
@@ -260,18 +411,167 @@ function refreshAliases(vm) {
   }
 }
 
+function isHtmlShell(text) {
+  return /pgpjs-landing|<!doctype html/i.test(text || '');
+}
+
+function repairSidebar(vm) {
+  const nav = document.querySelector('.sidebar-nav');
+  if (!nav || !isHtmlShell(nav.innerHTML)) {
+    return;
+  }
+
+  fetch('_sidebar.md', { cache: 'no-store' })
+    .then(response => (response.ok ? response.text() : ''))
+    .then(text => {
+      if (!text || isHtmlShell(text) || !vm?.compiler?.sidebar) {
+        return;
+      }
+      nav.innerHTML = vm.compiler.sidebar(text, vm.config.maxLevel);
+    })
+    .catch(() => {});
+}
+
+function closeMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar || !sidebar.classList.contains('show')) {
+    return;
+  }
+  if (window.matchMedia('(min-width: 641px)').matches) {
+    return;
+  }
+  sidebar.classList.remove('show');
+  document.body.classList.remove('pgpjs-sidebar-open');
+  document.querySelectorAll('[aria-controls="__sidebar"]').forEach(toggle => {
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Show primary navigation');
+  });
+  document
+    .querySelectorAll('[inert]')
+    .forEach(el => el.removeAttribute('inert'));
+  const backdrop = document.querySelector('.pgpjs-sidebar-backdrop');
+  if (backdrop) {
+    backdrop.hidden = true;
+  }
+}
+
+function repairInertChrome() {
+  document
+    .querySelectorAll('[inert]')
+    .forEach(el => el.removeAttribute('inert'));
+}
+
+function ensureSidebarBackdrop() {
+  let backdrop = document.querySelector('.pgpjs-sidebar-backdrop');
+  if (backdrop) {
+    return backdrop;
+  }
+  backdrop = document.createElement('button');
+  backdrop.type = 'button';
+  backdrop.className = 'pgpjs-sidebar-backdrop';
+  backdrop.hidden = true;
+  backdrop.setAttribute('aria-label', 'Close navigation');
+  document.body.appendChild(backdrop);
+  backdrop.addEventListener('click', event => {
+    event.preventDefault();
+    closeMobileSidebar();
+  });
+  return backdrop;
+}
+
+function syncMobileSidebarUi() {
+  const sidebar = document.querySelector('.sidebar');
+  const open =
+    Boolean(sidebar?.classList.contains('show')) &&
+    window.matchMedia('(max-width: 640px)').matches;
+  document.body.classList.toggle('pgpjs-sidebar-open', open);
+  const backdrop = ensureSidebarBackdrop();
+  backdrop.hidden = !open;
+}
+
+function observeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar || sidebar.dataset.sidebarObserved === '1') {
+    return;
+  }
+  sidebar.dataset.sidebarObserved = '1';
+  new MutationObserver(syncMobileSidebarUi).observe(sidebar, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+  syncMobileSidebarUi();
+}
+
+function bindMobileSidebarClose() {
+  if (document.body.dataset.sidebarCloseBound === '1') {
+    observeSidebar();
+    return;
+  }
+  document.body.dataset.sidebarCloseBound = '1';
+  ensureSidebarBackdrop();
+  observeSidebar();
+
+  new MutationObserver(repairInertChrome).observe(document.body, {
+    attributes: true,
+    subtree: true,
+    attributeFilter: ['inert'],
+  });
+
+  const closeIfOpen = event => {
+    const sidebar = document.querySelector('.sidebar.show');
+    if (!sidebar || window.matchMedia('(min-width: 641px)').matches) {
+      return;
+    }
+    const onToggle = event.target.closest(
+      '.sidebar-toggle, .sidebar-toggle-button, .pgpjs-sidebar-backdrop',
+    );
+    if (sidebar.contains(event.target) && !onToggle) {
+      return;
+    }
+    if (onToggle) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    closeMobileSidebar();
+  };
+
+  document.addEventListener('click', closeIfOpen, true);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeMobileSidebar();
+    }
+  });
+}
+
 function liveDocsPlugin(hook, vm) {
+  hook.init(() => {
+    patchDocsifyGet();
+  });
   hook.mounted(() => {
+    patchDocsifyGet();
     refreshAliases(vm);
     relocateSearch();
     measureChrome();
-    window.addEventListener('resize', measureChrome);
+    repairSidebar(vm);
+    bindMobileSidebarClose();
+    let chromeWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      // Ignore keyboard-driven visual-viewport resizes so the compact
+      // header does not jump after typing in search.
+      if (window.innerWidth === chromeWidth) {
+        return;
+      }
+      chromeWidth = window.innerWidth;
+      measureChrome();
+    });
   });
 
   hook.doneEach(() => {
     refreshAliases(vm);
     relocateSearch();
     measureChrome();
+    repairSidebar(vm);
+    bindMobileSidebarClose();
 
     const path = (vm.route.path || '/').replace(/\.md$/, '');
     const isHome = path === '/' || path === '/README' || path === '';
@@ -291,6 +591,7 @@ function liveDocsPlugin(hook, vm) {
         (current === `/${pkg}` || current.startsWith(`/${pkg}/`));
       link.classList.toggle('active', active);
     });
+    closeMobileSidebar();
   });
 }
 
