@@ -4,6 +4,7 @@
 
   - [Home](/)
   - [Quick start](quickstart.md)
+  - [CLI](https://github.com/pgpjs/cli)
 
 - [@pgpjs/core](core/)
 
